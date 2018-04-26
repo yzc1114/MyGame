@@ -64,20 +64,30 @@ bool HelloWorld::init()
 	//Ìí¼Ó¼üÅÌÊÂ¼þ
 	auto keyListener = EventListenerKeyboard::create();
 	keyListener->onKeyPressed = [=](EventKeyboard::KeyCode keycode, Event* unused_event) {
-		switch (keycode) {
-		case EventKeyboard::KeyCode::KEY_UP_ARROW: HelloWorld::up(this); this->schedule(schedule_selector(HelloWorld::keyup), 0.1f); break;
-		case EventKeyboard::KeyCode::KEY_DOWN_ARROW: HelloWorld::down(this); this->schedule(schedule_selector(HelloWorld::keydown), 0.1f); break;
-		case EventKeyboard::KeyCode::KEY_LEFT_ARROW: HelloWorld::left(this); this->schedule(schedule_selector(HelloWorld::keyleft), 0.1f); break;
-		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW: HelloWorld::right(this); this->schedule(schedule_selector(HelloWorld::keyright), 0.1f); break;
+		switch(keycode) {
+		case EventKeyboard::KeyCode::KEY_UP_ARROW: if (!(keyDownHolding || keyLeftHolding || keyRightHolding)) {
+			keyUpHolding = true; HelloWorld::up(this); this->schedule(schedule_selector(HelloWorld::keyup), 0.15f); break;
 		}
-	};
+		case EventKeyboard::KeyCode::KEY_DOWN_ARROW: if (!(keyUpHolding || keyLeftHolding || keyRightHolding)) {
+			keyDownHolding = true; HelloWorld::down(this); this->schedule(schedule_selector(HelloWorld::keydown), 0.15f); break;
+		}
+		case EventKeyboard::KeyCode::KEY_LEFT_ARROW: if (!(keyDownHolding || keyUpHolding || keyRightHolding)) {
+			keyLeftHolding = true; HelloWorld::left(this); this->schedule(schedule_selector(HelloWorld::keyleft), 0.15f); break;
+		}
+		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW: if (!(keyDownHolding || keyUpHolding || keyLeftHolding)) {
+			keyRightHolding = true; HelloWorld::right(this); this->schedule(schedule_selector(HelloWorld::keyright), 0.15f); break;
+		}
+		}
+		
+};
 	keyListener->onKeyReleased = [=](EventKeyboard::KeyCode keycode, Event* unused_event) {
 		switch (keycode) {
-		case EventKeyboard::KeyCode::KEY_UP_ARROW: this->unschedule(schedule_selector(HelloWorld::keyup)); break;
-		case EventKeyboard::KeyCode::KEY_DOWN_ARROW: this->unschedule(schedule_selector(HelloWorld::keydown)); break;
-		case EventKeyboard::KeyCode::KEY_LEFT_ARROW: this->unschedule(schedule_selector(HelloWorld::keyleft)); break;
-		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW: this->unschedule(schedule_selector(HelloWorld::keyright)); break;
-		}
+		case EventKeyboard::KeyCode::KEY_UP_ARROW: keyUpHolding = false; this->unschedule(schedule_selector(HelloWorld::keyup)); break;
+		case EventKeyboard::KeyCode::KEY_DOWN_ARROW: keyDownHolding = false; this->unschedule(schedule_selector(HelloWorld::keydown)); break;
+		case EventKeyboard::KeyCode::KEY_LEFT_ARROW: keyLeftHolding = false; this->unschedule(schedule_selector(HelloWorld::keyleft)); break;
+		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW: keyRightHolding = false; this->unschedule(schedule_selector(HelloWorld::keyright)); break;
+			}
+		
 	};
 	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
 	//
@@ -99,10 +109,10 @@ void HelloWorld::up(Ref * psender)
 {
 	float y = littleman->getPositionY();
 	if (y + 16 < MAP_SIZE && isCanReach(littleman->getPositionX(),y+32)  ) {
-		auto action = MoveBy::create(0.08f, Vec2(0, 32));
+		auto action = MoveBy::create(0.12f, Vec2(0, 32));
 		littleman->runAction(action);
 		if ((y + map->getPositionY() > size.height / 2) && ((MAP_SIZE - y) > size.height / 2)) {
-			auto action = MoveBy::create(0.08f, Vec2(0, -32));
+			auto action = MoveBy::create(0.12f, Vec2(0, -32));
 			map->runAction(action);
 		}
 	}
@@ -112,10 +122,10 @@ void HelloWorld::left(Ref * psender)
 {
 	float x = littleman->getPositionX();
 	if (x - 16 > 0 && isCanReach(x-32,littleman->getPositionY())  ){
-		auto action = MoveBy::create(0.08f, Vec2(-32, 0));
+		auto action = MoveBy::create(0.12f, Vec2(-32, 0));
 		littleman->runAction(action);
 		if ((x + map->getPositionX() < size.width / 2) && map->getPositionX() != 0) {
-			auto action = MoveBy::create(0.08f, Vec2(32, 0));
+			auto action = MoveBy::create(0.12f, Vec2(32, 0));
 			map->runAction(action);
 		}
 	}
@@ -125,10 +135,10 @@ void HelloWorld::down(Ref * psender)
 {
 	float y = littleman->getPositionY();
 	if (y - 16 > 0 && isCanReach(littleman->getPositionX(), y - 32) ) {
-		auto action = MoveBy::create(0.08f, Vec2(0, -32));
+		auto action = MoveBy::create(0.12f, Vec2(0, -32));
 		littleman->runAction(action);
 		if ((y + map->getPositionY() < size.height / 2) && map->getPositionY() != 0) {
-			auto action = MoveBy::create(0.08f, Vec2(0, 32));
+			auto action = MoveBy::create(0.12f, Vec2(0, 32));
 			map->runAction(action);
 		}
 	}
@@ -138,10 +148,10 @@ void HelloWorld::right(Ref * psender)
 {
 	float x = littleman->getPositionX();
 	if (x + 16 < MAP_SIZE && isCanReach(x+32,littleman->getPositionY()) ) {
-		auto action = MoveBy::create(0.08f, Vec2(32, 0));
+		auto action = MoveBy::create(0.12f, Vec2(32, 0));
 		littleman->runAction(action);
 		if ((x + map->getPositionX() > size.width / 2) && ((MAP_SIZE - x) > size.width / 2)) {
-			auto action = MoveBy::create(0.08f, Vec2(-32, 0));
+			auto action = MoveBy::create(0.12f, Vec2(-32, 0));
 			map->runAction(action);
 		}
 	}

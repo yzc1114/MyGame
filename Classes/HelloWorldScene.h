@@ -16,6 +16,10 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 
+	bool keyUpHolding = false;
+	bool keyDownHolding = false;
+	bool keyLeftHolding = false;
+	bool keyRightHolding = false;
 
 	void up(Ref* psender);
 	void down(Ref* psender);
