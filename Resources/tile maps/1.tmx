@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" infinite="0" nextobjectid="3">
+ <tileset firstgid="1" source="desert.tsx"/>
+ <layer name="ground" width="40" height="40" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKFL8v1jrsdQcNVUVVVVVVUfPdlnu4E=
+  </data>
+ </layer>
+ <layer name="collision" width="40" height="40" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJzt1bkKhEAQRVEXcEFwBTU0NPL/P8+XmCmUIt0V3AMXiokezYBJAgAAYLN/KPS+QpWGqkj7WtUZ6iPv2x92Xb/H3uf9/e7ezOs+j+/H/+/bvlkthtZI+zx/PwAAfhwv75BSlanceIdWq001xju0QY1qMt7AH07OkA+j
+  </data>
+ </layer>
+ <layer name="meta" width="40" height="40" opacity="0.5">
+  <data encoding="base64" compression="zlib">
+   eJzt1bsJACAMRdFs4A7uP6SlteDnCae4kHSnCKRXVQ+vhcbHx8fHlxnfOV/CH+fj4+Pj49vtS4iPj4+Pb+4r803f61/Gd/7+0vrFl9wAGhl26g==
+  </data>
+ </layer>
+</map>
