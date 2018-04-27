@@ -1,12 +1,12 @@
-#include "HelloWorldScene.h"
+#include "GameScene.h"
 #include "SimpleAudioEngine.h"
 #include "HRocker.h"
 USING_NS_CC;
 #define MAP_SIZE 1280
 
-Scene* HelloWorld::createScene()
+Scene* GameScene::createScene()
 {
-    return HelloWorld::create();
+    return GameScene::create();
 }
 
 // Print useful error message instead of segfaulting when files are not there.
@@ -17,7 +17,7 @@ static void problemLoading(const char* filename)
 }
 
 // on "init" you need to initialize your instance
-bool HelloWorld::init()
+bool GameScene::init()
 {
     //////////////////////////////
     // 1. super init first
@@ -41,11 +41,11 @@ bool HelloWorld::init()
 
 	size = Director::getInstance()->getVisibleSize();
     
-	//添加四个方向按钮
-	auto pLeft = MenuItemImage::create("left.png", "left.png", this,menu_selector(HelloWorld::left));
-	auto pRight = MenuItemImage::create("right.png", "right.png", this, menu_selector(HelloWorld::right));
-	auto pUp = MenuItemImage::create("up.png", "up.png", this, menu_selector(HelloWorld::up));
-	auto pDown = MenuItemImage::create("down.png", "down.png", this, menu_selector(HelloWorld::down));
+	/*添加四个方向按钮
+	auto pLeft = MenuItemImage::create("left.png", "left.png", this,menu_selector(GameScene::left));
+	auto pRight = MenuItemImage::create("right.png", "right.png", this, menu_selector(GameScene::right));
+	auto pUp = MenuItemImage::create("up.png", "up.png", this, menu_selector(GameScene::up));
+	auto pDown = MenuItemImage::create("down.png", "down.png", this, menu_selector(GameScene::down));
 	auto left = Menu::create(pLeft, NULL);
 	auto right = Menu::create(pRight, NULL);
 	auto up = Menu::create(pUp, NULL);
@@ -58,7 +58,7 @@ bool HelloWorld::init()
 	addChild(right, 10);
 	addChild(down, 10);
 	addChild(up, 10);
-    //
+    */
 
 
 	//添加键盘事件
@@ -66,26 +66,26 @@ bool HelloWorld::init()
 	keyListener->onKeyPressed = [=](EventKeyboard::KeyCode keycode, Event* unused_event) {
 		switch(keycode) {
 		case EventKeyboard::KeyCode::KEY_UP_ARROW: if (!(keyDownHolding || keyLeftHolding || keyRightHolding)) {
-			keyUpHolding = true; HelloWorld::up(this); this->schedule(schedule_selector(HelloWorld::keyup), 0.15f); break;
+			keyUpHolding = true; GameScene::up(this); this->schedule(schedule_selector(GameScene::keyup), 0.15f); break;
 		}
 		case EventKeyboard::KeyCode::KEY_DOWN_ARROW: if (!(keyUpHolding || keyLeftHolding || keyRightHolding)) {
-			keyDownHolding = true; HelloWorld::down(this); this->schedule(schedule_selector(HelloWorld::keydown), 0.15f); break;
+			keyDownHolding = true; GameScene::down(this); this->schedule(schedule_selector(GameScene::keydown), 0.15f); break;
 		}
 		case EventKeyboard::KeyCode::KEY_LEFT_ARROW: if (!(keyDownHolding || keyUpHolding || keyRightHolding)) {
-			keyLeftHolding = true; HelloWorld::left(this); this->schedule(schedule_selector(HelloWorld::keyleft), 0.15f); break;
+			keyLeftHolding = true; GameScene::left(this); this->schedule(schedule_selector(GameScene::keyleft), 0.15f); break;
 		}
 		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW: if (!(keyDownHolding || keyUpHolding || keyLeftHolding)) {
-			keyRightHolding = true; HelloWorld::right(this); this->schedule(schedule_selector(HelloWorld::keyright), 0.15f); break;
+			keyRightHolding = true; GameScene::right(this); this->schedule(schedule_selector(GameScene::keyright), 0.15f); break;
 		}
 		}
 		
 };
 	keyListener->onKeyReleased = [=](EventKeyboard::KeyCode keycode, Event* unused_event) {
 		switch (keycode) {
-		case EventKeyboard::KeyCode::KEY_UP_ARROW: keyUpHolding = false; this->unschedule(schedule_selector(HelloWorld::keyup)); break;
-		case EventKeyboard::KeyCode::KEY_DOWN_ARROW: keyDownHolding = false; this->unschedule(schedule_selector(HelloWorld::keydown)); break;
-		case EventKeyboard::KeyCode::KEY_LEFT_ARROW: keyLeftHolding = false; this->unschedule(schedule_selector(HelloWorld::keyleft)); break;
-		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW: keyRightHolding = false; this->unschedule(schedule_selector(HelloWorld::keyright)); break;
+		case EventKeyboard::KeyCode::KEY_UP_ARROW: keyUpHolding = false; this->unschedule(schedule_selector(GameScene::keyup)); break;
+		case EventKeyboard::KeyCode::KEY_DOWN_ARROW: keyDownHolding = false; this->unschedule(schedule_selector(GameScene::keydown)); break;
+		case EventKeyboard::KeyCode::KEY_LEFT_ARROW: keyLeftHolding = false; this->unschedule(schedule_selector(GameScene::keyleft)); break;
+		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW: keyRightHolding = false; this->unschedule(schedule_selector(GameScene::keyright)); break;
 			}
 		
 	};
@@ -105,7 +105,7 @@ bool HelloWorld::init()
     return true;
 }
 
-void HelloWorld::up(Ref * psender)
+void GameScene::up(Ref * psender)
 {
 	float y = littleman->getPositionY();
 	if (y + 16 < MAP_SIZE && isCanReach(littleman->getPositionX(),y+32)  ) {
@@ -118,7 +118,7 @@ void HelloWorld::up(Ref * psender)
 	}
 }
 
-void HelloWorld::left(Ref * psender)
+void GameScene::left(Ref * psender)
 {
 	float x = littleman->getPositionX();
 	if (x - 16 > 0 && isCanReach(x-32,littleman->getPositionY())  ){
@@ -131,7 +131,7 @@ void HelloWorld::left(Ref * psender)
 	}
 }
 
-void HelloWorld::down(Ref * psender)
+void GameScene::down(Ref * psender)
 {
 	float y = littleman->getPositionY();
 	if (y - 16 > 0 && isCanReach(littleman->getPositionX(), y - 32) ) {
@@ -144,7 +144,7 @@ void HelloWorld::down(Ref * psender)
 	}
 }
 
-void HelloWorld::right(Ref * psender)
+void GameScene::right(Ref * psender)
 {
 	float x = littleman->getPositionX();
 	if (x + 16 < MAP_SIZE && isCanReach(x+32,littleman->getPositionY()) ) {
@@ -157,27 +157,27 @@ void HelloWorld::right(Ref * psender)
 	}
 }
 
-void HelloWorld::keyup(float dt)
+void GameScene::keyup(float dt)
 {
 	up(this);
 }
 
-void HelloWorld::keydown(float dt)
+void GameScene::keydown(float dt)
 {
 	down(this);
 }
 
-void HelloWorld::keyright(float dt)
+void GameScene::keyright(float dt)
 {
 	right(this);
 }
 
-void HelloWorld::keyleft(float dt)
+void GameScene::keyleft(float dt)
 {
 	left(this);
 }
 
-bool HelloWorld::isCanReach(float x,float y)
+bool GameScene::isCanReach(float x,float y)
 {
 	int mapX = (int)(x - 16) / 32;
 	int mapY = (int)(39 - (y - 16) / 32);
