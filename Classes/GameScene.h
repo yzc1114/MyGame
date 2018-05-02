@@ -1,7 +1,10 @@
 #ifndef __GAME_SCENE_H__
 #define __GAME_SCENE_H__
 
-#include "cocos2d.h"
+#include"cocos2d.h"
+#include"GameLayer.h"
+#include"ControlLayer.h"
+#include"GameConstants.h"
 USING_NS_CC;
 
 class GameScene : public cocos2d::Scene
@@ -11,15 +14,69 @@ public:
 
     virtual bool init();
     
-	
-	
-    // implement the "static create()" method manually
     CREATE_FUNC(GameScene);
 
-	bool keyUpHolding = false;
-	bool keyDownHolding = false;
-	bool keyLeftHolding = false;
-	bool keyRightHolding = false;
+	GameLayer* gamelayer;
+
+	ControlLayer* controllayer;
+
+	void switchMap();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/*Á·Ï°
+
+	//bool keyUpHolding = false;
+	//bool keyDownHolding = false;
+	//bool keyLeftHolding = false;
+	//bool keyRightHolding = false;
 
 	void up(Ref* psender);
 	void down(Ref* psender);
@@ -33,16 +90,21 @@ public:
 
 	
 	bool isCanReach(float x,float y);
-	
+	*/
 
 	
 private:
+
+
+
+	/*Á·Ï°
 	Size size;
 	TMXTiledMap* map;
 	TMXLayer* meta;
-	Sprite* littleman;
-
 	
+	Sprite* littleman;
+	bool isMoving = false;
+	*/
 };
 
-#endif // __GAME_SCENE_H__
+#endif 

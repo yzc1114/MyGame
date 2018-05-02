@@ -1,3 +1,6 @@
+#ifndef _STARTSCENE_
+#define _STARTSCENE_
+
 #include"cocos2d.h"
 #include"GameScene.h"
 
@@ -12,3 +15,5 @@ public:
 	void buttonStartCALLBACK(Ref* psender);
 	void buttonExitCALLBACK(Ref* psender);
 };
+
+#endif

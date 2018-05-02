@@ -1,8 +1,8 @@
 #include "GameScene.h"
-#include "SimpleAudioEngine.h"
-#include "HRocker.h"
+
+
 USING_NS_CC;
-#define MAP_SIZE 1280
+#define MAP_SIZE 416
 
 Scene* GameScene::createScene()
 {
@@ -19,14 +19,116 @@ static void problemLoading(const char* filename)
 // on "init" you need to initialize your instance
 bool GameScene::init()
 {
-    //////////////////////////////
-    // 1. super init first
     if ( !Scene::init() )
     {
         return false;
     }
+	
+	//auto AnimationController = AnimationControl::instance();
+	//AnimationController->initAnimationMap();
 
-	map = TMXTiledMap::create("tile maps/1.tmx");
+	
+	gamelayer = GameLayer::createGameLayer(0);
+	addChild(gamelayer,1);
+	gamelayer->setPosition(192 , 0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/*练习
+	
+	map = TMXTiledMap::create("tile maps/2.tmx");
 	meta = map->layerNamed("meta");
 	if (meta) {
 		log("ok");
@@ -41,7 +143,7 @@ bool GameScene::init()
 
 	size = Director::getInstance()->getVisibleSize();
     
-	/*添加四个方向按钮
+	//添加四个方向按钮
 	auto pLeft = MenuItemImage::create("left.png", "left.png", this,menu_selector(GameScene::left));
 	auto pRight = MenuItemImage::create("right.png", "right.png", this, menu_selector(GameScene::right));
 	auto pUp = MenuItemImage::create("up.png", "up.png", this, menu_selector(GameScene::up));
@@ -58,10 +160,10 @@ bool GameScene::init()
 	addChild(right, 10);
 	addChild(down, 10);
 	addChild(up, 10);
-    */
+    
 
 
-	//添加键盘事件
+	/*添加键盘事件
 	auto keyListener = EventListenerKeyboard::create();
 	keyListener->onKeyPressed = [=](EventKeyboard::KeyCode keycode, Event* unused_event) {
 		switch(keycode) {
@@ -90,70 +192,101 @@ bool GameScene::init()
 		
 	};
 	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
-	//
-
-
-
-
+	
 
 
 	littleman = Sprite::create("contact.png");
 	map->addChild(littleman, 9);
-	littleman->setPosition(112, 144 + 4 * 32);
-
+	littleman->setPosition(112, 144 + 4 * 32); 
     
     return true;
+}*/
+
 }
 
+void GameScene::switchMap()
+{
+
+}
+
+
+
+
+/*
 void GameScene::up(Ref * psender)
 {
+	if (isMoving) {
+		return;
+	}
 	float y = littleman->getPositionY();
 	if (y + 16 < MAP_SIZE && isCanReach(littleman->getPositionX(),y+32)  ) {
+		isMoving = true;log("change_to_TRUE");
 		auto action = MoveBy::create(0.12f, Vec2(0, 32));
-		littleman->runAction(action);
-		if ((y + map->getPositionY() > size.height / 2) && ((MAP_SIZE - y) > size.height / 2)) {
-			auto action = MoveBy::create(0.12f, Vec2(0, -32));
-			map->runAction(action);
-		}
+		auto sequence = Sequence::create(action, CallFunc::create([&]() {isMoving = false; log("change_to_FALSE"); }), NULL);
+		littleman->runAction(sequence);
+		///*if ((y + map->getPositionY() > size.height / 2) && ((MAP_SIZE - y) > size.height / 2)) {
+			//auto action = MoveBy::create(0.12f, Vec2(0, -32));
+			//map->runAction(action);
+		//}
 	}
+	
 }
 
 void GameScene::left(Ref * psender)
 {
+	if (isMoving) {
+		return;
+	}
+	
 	float x = littleman->getPositionX();
 	if (x - 16 > 0 && isCanReach(x-32,littleman->getPositionY())  ){
+		isMoving = true; log("change_to_TRUE");
 		auto action = MoveBy::create(0.12f, Vec2(-32, 0));
-		littleman->runAction(action);
-		if ((x + map->getPositionX() < size.width / 2) && map->getPositionX() != 0) {
-			auto action = MoveBy::create(0.12f, Vec2(32, 0));
-			map->runAction(action);
-		}
+		auto sequence = Sequence::create(action, CallFunc::create([&]() {isMoving = false; log("change_to_FALSE"); }), NULL);
+		littleman->runAction(sequence);
+		
+		///*if ((x + map->getPositionX() < size.width / 2) && map->getPositionX() != 0) {
+		//	auto action = MoveBy::create(0.12f, Vec2(32, 0));
+		//	map->runAction(action);
+		//}
 	}
 }
 
 void GameScene::down(Ref * psender)
 {
+	if (isMoving) {
+		return;
+	}
+	
 	float y = littleman->getPositionY();
 	if (y - 16 > 0 && isCanReach(littleman->getPositionX(), y - 32) ) {
+		isMoving = true; log("change_to_TRUE");
 		auto action = MoveBy::create(0.12f, Vec2(0, -32));
-		littleman->runAction(action);
-		if ((y + map->getPositionY() < size.height / 2) && map->getPositionY() != 0) {
-			auto action = MoveBy::create(0.12f, Vec2(0, 32));
-			map->runAction(action);
-		}
+		auto sequence = Sequence::create(action, CallFunc::create([&]() {isMoving = false; log("change_to_FALSE"); }), NULL);
+		littleman->runAction(sequence);
+		///*if ((y + map->getPositionY() < size.height / 2) && map->getPositionY() != 0) {
+			//auto action = MoveBy::create(0.12f, Vec2(0, 32));
+			//map->runAction(action);
+		//}
 	}
 }
 
 void GameScene::right(Ref * psender)
 {
+	if (isMoving) {
+		return;
+	}
+	
 	float x = littleman->getPositionX();
 	if (x + 16 < MAP_SIZE && isCanReach(x+32,littleman->getPositionY()) ) {
+		isMoving = true; log("change_to_TRUE");
 		auto action = MoveBy::create(0.12f, Vec2(32, 0));
-		littleman->runAction(action);
-		if ((x + map->getPositionX() > size.width / 2) && ((MAP_SIZE - x) > size.width / 2)) {
-			auto action = MoveBy::create(0.12f, Vec2(-32, 0));
-			map->runAction(action);
-		}
+		auto sequence = Sequence::create(action, CallFunc::create([&]() {isMoving = false; log("change_to_FALSE"); }), NULL);
+		littleman->runAction(sequence);
+		///*if ((x + map->getPositionX() > size.width / 2) && ((MAP_SIZE - x) > size.width / 2)) {
+		//	auto action = MoveBy::create(0.12f, Vec2(-32, 0));
+		//	map->runAction(action);
+		//}
 	}
 }
 
@@ -177,10 +310,11 @@ void GameScene::keyleft(float dt)
 	left(this);
 }
 
+
 bool GameScene::isCanReach(float x,float y)
 {
 	int mapX = (int)(x - 16) / 32;
-	int mapY = (int)(39 - (y - 16) / 32);
+	int mapY = (int)(12 - (y - 16) / 32);
 
 	if (meta) {
 		int tileGid = meta->tileGIDAt(Vec2(mapX, mapY));
@@ -197,4 +331,4 @@ bool GameScene::isCanReach(float x,float y)
 	
 }
 
-
+*/
