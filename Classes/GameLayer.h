@@ -9,7 +9,7 @@ class GameLayer : public Layer {
 public:
 	GameMap * map;
 
-	//Hero* hero;
+	Hero* hero;
 
 	virtual bool init();
 

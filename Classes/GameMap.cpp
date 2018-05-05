@@ -1,5 +1,14 @@
 #include"GameMap.h"
 
+GameMap::GameMap()
+{
+	Global::instance()->gameMap = this;
+}
+
+GameMap::~GameMap()
+{
+}
+
 GameMap* GameMap::createMap(int floor)
 {
 
@@ -10,10 +19,7 @@ GameMap* GameMap::createMap(int floor)
 	GameMap* map = new GameMap;
 	if (map->initWithTMXFile("tile maps/" + strFloor + ".tmx"))
 	{
-		//调用额外的init方法
 		map->extraInit();
-
-		//将实例放入autorelease池，统一由引擎控制对象的生命周期
 		map->autorelease();
 		return map;
 	}
@@ -26,4 +32,19 @@ GameMap* GameMap::createMap(int floor)
 void GameMap::extraInit()
 {
 	
+}
+
+
+Point GameMap::tileCoordForPosition(Point position)
+{
+	int x = position.x / this->getTileSize().width;
+	int y = (((this->getMapSize().height - 1) * this->getTileSize().height) - position.y) / this->getTileSize().height;
+	return Point(x, y);
+}
+
+
+Point GameMap::positionForTileCoord(Point tileCoord)
+{
+	Point pos = Point((tileCoord.x * this->getTileSize().width), ((this->getMapSize().height - tileCoord.y - 1) * this->getTileSize().height));
+	return pos;
 }

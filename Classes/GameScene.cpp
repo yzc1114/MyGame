@@ -32,7 +32,9 @@ bool GameScene::init()
 	addChild(gamelayer,1);
 	gamelayer->setPosition(192 , 0);
 
-
+	statusLayer = LayerColor::create(Color4B::YELLOW, 192, 416);
+	addChild(statusLayer, 1);
+	statusLayer->setPosition(0, 0);
 
 
 

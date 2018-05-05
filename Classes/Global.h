@@ -1,8 +1,16 @@
-/*#ifndef _GLOBAL_H_
+#ifndef _GLOBAL_H_
 #define _GLOBAL_H_
 
-#include "CommonHeader.h"
 
+#include"cocos2d.h"
+#include"Singleton.h"
+USING_NS_CC;
+
+class GameScene;
+class GameLayer;
+class ControlLayer;
+class GameMap;
+class Hero;
 
 class Global : public Singleton<Global>
 {
@@ -34,4 +42,3 @@ public:
 
 #endif
 
-*/

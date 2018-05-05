@@ -15,6 +15,9 @@ void GameLayer::extraInit(int floor)
 	addChild(map, 0);
 	map->setPosition(0, 0);
 
+	
+
+
 }
 
 GameLayer* GameLayer::createGameLayer(int floor)

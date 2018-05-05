@@ -18,6 +18,8 @@ public:
 
 	GameLayer* gamelayer;
 
+	LayerColor* statusLayer;
+
 	ControlLayer* controllayer;
 
 	void switchMap();

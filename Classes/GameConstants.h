@@ -6,3 +6,13 @@ typedef enum {
 	kup,
 	knormal
 }HeroDirection;
+
+typedef enum {
+	kwall,
+	kdoor,
+	kupstair,
+	kdownstair,
+	kenemy,
+	kstore,
+	knpc
+}CollisionType;

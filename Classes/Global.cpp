@@ -1,4 +1,4 @@
-/*#include "Global.h"
+#include "Global.h"
 
 DECLARE_SINGLETON_MEMBER(Global);
 
@@ -26,4 +26,3 @@ Global::~Global(void)
 
 }
 
-*/
