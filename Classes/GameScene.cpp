@@ -36,6 +36,9 @@ bool GameScene::init()
 	addChild(statusLayer, 1);
 	statusLayer->setPosition(0, 0);
 
+	controllayer = ControlLayer::create();
+	addChild(controllayer, 2);
+	controllayer->setPosition(Vec2::ZERO);
 
 
 
