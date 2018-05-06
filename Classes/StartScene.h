@@ -1,8 +1,7 @@
 #ifndef _STARTSCENE_
 #define _STARTSCENE_
 
-#include"cocos2d.h"
-#include"GameScene.h"
+#include"MagicTower.h"
 
 USING_NS_CC;
 class StartScene : public Scene {

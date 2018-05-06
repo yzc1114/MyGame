@@ -38,9 +38,10 @@
   </data>
  </layer>
  <objectgroup name="object">
-  <object id="1" name="npc0" type="npc" x="128" y="320" width="32" height="32">
+  <object id="1" name="1" type="npc" x="128" y="320" width="32" height="32">
    <properties>
-    <property name="image" value="npc.png"/>
+    <property name="image" value="npc1.png"/>
+    <property name="name" value="npc1"/>
     <property name="rectX" value="0"/>
     <property name="rectY" value="0"/>
    </properties>

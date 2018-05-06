@@ -15,6 +15,9 @@ bool Hero::init()
 
 	ATK = DEF = 100;
 	HP = 1000;
+	YellowKeys = 5;
+	BlueKeys = 1;
+	RedKeys = 1;
 
 	isHeroMoving = isHeroFighting = isDoorOpening = false;
 	return true;
@@ -63,9 +66,10 @@ void Hero::move(HeroDirection direction)
 	CollisionType collisionType = checkCollision(targetPosition);
 
 	if (collisionType == kwall
-		|| collisionType == kenemy
+		//|| collisionType == kenemy
+		//|| collisionType == knpc
 		|| collisionType == kdoor
-		|| collisionType == knpc)
+		)
 	{
 		setFaceDirection((HeroDirection)direction);
 		return;
@@ -90,6 +94,7 @@ CollisionType Hero::checkCollision(Point heroPosition)
 	auto map = Global::instance()->gameMap;
 	targetTileCoord = map->tileCoordForPosition(heroPosition);
 
+	//超出边界
 	if (heroPosition.x < 0
 		|| targetTileCoord.x > map->getMapSize().width - 1
 		|| targetTileCoord.y < 0
@@ -97,6 +102,65 @@ CollisionType Hero::checkCollision(Point heroPosition)
 	{
 		return kwall;
 	}
+
+	//获取墙壁层对应坐标的图块ID
+	int targetTileGID = Global::instance()->gameMap->WallLayer->getTileGIDAt(targetTileCoord);
+
+	//如果图块ID不为0，表示有墙
+	if (targetTileGID)
+	{
+		return kwall;
+	}
+
+	//获得物品层对应坐标的图块ID
+	targetTileGID = Global::instance()->gameMap->ItemLayer->getTileGIDAt(targetTileCoord);
+
+	//如果图块ID不为0，表示有物品
+	if (targetTileGID) {
+		pickUpItem();
+		return kitem;
+	}
+
+	//获得门层对应坐标的图块ID
+	targetTileGID = Global::instance()->gameMap->DoorLayer->getTileGIDAt(targetTileCoord);
+	
+	//如果图块ID不为0，表示有门
+	if (targetTileGID) {
+		openDoor(targetTileGID);
+		return kdoor;
+	}
+
+
+	//获得怪物层对应坐标的图块ID
+	targetTileGID = Global::instance()->gameMap->enemyLayer->getTileGIDAt(targetTileCoord);
+
+	//如果图块ID不为0，表示有敌人
+	if (targetTileGID) {
+		return kenemy;
+	}
+
+
+
+	int index = targetTileCoord.x + targetTileCoord.y * Global::instance()->gameMap->getMapSize().width;
+
+	//从npc字典中查询
+	NPC *npc = Global::instance()->gameMap->npcDict.at(index);
+	if (npc != NULL)
+	{
+		actWithNPC();
+		return knpc;
+	}
+
+	//从Teleport字典中查询
+	Teleport *teleport = Global::instance()->gameMap->teleportDict.at(index);
+	if (teleport != NULL)
+	{
+		doTeleport(teleport);
+		return kteleport;
+	}
+
+
+	return knull;
 }
 
 
@@ -109,4 +173,43 @@ void Hero::onMoveDone(Node* pTarget, void* data) {
 	setFaceDirection((HeroDirection)direction);
 	isHeroMoving = false;
 
+}
+
+void Hero::doTeleport(Teleport *teleport) {
+
+}
+
+void Hero::actWithNPC() {
+
+}
+
+void Hero::openDoor(int gid) {
+	if (isDoorOpening) {
+		return;
+	}
+
+	targetDoorGID = gid;
+	isDoorOpening = true;
+
+	schedule(schedule_selector(Hero::DoorOpeningUpdate), 0.1f);
+}
+
+void Hero::pickUpItem() {
+
+	Global::instance()->gameMap->ItemLayer->removeTileAt(targetTileCoord);
+
+}
+
+void Hero::DoorOpeningUpdate(float dt) {
+	
+	int NextGid = Global::instance()->gameMap->DoorLayer->getTileGIDAt(targetTileCoord) + 4;
+
+	if (NextGid - targetDoorGID > 12) {
+		Global::instance()->gameMap->DoorLayer->removeTileAt(targetTileCoord);
+		unschedule(schedule_selector(Hero::DoorOpeningUpdate));
+		isDoorOpening = false;
+	}
+	else {
+		Global::instance()->gameMap->DoorLayer->setTileGID(NextGid,targetTileCoord);
+	}
 }

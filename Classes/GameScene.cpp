@@ -9,14 +9,7 @@ Scene* GameScene::createScene()
     return GameScene::create();
 }
 
-// Print useful error message instead of segfaulting when files are not there.
-static void problemLoading(const char* filename)
-{
-    printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
-}
 
-// on "init" you need to initialize your instance
 bool GameScene::init()
 {
     if ( !Scene::init() )
@@ -24,32 +17,20 @@ bool GameScene::init()
         return false;
     }
 	
-	//auto AnimationController = AnimationControl::instance();
-	//AnimationController->initAnimationMap();
+	
 
 	
-	gamelayer = GameLayer::createGameLayer(0);
+	GameLayer* gamelayer = GameLayer::createGameLayer(0);
 	addChild(gamelayer,1);
 	gamelayer->setPosition(192 , 0);
 
-	statusLayer = LayerColor::create(Color4B::YELLOW, 192, 416);
+	LayerColor* statusLayer = LayerColor::create(Color4B::YELLOW, 192, 416);
 	addChild(statusLayer, 1);
 	statusLayer->setPosition(0, 0);
 
-	controllayer = ControlLayer::create();
+	ControlLayer* controllayer = ControlLayer::create();
 	addChild(controllayer, 2);
 	controllayer->setPosition(Vec2::ZERO);
-
-
-
-
-
-
-
-
-
-
-
 
 
 

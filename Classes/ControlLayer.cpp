@@ -1,5 +1,14 @@
 #include"ControlLayer.h"
 
+ControlLayer::ControlLayer()
+{
+	Global::instance()->controlLayer = this;
+}
+
+ControlLayer::~ControlLayer()
+{
+}
+
 bool ControlLayer::init()
 {
 	if (!Layer::init()) {
@@ -96,16 +105,22 @@ void ControlLayer::onTouchMoved(Touch * touch, Event * unused_Event)
 
 void ControlLayer::onTouchEnded(Touch * touch, Event * unused_Event)
 {
+	auto hero = Global::instance()->hero;
+
 	if (UpPart.containsPoint(touch->getStartLocation())) {
+		hero->move(kup);
 		getChildByTag(up)->setZOrder(up);
 	}
 	if (DownPart.containsPoint(touch->getStartLocation())) {
+		hero->move(kdown);
 		getChildByTag(down)->setZOrder(down);
 	}
 	if (LeftPart.containsPoint(touch->getStartLocation())) {
+		hero->move(kleft);
 		getChildByTag(left)->setZOrder(left);
 	}
 	if (RightPart.containsPoint(touch->getStartLocation())) {
+		hero->move(kright);
 		getChildByTag(right)->setZOrder(right);
 	}
 }

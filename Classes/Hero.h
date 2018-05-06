@@ -1,12 +1,10 @@
 #ifndef _HERO_
 #define _HERO_
 
-#include"cocos2d.h"
-#include"Global.h"
-#include"GameMap.h"
-#include"AnimationControl.h"
+#include"MagicTower.h"
 USING_NS_CC;
 
+class Teleport;
 class Hero : public Node {
 	
 
@@ -16,6 +14,14 @@ public:
 	int ATK; //攻击力
 
 	int DEF; //防御力
+
+	int YellowKeys;
+
+	int BlueKeys;
+
+	int RedKeys;
+
+
 
 	bool init(); //初始化英雄
 
@@ -37,11 +43,15 @@ public:
 
 	bool isDoorOpening; // 标记是否在开门
 
-	//void pickUpItem(); // 捡东西
+	void pickUpItem(); // 捡东西
 
-	//void openDoor(int targetDoorGID); // 开门
+	void openDoor(int targetDoorGID); // 开门
 
-	//void actWithNPC(); // 与npc互动
+	void DoorOpeningUpdate(float dt);
+
+	void actWithNPC(); // 与npc互动
+
+	void doTeleport(Teleport *teleport); //传送
 
 	Sprite *heroSprite; //存储英雄的精灵
 

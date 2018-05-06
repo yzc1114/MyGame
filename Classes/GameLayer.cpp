@@ -1,5 +1,14 @@
 #include"GameLayer.h"
 
+GameLayer::GameLayer()
+{
+	Global::instance()->gameLayer = this;
+}
+
+GameLayer::~GameLayer()
+{
+}
+
 bool GameLayer::init()
 {
 	if (!Layer::init()) {
@@ -15,7 +24,9 @@ void GameLayer::extraInit(int floor)
 	addChild(map, 0);
 	map->setPosition(0, 0);
 
-	
+	hero = Hero::create();
+	hero->setPosition(GameMap::positionForTileCoord(Point(1, 11)));
+	this->addChild(hero);
 
 
 }

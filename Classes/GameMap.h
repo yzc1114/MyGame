@@ -1,8 +1,11 @@
 #ifndef _GAMEMAP_
 #define _GAMEMAP_
 
-#include"cocos2d.h"
-#include"Global.h"
+#include"MagicTower.h"
+class NPC;
+class Teleport;
+class Enemy;
+
 USING_NS_CC;
 
 class GameMap : public TMXTiledMap {
@@ -12,16 +15,35 @@ public:
 
 	static GameMap* createMap(int floor);
 
+	//附加init
 	void extraInit();
 
-	Point tileCoordForPosition(Point position);
+	//cocos坐标到tiled map坐标
+	static Point tileCoordForPosition(Point position);
 
-	Point positionForTileCoord(Point tileCoord);
+	//tiled坐标到cocos坐标
+	static Point positionForTileCoord(Point tileCoord);
+
+	void initEnemy();
+
+	void initObject();
+
+	void updateEnemyAnimation(float time);
+
+	Map<int, Teleport*> teleportDict;
+
+	Map<int, NPC*> npcDict;
+
+	TMXTiledMap * map;
+	TMXLayer* WallLayer;
+	TMXLayer* FloorLayer;
+	TMXLayer* DoorLayer;
+	TMXLayer* ItemLayer;
+	TMXLayer* enemyLayer;
+
 
 private:
-
-    TMXTiledMap * map;
-
+	Vector<Enemy*> enemyArray;
 
 };
 

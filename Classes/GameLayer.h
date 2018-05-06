@@ -1,12 +1,18 @@
 #ifndef _GAME_LAYER_
 #define _GAME_LAYER_
-#include"cocos2d.h"
-#include"GameMap.h"
+#include"MagicTower.h"
 USING_NS_CC;
 
+class GameMap;
+class Hero;
 
 class GameLayer : public Layer {
 public:
+	GameLayer();
+	
+	~GameLayer();
+
+
 	GameMap * map;
 
 	Hero* hero;

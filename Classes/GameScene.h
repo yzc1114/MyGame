@@ -16,11 +16,7 @@ public:
     
     CREATE_FUNC(GameScene);
 
-	GameLayer* gamelayer;
-
-	LayerColor* statusLayer;
-
-	ControlLayer* controllayer;
+	
 
 	void switchMap();
 

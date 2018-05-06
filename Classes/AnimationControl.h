@@ -1,9 +1,7 @@
 #ifndef _ANIMATIONCONTROL_
 #define _ANIMATIONCONTROL_
 
-#include"cocos2d.h"
-#include"Singleton.h"
-#include"GameConstants.h"
+#include"MagicTower.h"
 USING_NS_CC;
 
 
@@ -29,6 +27,8 @@ public:
 protected:
 	//加载勇士行走动画模版
 	Animation * createHeroMovingAnimationByDirection(HeroDirection direction);
+
+	Animation * createNPCAnimationByImageID(int ID);
 	
 };
 

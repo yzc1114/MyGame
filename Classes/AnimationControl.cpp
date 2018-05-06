@@ -31,7 +31,12 @@ bool AnimationControl::initAnimationMap()
 	sprintf(temp, "%d", kup);
 	AnimationCache::getInstance()->addAnimation(createHeroMovingAnimationByDirection(kup), temp);
 
-	
+
+	AnimationCache::getInstance()->addAnimation(createNPCAnimationByImageID(1), std::string("npc" + std::to_string(1)));
+
+
+
+
 
 	return true;
 }
@@ -90,6 +95,30 @@ Animation * AnimationControl::createHeroMovingAnimationByDirection(HeroDirection
 
 	//0.05f表示每帧动画间的间隔
 	Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.05f);
+
+	return animation;
+}
+
+Animation * AnimationControl::createNPCAnimationByImageID(int ID)
+{
+	std::string ImagePath("npc" + std::to_string(ID) + ".png");
+	Texture2D *heroTexture = TextureCache::getInstance()->addImage(ImagePath);
+
+	//第二个参数表示显示区域的x, y, width, height，根据direction来确定显示的y坐标
+	SpriteFrame *frame0 = SpriteFrame::createWithTexture(heroTexture, Rect(32 * 0, 0, 32, 32));
+	SpriteFrame *frame1 = SpriteFrame::createWithTexture(heroTexture, Rect(32 * 1, 0, 32, 32));
+	SpriteFrame *frame2 = SpriteFrame::createWithTexture(heroTexture, Rect(32 * 2, 0, 32, 32));
+	SpriteFrame *frame3 = SpriteFrame::createWithTexture(heroTexture, Rect(32 * 3, 0, 32, 32));
+
+	Vector<SpriteFrame*> animFrames;
+
+	animFrames.pushBack(frame0);
+	animFrames.pushBack(frame1);
+	animFrames.pushBack(frame2);
+	animFrames.pushBack(frame3);
+
+	//0.2f表示每帧动画间的间隔
+	Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
 
 	return animation;
 }

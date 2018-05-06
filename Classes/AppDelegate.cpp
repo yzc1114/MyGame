@@ -1,6 +1,6 @@
 #include "AppDelegate.h"
-#include "GameScene.h"
-#include "StartScene.h"
+#include "SimpleAudioEngine.h"
+#include"MagicTower.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -35,6 +35,8 @@ AppDelegate::~AppDelegate()
 #elif USE_SIMPLE_AUDIO_ENGINE
     SimpleAudioEngine::end();
 #endif
+	AnimationControl::instance()->release();
+
 }
 
 // if you want a different context, modify the value of glContextAttrs
@@ -72,6 +74,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);
+
+	AnimationControl::instance()->initAnimationMap();
 
     // Set the design resolution
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);

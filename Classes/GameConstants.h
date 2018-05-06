@@ -8,11 +8,23 @@ typedef enum {
 }HeroDirection;
 
 typedef enum {
+	knull = 1,
 	kwall,
 	kdoor,
-	kupstair,
-	kdownstair,
+	kteleport,
 	kenemy,
+	kitem,
 	kstore,
 	knpc
 }CollisionType;
+
+typedef enum {
+	kZfloor,
+	kZwall,
+	kZdoor,
+	kZteleport,
+	kZnpc,
+	kZenemy,
+	kZitem,
+	kZhero,
+}kZorder;

@@ -7,6 +7,9 @@
 USING_NS_CC;
 class ControlLayer : public Layer {
 public:
+	ControlLayer();
+	~ControlLayer();
+
 	Layer * controllayer;
 
 	virtual bool init();
