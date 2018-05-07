@@ -12,12 +12,8 @@ GameMap::~GameMap()
 GameMap* GameMap::createMap(int floor)
 {
 
-	char cfloor[2];
-	sprintf(cfloor, "%d", floor);
-	std::string strFloor(cfloor);
-
 	GameMap* map = new GameMap;
-	if (map->initWithTMXFile("tile maps/" + strFloor + ".tmx"))
+	if (map->initWithTMXFile("tile maps/" + std::to_string(floor) + ".tmx"))
 	{
 		map->extraInit();
 		map->autorelease();
@@ -160,6 +156,7 @@ void GameMap::initObject()
 
 		//计算唯一ID
 		int index = tileCoord.x + tileCoord.y * this->getMapSize().width;
+
 		key = "type";
 
 		//获取对象类别

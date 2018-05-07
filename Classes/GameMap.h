@@ -41,6 +41,7 @@ public:
 	TMXLayer* ItemLayer;
 	TMXLayer* enemyLayer;
 
+	
 
 private:
 	Vector<Enemy*> enemyArray;

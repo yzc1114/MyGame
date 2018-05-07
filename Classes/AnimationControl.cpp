@@ -31,10 +31,11 @@ bool AnimationControl::initAnimationMap()
 	sprintf(temp, "%d", kup);
 	AnimationCache::getInstance()->addAnimation(createHeroMovingAnimationByDirection(kup), temp);
 
-
+	//加载NPC动画
 	AnimationCache::getInstance()->addAnimation(createNPCAnimationByImageID(1), std::string("npc" + std::to_string(1)));
 
-
+	//加载战斗动画
+	AnimationCache::getInstance()->addAnimation(createFightingAnimation(), "Fighting");
 
 
 
@@ -119,6 +120,30 @@ Animation * AnimationControl::createNPCAnimationByImageID(int ID)
 
 	//0.2f表示每帧动画间的间隔
 	Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
+
+	return animation;
+}
+
+Animation * AnimationControl::createFightingAnimation()
+{
+	std::string ImagePath("sword.png");
+	Texture2D *fightingTexture = TextureCache::getInstance()->addImage(ImagePath);
+
+	SpriteFrame *frame0 = SpriteFrame::createWithTexture(fightingTexture, Rect(192*0, 192*0, 192, 192));
+	SpriteFrame *frame1 = SpriteFrame::createWithTexture(fightingTexture, Rect(192*1, 192*1, 192, 192));
+	SpriteFrame *frame2 = SpriteFrame::createWithTexture(fightingTexture, Rect(192*2, 192*2, 192, 192));
+	SpriteFrame *frame3 = SpriteFrame::createWithTexture(fightingTexture, Rect(192*3, 192*3, 192, 192));
+	SpriteFrame *frame4 = SpriteFrame::createWithTexture(fightingTexture, Rect(192*0, 192*4, 192, 192));
+
+	Vector<SpriteFrame*> Frames;
+
+	Frames.pushBack(frame0);
+	Frames.pushBack(frame1);
+	Frames.pushBack(frame2);
+	Frames.pushBack(frame3);
+	Frames.pushBack(frame4);
+
+	Animation* animation = Animation::createWithSpriteFrames(Frames, 0.2f);
 
 	return animation;
 }

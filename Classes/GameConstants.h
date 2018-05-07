@@ -19,6 +19,7 @@ typedef enum {
 }CollisionType;
 
 typedef enum {
+	kZmap = 0,
 	kZfloor,
 	kZwall,
 	kZdoor,
@@ -27,4 +28,5 @@ typedef enum {
 	kZenemy,
 	kZitem,
 	kZhero,
+	kZfighting,
 }kZorder;

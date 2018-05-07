@@ -14,6 +14,9 @@ Teleport::Teleport(const ValueMap &dict, int x, int y)
 	key = "heroTileCoordY";
 	int y1 = dict.at(key).asInt();
 
+	//计算index
+	int index = tileCoord.x + tileCoord.y * Global::instance()->gameMap->getMapSize().width;
+
 	heroTileCoord = Point(x1, y1);
 
 	//取得目标地图的层数
@@ -28,7 +31,7 @@ Teleport::Teleport(const ValueMap &dict, int x, int y)
 	teleportSprite = Sprite::create(imagePath);
 	teleportSprite->setAnchorPoint(Point::ZERO);
 	teleportSprite->setPosition(position);
-	Global::instance()->gameLayer->addChild(teleportSprite, kZteleport);
+	Global::instance()->gameLayer->addChild(teleportSprite, kZteleport, index);
 }
 
 Teleport::~Teleport(void)

@@ -55,6 +55,8 @@ public:
 
 	Sprite *heroSprite; //存储英雄的精灵
 
+	Sprite* Fighting; //战斗图片的精灵
+
 	Point targetTileCoord; //临时保存的砖块坐标
 
 	Point targetPosition;//临时保存的cocos坐标
@@ -63,7 +65,7 @@ public:
 	
 	CollisionType checkCollision(Point heroPosition); //碰撞检测函数
 
-	void onMoveDone(Node* pTarget, void* data);//移动完成后的回调函数
+	void onMoveDone(Node* pTarget, int data);//移动完成后的回调函数
 
 };
 

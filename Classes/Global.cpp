@@ -17,7 +17,7 @@ Global::Global(void)
 	//新游戏，当前地图层数为0
 	currentLevel = 0;
 
-	//勇士出生位置
+	//勇士出生位置 初始化为第一层的出生位置
 	heroSpawnTileCoord = Point(1, 11);
 }
 

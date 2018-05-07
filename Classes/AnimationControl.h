@@ -29,6 +29,8 @@ protected:
 	Animation * createHeroMovingAnimationByDirection(HeroDirection direction);
 
 	Animation * createNPCAnimationByImageID(int ID);
+
+	Animation * createFightingAnimation();
 	
 };
 

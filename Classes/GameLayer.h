@@ -13,9 +13,6 @@ public:
 	~GameLayer();
 
 
-	GameMap * map;
-
-	Hero* hero;
 
 	virtual bool init();
 
@@ -27,6 +24,7 @@ public:
 
 	CREATE_FUNC(GameLayer);
 
+	void switchMap(int floor);
 };
 
 

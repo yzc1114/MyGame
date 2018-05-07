@@ -35,83 +35,6 @@ bool GameScene::init()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	/*Á·Ï°
 	
 	map = TMXTiledMap::create("tile maps/2.tmx");
@@ -190,10 +113,7 @@ bool GameScene::init()
 
 }
 
-void GameScene::switchMap()
-{
 
-}
 
 
 
