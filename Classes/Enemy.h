@@ -11,6 +11,13 @@ public:
 	Enemy(void);
 	~Enemy(void);
 
+	Enemy(int gid);
+
+	int HP;
+	int ATK;
+	int DEF;
+
+
 	//怪物在TileMap上的方位
 	Point position;
 

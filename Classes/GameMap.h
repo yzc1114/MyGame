@@ -40,10 +40,6 @@ public:
 	TMXLayer* DoorLayer;
 	TMXLayer* ItemLayer;
 	TMXLayer* enemyLayer;
-
-	
-
-private:
 	Vector<Enemy*> enemyArray;
 
 };

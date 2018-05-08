@@ -29,4 +29,10 @@ typedef enum {
 	kZitem,
 	kZhero,
 	kZfighting,
+	kZHP,
+	kZATK,
+	kZDEF,
+	kZYellowKeys,
+	kZBlueKeys,
+	kZRedKeys
 }kZorder;

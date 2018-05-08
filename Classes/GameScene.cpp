@@ -16,8 +16,7 @@ bool GameScene::init()
     {
         return false;
     }
-	
-	
+	Global::instance()->gameScene = this;
 
 	
 	GameLayer* gamelayer = GameLayer::createGameLayer(0);
@@ -33,208 +32,113 @@ bool GameScene::init()
 	controllayer->setPosition(Vec2::ZERO);
 
 
+	//创建左侧显示人物信息的状态条
+	//显示血量
+	TTFConfig ttfconfig("fonts/arial.ttf", 12);
+	std::string temp = std::to_string(Global::instance()->hero->HP);
+	auto currentHP = Label::createWithTTF(ttfconfig, "Hero HP : " + temp);
+	currentHP->setAnchorPoint(Vec2::ZERO);
+	currentHP->setColor(Color3B::BLACK);
+	currentHP->setPosition(192 / 3, 32 * 11);
+	this->addChild(currentHP, kZHP, kZHP);
+	//显示攻击力
+	temp = std::to_string(Global::instance()->hero->ATK);
+	auto currentATK = Label::createWithTTF(ttfconfig, "Hero ATK : " + temp);
+	currentATK->setAnchorPoint(Vec2::ZERO);
+	currentATK->setColor(Color3B::BLACK);
+	currentATK->setPosition(192 / 3, 32 * 10);
+	this->addChild(currentATK, kZATK, kZATK);
+	//显示防御力
+	temp = std::to_string(Global::instance()->hero->DEF);
+	auto currentDEF = Label::createWithTTF(ttfconfig, "Hero DEF : " + temp);
+	currentDEF->setAnchorPoint(Vec2::ZERO);
+	currentDEF->setColor(Color3B::BLACK);
+	currentDEF->setPosition(192 / 3, 32 * 9);
+	this->addChild(currentDEF, kZDEF, kZDEF);
+	//显示黄钥匙数量
+	temp = std::to_string(Global::instance()->hero->YellowKeys);
+	auto currentYellowKeys = Label::createWithTTF(ttfconfig, "Hero YellowKeys : " + temp);
+	currentYellowKeys->setAnchorPoint(Vec2::ZERO);
+	currentYellowKeys->setColor(Color3B::BLACK);
+	currentYellowKeys->setPosition(192 / 3, 32 * 8);
+	this->addChild(currentYellowKeys, kZYellowKeys, kZYellowKeys);
+	//显示蓝钥匙数量
+	temp = std::to_string(Global::instance()->hero->BlueKeys);
+	auto currentBlueKeys = Label::createWithTTF(ttfconfig, "Hero BlueKeys : " + temp);
+	currentBlueKeys->setAnchorPoint(Vec2::ZERO);
+	currentBlueKeys->setColor(Color3B::BLACK);
+	currentBlueKeys->setPosition(192 / 3, 32 * 7);
+	this->addChild(currentBlueKeys, kZBlueKeys, kZBlueKeys);
+	//显示红钥匙数量
+	temp = std::to_string(Global::instance()->hero->RedKeys);
+	auto currentRedKeys = Label::createWithTTF(ttfconfig, "Hero RedKeys : " + temp);
+	currentRedKeys->setAnchorPoint(Vec2::ZERO);
+	currentRedKeys->setColor(Color3B::BLACK);
+	currentRedKeys->setPosition(192 / 3, 32 * 6);
+	this->addChild(currentRedKeys, kZRedKeys, kZRedKeys);
 
-
-	/*练习
 	
-	map = TMXTiledMap::create("tile maps/2.tmx");
-	meta = map->layerNamed("meta");
-	if (meta) {
-		log("ok");
-	}
-	addChild(map, 0);
-	log("%f,%f", map->getPositionX(), map->getPositionY());
-	//HRocker* rocker = HRocker::createHRocker("rocker.png", "rockerBG.png", Vec2(100, 100));
-	//map->addChild(rocker,10);
-	//rocker->startRocker(true);
-
-   
-
-	size = Director::getInstance()->getVisibleSize();
-    
-	//添加四个方向按钮
-	auto pLeft = MenuItemImage::create("left.png", "left.png", this,menu_selector(GameScene::left));
-	auto pRight = MenuItemImage::create("right.png", "right.png", this, menu_selector(GameScene::right));
-	auto pUp = MenuItemImage::create("up.png", "up.png", this, menu_selector(GameScene::up));
-	auto pDown = MenuItemImage::create("down.png", "down.png", this, menu_selector(GameScene::down));
-	auto left = Menu::create(pLeft, NULL);
-	auto right = Menu::create(pRight, NULL);
-	auto up = Menu::create(pUp, NULL);
-	auto down = Menu::create(pDown, NULL);
-	left->setPosition(16 + 32, 16 + 32 * 2);
-	right->setPosition(16 + 32 * 3, 16 + 32 * 2);
-	up->setPosition(16 + 32 * 2, 16 + 32 * 3);
-	down->setPosition(16 + 32 * 2, 16 + 32);
-	addChild(left, 10);
-	addChild(right, 10);
-	addChild(down, 10);
-	addChild(up, 10);
-    
-
-
-	/*添加键盘事件
-	auto keyListener = EventListenerKeyboard::create();
-	keyListener->onKeyPressed = [=](EventKeyboard::KeyCode keycode, Event* unused_event) {
-		switch(keycode) {
-		case EventKeyboard::KeyCode::KEY_UP_ARROW: if (!(keyDownHolding || keyLeftHolding || keyRightHolding)) {
-			keyUpHolding = true; GameScene::up(this); this->schedule(schedule_selector(GameScene::keyup), 0.15f); break;
-		}
-		case EventKeyboard::KeyCode::KEY_DOWN_ARROW: if (!(keyUpHolding || keyLeftHolding || keyRightHolding)) {
-			keyDownHolding = true; GameScene::down(this); this->schedule(schedule_selector(GameScene::keydown), 0.15f); break;
-		}
-		case EventKeyboard::KeyCode::KEY_LEFT_ARROW: if (!(keyDownHolding || keyUpHolding || keyRightHolding)) {
-			keyLeftHolding = true; GameScene::left(this); this->schedule(schedule_selector(GameScene::keyleft), 0.15f); break;
-		}
-		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW: if (!(keyDownHolding || keyUpHolding || keyLeftHolding)) {
-			keyRightHolding = true; GameScene::right(this); this->schedule(schedule_selector(GameScene::keyright), 0.15f); break;
-		}
-		}
-		
-};
-	keyListener->onKeyReleased = [=](EventKeyboard::KeyCode keycode, Event* unused_event) {
-		switch (keycode) {
-		case EventKeyboard::KeyCode::KEY_UP_ARROW: keyUpHolding = false; this->unschedule(schedule_selector(GameScene::keyup)); break;
-		case EventKeyboard::KeyCode::KEY_DOWN_ARROW: keyDownHolding = false; this->unschedule(schedule_selector(GameScene::keydown)); break;
-		case EventKeyboard::KeyCode::KEY_LEFT_ARROW: keyLeftHolding = false; this->unschedule(schedule_selector(GameScene::keyleft)); break;
-		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW: keyRightHolding = false; this->unschedule(schedule_selector(GameScene::keyright)); break;
-			}
-		
-	};
-	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
-	
-
-
-	littleman = Sprite::create("contact.png");
-	map->addChild(littleman, 9);
-	littleman->setPosition(112, 144 + 4 * 32); 
-    
-    return true;
-}*/
 
 }
 
-
-
-
-
-
-/*
-void GameScene::up(Ref * psender)
+//刷新左侧状态条 形参为kZoder的枚举常量 表示人物变化的信息类别
+void GameScene::refreshStatus(kZorder order)
 {
-	if (isMoving) {
-		return;
+	Label* newLabel;
+	GameScene* tempGameScene = Global::instance()->gameScene;
+
+	if (order == kZHP) {
+		newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZHP)));
+		this->removeChildByTag(kZHP);
+		this->addChild(newLabel, kZHP, kZHP);
 	}
-	float y = littleman->getPositionY();
-	if (y + 16 < MAP_SIZE && isCanReach(littleman->getPositionX(),y+32)  ) {
-		isMoving = true;log("change_to_TRUE");
-		auto action = MoveBy::create(0.12f, Vec2(0, 32));
-		auto sequence = Sequence::create(action, CallFunc::create([&]() {isMoving = false; log("change_to_FALSE"); }), NULL);
-		littleman->runAction(sequence);
-		///*if ((y + map->getPositionY() > size.height / 2) && ((MAP_SIZE - y) > size.height / 2)) {
-			//auto action = MoveBy::create(0.12f, Vec2(0, -32));
-			//map->runAction(action);
-		//}
+	else if (order == kZATK) {
+		newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZATK)));
+		this->removeChildByTag(kZATK);
+		this->addChild(newLabel, kZATK, kZATK);
 	}
+	else if (order == kZDEF) {
+		newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZDEF)));
+		this->removeChildByTag(kZDEF);
+		this->addChild(newLabel, kZDEF, kZDEF);
+	}
+	else if (order == kZYellowKeys) {
+		newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZYellowKeys)));
+		this->removeChildByTag(kZYellowKeys);
+		this->addChild(newLabel, kZYellowKeys, kZYellowKeys);
+	}
+	else if (order == kZBlueKeys) {
+		newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZBlueKeys)));
+		this->removeChildByTag(kZBlueKeys);
+		this->addChild(newLabel, kZBlueKeys, kZBlueKeys);
+	}
+	else if (order == kZRedKeys) {
+		newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZRedKeys)));
+		this->removeChildByTag(kZRedKeys);
+		this->addChild(newLabel, kZRedKeys, kZRedKeys);
+	}
+
 	
 }
 
-void GameScene::left(Ref * psender)
-{
-	if (isMoving) {
-		return;
+Label* GameScene::createNewLabelForStatus(Label* oldLabel) {
+	TTFConfig ttfconfig("fonts/arial.ttf", 12);
+	std::string newString;
+	switch (oldLabel->getZOrder()) {
+	case kZHP:newString = std::string("Hero HP : " + std::to_string(Global::instance()->hero->HP)); break;
+	case kZATK:newString = std::string("Hero ATK : " + std::to_string(Global::instance()->hero->ATK)); break;
+	case kZDEF:newString = std::string("Hero DEF : " + std::to_string(Global::instance()->hero->DEF)); break;
+	case kZYellowKeys:newString = std::string("Hero YellowKeys : " + std::to_string(Global::instance()->hero->YellowKeys)); break;
+	case kZBlueKeys:newString = std::string("Hero BlueKeys : " + std::to_string(Global::instance()->hero->BlueKeys)); break;
+	case kZRedKeys:newString = std::string("Hero RedKeys : " + std::to_string(Global::instance()->hero->RedKeys)); break;
+	default:;
 	}
-	
-	float x = littleman->getPositionX();
-	if (x - 16 > 0 && isCanReach(x-32,littleman->getPositionY())  ){
-		isMoving = true; log("change_to_TRUE");
-		auto action = MoveBy::create(0.12f, Vec2(-32, 0));
-		auto sequence = Sequence::create(action, CallFunc::create([&]() {isMoving = false; log("change_to_FALSE"); }), NULL);
-		littleman->runAction(sequence);
-		
-		///*if ((x + map->getPositionX() < size.width / 2) && map->getPositionX() != 0) {
-		//	auto action = MoveBy::create(0.12f, Vec2(32, 0));
-		//	map->runAction(action);
-		//}
-	}
-}
+	Label* newLabel = Label::createWithTTF(ttfconfig, newString);
+	newLabel->setAnchorPoint(Vec2::ZERO);
+	newLabel->setColor(oldLabel->getColor());
+	newLabel->setPosition(oldLabel->getPosition());
+	return newLabel;
 
-void GameScene::down(Ref * psender)
-{
-	if (isMoving) {
-		return;
-	}
-	
-	float y = littleman->getPositionY();
-	if (y - 16 > 0 && isCanReach(littleman->getPositionX(), y - 32) ) {
-		isMoving = true; log("change_to_TRUE");
-		auto action = MoveBy::create(0.12f, Vec2(0, -32));
-		auto sequence = Sequence::create(action, CallFunc::create([&]() {isMoving = false; log("change_to_FALSE"); }), NULL);
-		littleman->runAction(sequence);
-		///*if ((y + map->getPositionY() < size.height / 2) && map->getPositionY() != 0) {
-			//auto action = MoveBy::create(0.12f, Vec2(0, 32));
-			//map->runAction(action);
-		//}
-	}
-}
-
-void GameScene::right(Ref * psender)
-{
-	if (isMoving) {
-		return;
-	}
-	
-	float x = littleman->getPositionX();
-	if (x + 16 < MAP_SIZE && isCanReach(x+32,littleman->getPositionY()) ) {
-		isMoving = true; log("change_to_TRUE");
-		auto action = MoveBy::create(0.12f, Vec2(32, 0));
-		auto sequence = Sequence::create(action, CallFunc::create([&]() {isMoving = false; log("change_to_FALSE"); }), NULL);
-		littleman->runAction(sequence);
-		///*if ((x + map->getPositionX() > size.width / 2) && ((MAP_SIZE - x) > size.width / 2)) {
-		//	auto action = MoveBy::create(0.12f, Vec2(-32, 0));
-		//	map->runAction(action);
-		//}
-	}
-}
-
-void GameScene::keyup(float dt)
-{
-	up(this);
-}
-
-void GameScene::keydown(float dt)
-{
-	down(this);
-}
-
-void GameScene::keyright(float dt)
-{
-	right(this);
-}
-
-void GameScene::keyleft(float dt)
-{
-	left(this);
 }
 
 
-bool GameScene::isCanReach(float x,float y)
-{
-	int mapX = (int)(x - 16) / 32;
-	int mapY = (int)(12 - (y - 16) / 32);
-
-	if (meta) {
-		int tileGid = meta->tileGIDAt(Vec2(mapX, mapY));
-			if (tileGid == 15) {
-				return true;
-			}
-			else {
-				return false;
-			}
-	}
-	else {
-		log("fuck");
-	}
-	
-}
-
-*/

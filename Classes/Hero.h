@@ -5,6 +5,7 @@
 USING_NS_CC;
 
 class Teleport;
+class Enemy;
 class Hero : public Node {
 	
 
@@ -37,6 +38,10 @@ public:
 
 	void fight();//打架
 
+	bool ifTheEnemyCanBeHurt(Enemy* enemy);//判断敌人是否能被击败
+
+	Enemy* enemy;//当前面对的敌人
+
 	bool isHeroMoving; // 标记是否在移动
 
 	bool isHeroFighting; // 标记是否在打架
@@ -47,7 +52,7 @@ public:
 
 	void openDoor(int targetDoorGID); // 开门
 
-	void DoorOpeningUpdate(float dt);
+	void DoorOpeningUpdate(float dt); //开门时更新图块的schedule函数
 
 	void actWithNPC(); // 与npc互动
 
@@ -55,7 +60,9 @@ public:
 
 	Sprite *heroSprite; //存储英雄的精灵
 
-	Sprite* Fighting; //战斗图片的精灵
+	Sprite* FightingSprite; //战斗图片的精灵
+
+	void FightingUpdate(float dt);
 
 	Point targetTileCoord; //临时保存的砖块坐标
 

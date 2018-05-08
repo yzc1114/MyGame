@@ -1,9 +1,8 @@
 #ifndef _CONTROLLAYER_
 #define _CONTROLLAYER_
 
-#include"cocos2d.h"
-#include"GameConstants.h"
-#include"StartScene.h"
+#include"MagicTower.h"
+
 USING_NS_CC;
 class ControlLayer : public Layer {
 public:

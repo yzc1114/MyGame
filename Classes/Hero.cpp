@@ -13,7 +13,7 @@ bool Hero::init()
 
 	this->addChild(heroSprite);
 	//初始化英雄属性
-	ATK = DEF = 100;
+	ATK = DEF = 20;
 	HP = 1000;
 	YellowKeys = 5;
 	BlueKeys = 1;
@@ -68,8 +68,8 @@ void Hero::move(HeroDirection direction)
 	CollisionType collisionType = checkCollision(targetPosition);
 
 	if (collisionType == kwall
-		//|| collisionType == kenemy
-		//|| collisionType == knpc
+		|| collisionType == kenemy
+		|| collisionType == knpc
 		|| collisionType == kdoor
 		)
 	{
@@ -142,6 +142,8 @@ CollisionType Hero::checkCollision(Point heroPosition)
 
 	//如果图块ID不为0，表示有敌人
 	if (targetTileGID) {
+		enemy = new Enemy(targetTileGID); //用GID初始化面对的敌人
+		fight();
 		return kenemy;
 	}
 
@@ -181,9 +183,45 @@ void Hero::fight()
 	if (isHeroFighting) {
 		return;
 	}
+
+	int targetTileGID = Global::instance()->gameMap->WallLayer->getTileGIDAt(targetTileCoord);
+
+	bool isEnemyCanBeHurt = ifTheEnemyCanBeHurt(enemy);
+
+	if (!isEnemyCanBeHurt) {
+		//无法攻击 showTip()
+		return;
+	}
+
+	//创建战斗用精灵
+	FightingSprite = Sprite::create("sword.png", Rect(0, 0, 192, 192)); 
+	//在map中加入该精灵
+	Global::instance()->gameMap->addChild(FightingSprite,100,kZfighting);
+	//战斗精灵位置计算 在英雄和敌人中点
+	Point FightingPosition = (this->getPosition() + targetPosition) / 2;
+	//使用AnimationControl创建永远重复的战斗动作
+	RepeatForever* FightingAction = RepeatForever::create(AnimationControl::instance()->createAnimate("Fighting"));
+	//设置精灵位置
+	FightingSprite->setPosition(FightingPosition);
+	//运行该动作
+	FightingSprite->runAction(FightingAction);
+	//设置正在战斗为true
+	isHeroFighting = true;
+	//设置战斗的定时器
+	schedule(schedule_selector(Hero::FightingUpdate), 0.2f);
 	
-	Fighting = Sprite::create("sword.png", Rect(0, 0, 192, 192));
-	//Fighting->setPosition()
+
+}
+
+bool Hero::ifTheEnemyCanBeHurt(Enemy* enemy)
+{
+	//若无法使敌人受伤 返回false
+	if (this->ATK - enemy->DEF <= 0) {
+		return false;
+	}
+	else {
+		return true;
+	}
 
 }
 
@@ -200,6 +238,61 @@ void Hero::doTeleport(Teleport *teleport) {
 	//将Global中保存的复活点设置为新地图的复活点
 	Global::instance()->heroSpawnTileCoord = teleport->heroTileCoord;
 	Global::instance()->gameLayer->switchMap(teleport->targetMap);
+}
+
+void Hero::FightingUpdate(float dt)
+{
+	int HeroATKminusEnemyDEF; //每次update敌人减少的血量
+	int EnemyATKminusHeroDEF; //每次update英雄减少的血量
+
+
+	//设置HeroATKminusEnemyDEF为英雄攻击减去敌人防御
+	if (this->ATK - enemy->DEF < 0) {
+		HeroATKminusEnemyDEF = 0;
+	}
+	else {
+		HeroATKminusEnemyDEF = this->ATK - enemy->DEF;
+	}
+
+	//设置EnemyATKminusHeroDEF为敌人攻击减去英雄防御
+	if (enemy->ATK - this->ATK < 0) {
+		EnemyATKminusHeroDEF = 0;
+	}
+	else {
+		EnemyATKminusHeroDEF = enemy->ATK - this->ATK;
+	}
+
+	enemy->HP -= HeroATKminusEnemyDEF; //敌人先受到攻击
+	//若敌人死亡
+	if (enemy->HP <= 0) { 
+		//在地图中删除敌人
+		Global::instance()->gameMap->enemyLayer->removeTileAt(targetTileCoord);
+		//删除战斗用精灵
+		Global::instance()->gameMap->removeChildByTag(kZfighting); 
+		//取消定时器
+		unschedule(schedule_selector(Hero::FightingUpdate)); 
+		//设置isHeroFighting为false
+		isHeroFighting = false;
+	}
+
+	this->HP -= EnemyATKminusHeroDEF; //英雄受到攻击
+	Global::instance()->gameScene->refreshStatus(kZHP);
+
+	//若英雄死亡
+	if (this->HP <= 0) {
+		log("gg");
+		//删除战斗用精灵
+		Global::instance()->gameMap->removeChildByTag(kZfighting);
+		//取消定时器
+		unschedule(schedule_selector(Hero::FightingUpdate));
+		//设置isHeroFighting为false
+		isHeroFighting = false;
+		//更换场景
+		auto scene = StartScene::createStartScene();
+		Director::getInstance()->replaceScene(scene);
+	}
+
+
 }
 
 void Hero::actWithNPC() {
@@ -222,6 +315,48 @@ void Hero::openDoor(int gid) {
 }
 
 void Hero::pickUpItem() {
+
+	int gid = Global::instance()->gameMap->ItemLayer->getTileGIDAt(targetTileCoord);
+
+	GameScene* tempGameScene = Global::instance()->gameScene;
+
+	if (gid == 291) {
+		//黄钥匙
+		this->YellowKeys++;
+		tempGameScene->refreshStatus(kZYellowKeys);
+	}
+	if (gid == 292) {
+		//蓝钥匙
+		this->BlueKeys++;
+		tempGameScene->refreshStatus(kZBlueKeys);
+	}
+	if (gid == 293) {
+		//红钥匙
+		this->RedKeys++;
+		tempGameScene->refreshStatus(kZRedKeys);
+	}
+	if (gid == 275) {
+		//攻击力增加2
+		this->ATK += 2;
+		tempGameScene->refreshStatus(kZATK);
+	}
+	if (gid == 276) {
+		//防御力增加2
+		this->DEF += 2;
+		tempGameScene->refreshStatus(kZDEF);
+	}
+	if (gid == 279) {
+		//红血瓶 血量加200
+		this->HP += 200;
+		tempGameScene->refreshStatus(kZHP);
+	}
+	if (gid == 280) {
+		//蓝血瓶 血量加500
+		this->HP += 500;
+		tempGameScene->refreshStatus(kZHP);
+	}
+
+	
 
 	//直接删除图块
 	Global::instance()->gameMap->ItemLayer->removeTileAt(targetTileCoord);

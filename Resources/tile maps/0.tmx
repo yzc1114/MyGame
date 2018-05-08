@@ -34,7 +34,7 @@
  </layer>
  <layer name="item" width="13" height="13">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACmNgIA+IMEJofyDtzohdjTBQXIoRlU8MEMaiRxyLXpAczB0qWOSx6ZEEihkR6Q56AmzuhwFVRoi7QUAEizoJqJgyCf4Sx6IHxCbFDHyAGHP0ibQLAJM6iWekAgAA
+   H4sIAAAAAAAACmNgIA+IMEJofyDtzohdjTBQXIIRlU8MEMaiRxyLXpAczB0qWOSx6QG5x4hId9ATYHM/DKgihaMIDj+BgDIJ/hLHogfEJsUMfIAYc/SJtAsAUQ6VJqQCAAA=
   </data>
  </layer>
  <objectgroup name="object">

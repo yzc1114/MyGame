@@ -16,43 +16,9 @@ public:
     
     CREATE_FUNC(GameScene);
 
-	
+	void refreshStatus(kZorder kzorder);
 
-
-	/*Á·Ï°
-
-	//bool keyUpHolding = false;
-	//bool keyDownHolding = false;
-	//bool keyLeftHolding = false;
-	//bool keyRightHolding = false;
-
-	void up(Ref* psender);
-	void down(Ref* psender);
-	void left(Ref* psender);
-	void right(Ref* psender);
-
-	void keyup(float dt);
-	void keydown(float dt);
-	void keyright(float dt);
-	void keyleft(float dt);
-
-	
-	bool isCanReach(float x,float y);
-	*/
-
-	
-private:
-
-
-
-	/*Á·Ï°
-	Size size;
-	TMXTiledMap* map;
-	TMXLayer* meta;
-	
-	Sprite* littleman;
-	bool isMoving = false;
-	*/
+	Label* createNewLabelForStatus(Label* oldLabel);
 };
 
 #endif 
