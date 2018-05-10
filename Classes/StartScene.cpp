@@ -41,7 +41,7 @@ void StartScene::initStartScene()
 	menu->alignItemsVerticallyWithPadding(30);
 	menu->setPosition(origin.x + visibleSize.width / 2, origin.y + 2.5*visibleSize.height / 7);
 	this->addChild(menu, 2);
-
+	;
 
 }
 
