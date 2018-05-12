@@ -28,6 +28,8 @@ public:
 	Sprite* TouchUp;
 	Sprite* TouchDown;
 
+	bool MouseGoesAway;
+
 	typedef enum {
 		up = 1,
 		down,
@@ -44,6 +46,15 @@ public:
 	bool onTouchBegan(Touch* touch, Event* unused_Event);
 	void onTouchMoved(Touch* touch, Event* unused_Event);
 	void onTouchEnded(Touch* touch, Event* unused_Event);
+
+	void onKeyPressed(EventKeyboard::KeyCode keycode, Event* unused_event);
+	void onKeyReleased(EventKeyboard::KeyCode keycode, Event* unused_event);
+
+	void moveUpUpdate(float dt);
+	void moveDownUpdate(float dt);
+	void moveLeftUpdate(float dt);
+	void moveRightUpdate(float dt);
+
 };
 
 #endif

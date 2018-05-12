@@ -31,7 +31,7 @@ Teleport::Teleport(const ValueMap &dict, int x, int y)
 	teleportSprite = Sprite::create(imagePath);
 	teleportSprite->setAnchorPoint(Point::ZERO);
 	teleportSprite->setPosition(position);
-	Global::instance()->gameLayer->addChild(teleportSprite, kZteleport, index);
+	Global::instance()->gameMap->addChild(teleportSprite, kZteleport, index);
 }
 
 Teleport::~Teleport(void)

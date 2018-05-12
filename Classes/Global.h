@@ -22,10 +22,14 @@ public:
 	//游戏主图层
 	GameLayer *gameLayer;
 
+	//控制图层
 	ControlLayer *controlLayer;
 
 	//游戏地图
 	GameMap *gameMap;
+
+	//游戏地图数组
+	std::map<int, GameMap*> GameMaps;
 
 	//勇士
 	Hero *hero;

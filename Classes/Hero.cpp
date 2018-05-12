@@ -36,7 +36,7 @@ Hero::~Hero()
 void Hero::move(HeroDirection direction)
 {
 	//若已经在走 则返回
-	if (isHeroMoving)
+	if (isHeroMoving || isHeroFighting || isDoorOpening)
 	{
 		return;
 	}
@@ -306,7 +306,41 @@ void Hero::openDoor(int gid) {
 	}
 	//保存这个门的GID；
 	targetDoorGID = gid;
-
+	//259 黄门
+	//260 蓝门
+	//261 红门
+	//262 boss门
+	if (gid == 259) { //黄门
+		if (YellowKeys > 0) {
+			YellowKeys--;
+			Global::instance()->gameScene->refreshStatus(kZYellowKeys);
+		}
+		else {
+			return;
+		}
+	}
+	if (gid == 260) { //蓝门
+		if (BlueKeys > 0) {
+			BlueKeys--;
+			Global::instance()->gameScene->refreshStatus(kZBlueKeys);
+		}
+		else {
+			return;
+		}
+	}
+	if (gid == 261) { //红门
+		if (RedKeys > 0) {
+			RedKeys--;
+			Global::instance()->gameScene->refreshStatus(kZRedKeys);
+		}
+		else {
+			return;
+		}
+	}
+	if (gid == 262) {
+		//dosomething
+		return;
+	}
 	//设置正在开门为TRUE
 	isDoorOpening = true;
 

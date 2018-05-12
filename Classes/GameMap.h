@@ -42,6 +42,7 @@ public:
 	TMXLayer* enemyLayer;
 	Vector<Enemy*> enemyArray;
 
+	void afterSwitchMap();
 };
 
 #endif

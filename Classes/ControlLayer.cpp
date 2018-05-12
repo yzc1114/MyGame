@@ -55,6 +55,15 @@ bool ControlLayer::init()
 	touchListener->onTouchEnded = CC_CALLBACK_2(ControlLayer::onTouchEnded, this);
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+
+
+	auto keyBoardListener = EventListenerKeyboard::create();
+
+	keyBoardListener->onKeyPressed = CC_CALLBACK_2(ControlLayer::onKeyPressed,this);
+	keyBoardListener->onKeyReleased = CC_CALLBACK_2(ControlLayer::onKeyReleased,this);
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyBoardListener, this);
+
 }
 
 
@@ -66,6 +75,8 @@ void ControlLayer::exitButtonCallBack(Ref* psender)
 
 bool ControlLayer::onTouchBegan(Touch * touch, Event * unused_Event)
 {
+	MouseGoesAway = false;
+
 	if (UpPart.containsPoint(touch->getStartLocation())) {
 		getChildByTag(up)->setZOrder(100);
 		return true;
@@ -89,38 +100,106 @@ bool ControlLayer::onTouchBegan(Touch * touch, Event * unused_Event)
 
 void ControlLayer::onTouchMoved(Touch * touch, Event * unused_Event)
 {
-	/*if (UpPart.containsPoint(touch->getStartLocation())) {
-		this->removeChildByTag(up);
+	
+
+	if (UpPart.containsPoint(touch->getStartLocation())) {
+		if (!UpPart.containsPoint(touch->getLocation())) {
+			getChildByTag(up)->setZOrder(up);
+			MouseGoesAway = true;
+		}
 	}
 	if (DownPart.containsPoint(touch->getStartLocation())) {
-		this->removeChildByTag(down);
+		if (!DownPart.containsPoint(touch->getLocation())) {
+			getChildByTag(down)->setZOrder(down);
+			MouseGoesAway = true;
+		}
 	}
 	if (LeftPart.containsPoint(touch->getStartLocation())) {
-		this->removeChildByTag(left);
+		if (!LeftPart.containsPoint(touch->getLocation())) {
+			getChildByTag(left)->setZOrder(left);
+			MouseGoesAway = true;
+		}
 	}
 	if (RightPart.containsPoint(touch->getStartLocation())) {
-		this->removeChildByTag(right);
-	}*/
+		if (!RightPart.containsPoint(touch->getLocation())) {
+			getChildByTag(right)->setZOrder(right);
+			MouseGoesAway = true;
+		}
+	}
+
+	
 }
 
 void ControlLayer::onTouchEnded(Touch * touch, Event * unused_Event)
 {
 	auto hero = Global::instance()->hero;
 
-	if (UpPart.containsPoint(touch->getStartLocation())) {
+	if (UpPart.containsPoint(touch->getStartLocation()) && !MouseGoesAway) {
 		hero->move(kup);
 		getChildByTag(up)->setZOrder(up);
 	}
-	if (DownPart.containsPoint(touch->getStartLocation())) {
+	if (DownPart.containsPoint(touch->getStartLocation()) && !MouseGoesAway) {
 		hero->move(kdown);
 		getChildByTag(down)->setZOrder(down);
 	}
-	if (LeftPart.containsPoint(touch->getStartLocation())) {
+	if (LeftPart.containsPoint(touch->getStartLocation()) && !MouseGoesAway) {
 		hero->move(kleft);
 		getChildByTag(left)->setZOrder(left);
 	}
-	if (RightPart.containsPoint(touch->getStartLocation())) {
+	if (RightPart.containsPoint(touch->getStartLocation()) && !MouseGoesAway) {
 		hero->move(kright);
 		getChildByTag(right)->setZOrder(right);
 	}
+}
+
+void ControlLayer::onKeyPressed(EventKeyboard::KeyCode keycode, Event * unused_event)
+{
+	if (keycode == EventKeyboard::KeyCode::KEY_W || keycode == EventKeyboard::KeyCode::KEY_UP_ARROW) {
+		schedule(schedule_selector(ControlLayer::moveUpUpdate));
+	}
+	if (keycode == EventKeyboard::KeyCode::KEY_S || keycode == EventKeyboard::KeyCode::KEY_DOWN_ARROW) {
+		schedule(schedule_selector(ControlLayer::moveDownUpdate));
+	}
+	if (keycode == EventKeyboard::KeyCode::KEY_A || keycode == EventKeyboard::KeyCode::KEY_LEFT_ARROW) {
+		schedule(schedule_selector(ControlLayer::moveLeftUpdate));
+	}
+	if (keycode == EventKeyboard::KeyCode::KEY_D || keycode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW) {
+		schedule(schedule_selector(ControlLayer::moveRightUpdate));
+	}
+}
+
+void ControlLayer::onKeyReleased(EventKeyboard::KeyCode keycode, Event * unused_event)
+{
+	if (keycode == EventKeyboard::KeyCode::KEY_W || keycode == EventKeyboard::KeyCode::KEY_UP_ARROW) {
+		unschedule(schedule_selector(ControlLayer::moveUpUpdate));
+	}
+	if (keycode == EventKeyboard::KeyCode::KEY_S || keycode == EventKeyboard::KeyCode::KEY_DOWN_ARROW) {
+		unschedule(schedule_selector(ControlLayer::moveDownUpdate));
+	}
+	if (keycode == EventKeyboard::KeyCode::KEY_A || keycode == EventKeyboard::KeyCode::KEY_LEFT_ARROW) {
+		unschedule(schedule_selector(ControlLayer::moveLeftUpdate));
+	}
+	if (keycode == EventKeyboard::KeyCode::KEY_D || keycode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW) {
+		unschedule(schedule_selector(ControlLayer::moveRightUpdate));
+	}
+}
+
+void ControlLayer::moveUpUpdate(float dt)
+{
+	Global::instance()->hero->move(kup);
+}
+
+void ControlLayer::moveDownUpdate(float dt)
+{
+	Global::instance()->hero->move(kdown);
+}
+
+void ControlLayer::moveLeftUpdate(float dt)
+{
+	Global::instance()->hero->move(kleft);
+}
+
+void ControlLayer::moveRightUpdate(float dt)
+{
+	Global::instance()->hero->move(kright);
 }
