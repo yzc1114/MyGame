@@ -22,6 +22,8 @@ public:
 
 	int RedKeys;
 
+	int coins; //½ð±Ò
+
 
 
 	bool init(); //³õÊ¼»¯Ó¢ÐÛ

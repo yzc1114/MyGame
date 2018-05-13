@@ -5,6 +5,7 @@
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
 
+
 #if USE_AUDIO_ENGINE && USE_SIMPLE_AUDIO_ENGINE
 #error "Don't use AudioEngine and SimpleAudioEngine at the same time. Please just select one in your game!"
 #endif
@@ -19,8 +20,8 @@ using namespace CocosDenshion;
 
 USING_NS_CC;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(32 * 13 + 32 * 6, 416);
-static cocos2d::Size smallResolutionSize = cocos2d::Size(32 * 13 + 32 * 6, 416);
+static cocos2d::Size designResolutionSize = cocos2d::Size(MAP_SIZE + STATUSBARWIDTH, MAP_SIZE + TIPBARHEIGHT);
+static cocos2d::Size smallResolutionSize = cocos2d::Size(MAP_SIZE + STATUSBARWIDTH, MAP_SIZE + TIPBARHEIGHT);
 
 
 AppDelegate::AppDelegate()
@@ -62,7 +63,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("My Game", cocos2d::Rect(0, 0, 32 * 13 + 32 * 6, 416));
+        glview = GLViewImpl::createWithRect("My Game", cocos2d::Rect(0, 0, 32 * 13 + 32 * 6, 416+25));
 #else
         glview = GLViewImpl::create("HelloWorld");
 #endif

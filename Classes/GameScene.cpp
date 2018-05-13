@@ -2,7 +2,7 @@
 
 
 USING_NS_CC;
-#define MAP_SIZE 416
+
 
 Scene* GameScene::createScene()
 {
@@ -21,11 +21,15 @@ bool GameScene::init()
 	
 	GameLayer* gamelayer = GameLayer::createGameLayer(0);
 	addChild(gamelayer,1);
-	gamelayer->setPosition(192 , 0);
+	gamelayer->setPosition(192 , TIPBARHEIGHT);
 
-	LayerColor* statusLayer = LayerColor::create(Color4B::YELLOW, 192, 416);
+	LayerColor* statusLayer = LayerColor::create(Color4B::YELLOW, STATUSBARWIDTH, MAP_SIZE);
 	addChild(statusLayer, 1);
-	statusLayer->setPosition(0, 0);
+	statusLayer->setPosition(0, TIPBARHEIGHT);
+
+	LayerColor* downTipBar = LayerColor::create(Color4B::WHITE, STATUSBARWIDTH + MAP_SIZE, TIPBARHEIGHT);
+	addChild(downTipBar, 1);
+	downTipBar->setPosition(0, 0);
 
 	ControlLayer* controllayer = ControlLayer::create();
 	addChild(controllayer, 2);
@@ -78,6 +82,7 @@ bool GameScene::init()
 	this->addChild(currentRedKeys, kZRedKeys, kZRedKeys);
 
 	
+
 
 }
 
@@ -139,6 +144,11 @@ Label* GameScene::createNewLabelForStatus(Label* oldLabel) {
 	newLabel->setPosition(oldLabel->getPosition());
 	return newLabel;
 
+}
+
+void GameScene::showTipBarText(std::string str)
+{
+	//Label::createWithTTF()
 }
 
 

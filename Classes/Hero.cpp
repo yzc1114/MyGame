@@ -18,6 +18,7 @@ bool Hero::init()
 	YellowKeys = 5;
 	BlueKeys = 1;
 	RedKeys = 1;
+	coins = 0;
 
 	isHeroMoving = isHeroFighting = isDoorOpening = false;
 	return true;
@@ -336,7 +337,8 @@ void Hero::openDoor(int gid) {
 		else {
 			return;
 		}
-	}
+	} 
+
 	if (gid == 262) {
 		//dosomething
 		return;

@@ -1,6 +1,11 @@
 #ifndef __MAGIC_TOWER__
 #define __MAGIC_TOWER__
 
+#define TIPBARHEIGHT 25
+#define MAP_SIZE 416
+#define STATUSBARWIDTH 192
+
+
 #include "cocos2d.h"
 #include "GameConstants.h"
 //Layer

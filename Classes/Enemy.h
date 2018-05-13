@@ -16,7 +16,7 @@ public:
 	int HP;
 	int ATK;
 	int DEF;
-
+	int coinsWorth;
 
 	//怪物在TileMap上的方位
 	Point position;
