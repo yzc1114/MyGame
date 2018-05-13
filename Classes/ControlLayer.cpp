@@ -154,32 +154,35 @@ void ControlLayer::onTouchEnded(Touch * touch, Event * unused_Event)
 
 void ControlLayer::onKeyPressed(EventKeyboard::KeyCode keycode, Event * unused_event)
 {
-	if (keycode == EventKeyboard::KeyCode::KEY_W || keycode == EventKeyboard::KeyCode::KEY_UP_ARROW) {
+	if (keycode == EventKeyboard::KeyCode::KEY_UP_ARROW) {
 		schedule(schedule_selector(ControlLayer::moveUpUpdate));
 	}
-	if (keycode == EventKeyboard::KeyCode::KEY_S || keycode == EventKeyboard::KeyCode::KEY_DOWN_ARROW) {
+	if (keycode == EventKeyboard::KeyCode::KEY_DOWN_ARROW) {
 		schedule(schedule_selector(ControlLayer::moveDownUpdate));
 	}
-	if (keycode == EventKeyboard::KeyCode::KEY_A || keycode == EventKeyboard::KeyCode::KEY_LEFT_ARROW) {
+	if (keycode == EventKeyboard::KeyCode::KEY_LEFT_ARROW) {
 		schedule(schedule_selector(ControlLayer::moveLeftUpdate));
 	}
-	if (keycode == EventKeyboard::KeyCode::KEY_D || keycode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW) {
+	if (keycode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW) {
 		schedule(schedule_selector(ControlLayer::moveRightUpdate));
+	}
+	if (keycode == EventKeyboard::KeyCode::KEY_S) {
+		SaveControl::instance()->save(1);
 	}
 }
 
 void ControlLayer::onKeyReleased(EventKeyboard::KeyCode keycode, Event * unused_event)
 {
-	if (keycode == EventKeyboard::KeyCode::KEY_W || keycode == EventKeyboard::KeyCode::KEY_UP_ARROW) {
+	if (keycode == EventKeyboard::KeyCode::KEY_UP_ARROW) {
 		unschedule(schedule_selector(ControlLayer::moveUpUpdate));
 	}
-	if (keycode == EventKeyboard::KeyCode::KEY_S || keycode == EventKeyboard::KeyCode::KEY_DOWN_ARROW) {
+	if (keycode == EventKeyboard::KeyCode::KEY_DOWN_ARROW) {
 		unschedule(schedule_selector(ControlLayer::moveDownUpdate));
 	}
-	if (keycode == EventKeyboard::KeyCode::KEY_A || keycode == EventKeyboard::KeyCode::KEY_LEFT_ARROW) {
+	if (keycode == EventKeyboard::KeyCode::KEY_LEFT_ARROW) {
 		unschedule(schedule_selector(ControlLayer::moveLeftUpdate));
 	}
-	if (keycode == EventKeyboard::KeyCode::KEY_D || keycode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW) {
+	if (keycode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW) {
 		unschedule(schedule_selector(ControlLayer::moveRightUpdate));
 	}
 }
