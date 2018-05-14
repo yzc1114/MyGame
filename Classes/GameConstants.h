@@ -35,5 +35,6 @@ typedef enum {
 	kZDEF,
 	kZYellowKeys,
 	kZBlueKeys,
-	kZRedKeys
+	kZRedKeys,
+	kZSaveLayer
 }kZorder;

@@ -169,6 +169,9 @@ void ControlLayer::onKeyPressed(EventKeyboard::KeyCode keycode, Event * unused_e
 	if (keycode == EventKeyboard::KeyCode::KEY_S) {
 		SaveControl::instance()->save(1);
 	}
+	if (keycode == EventKeyboard::KeyCode::KEY_L) {
+		SaveControl::instance()->load(1);
+	}
 }
 
 void ControlLayer::onKeyReleased(EventKeyboard::KeyCode keycode, Event * unused_event)

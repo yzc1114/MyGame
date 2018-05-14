@@ -20,6 +20,9 @@ void SaveControl::save(int order)
 	auto Hero = Global::instance()->hero;
 	auto GameMaps = Global::instance()->GameMaps;
 
+	//保存该存档确实存在
+	Saver->setBoolForKey((order_str).c_str(), true);
+
 	//保存英雄相关属性
 	Saver->setIntegerForKey((order_str + space + "HP").c_str(), Hero->HP);
 	Saver->setIntegerForKey((order_str + space + "ATK").c_str(), Hero->ATK);
@@ -51,22 +54,13 @@ void SaveControl::save(int order)
 				if (DoorLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //保存地图上的门 是否已经开启过
 					Saver->setBoolForKey((order_str + space + "isDoorsClosed" + space + floor_str + space + x_str + space + y_str).c_str(), true);  //门还在 存储为true
 				}
-				else {
-					Saver->setBoolForKey((order_str + space + "isDoorsClosed" + space + floor_str + space + x_str + space + y_str).c_str(), false); //门已开过 或者根本没有门 存储为false
-				}
 
 				if (ItemLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //保存地图上的物品 是否已经被拿走
 					Saver->setBoolForKey((order_str + space + "isItemHaveNotBeenPickedUp" + space + floor_str + space + x_str + space + y_str).c_str(), true); //东西还在 存储为true
 				}
-				else {
-					Saver->setBoolForKey((order_str + space + "isItemHaveNotBeenPickedUp" + space + floor_str + space + x_str + space + y_str).c_str(), false); //东西不在 或者本来就没有东西 存储为false
-				}
 
 				if (enemyLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //保存地图上的怪物 是否已经被击败
 					Saver->setBoolForKey((order_str + space + "isEnemyExisted" + space + floor_str + space + x_str + space + y_str).c_str(), true); //怪物还在 存储为true
-				}
-				else {
-					Saver->setBoolForKey((order_str + space + "isEnemyExisted" + space + floor_str + space + x_str + space + y_str).c_str(), false); //怪物不在 或者本来就没有怪物 存储为false
 				}
 
 			}
@@ -80,6 +74,9 @@ void SaveControl::save(int order)
 
 void SaveControl::load(int order)
 {
+	if (!checkIfTheSaveExisted(order)) {
+		return;
+	}
 	std::string order_str = std::to_string(order);
 	auto Saver = UserDefault::getInstance();
 	auto Hero = Global::instance()->hero;
@@ -98,8 +95,75 @@ void SaveControl::load(int order)
 	int y = Saver->getFloatForKey((order_str + "HeroCocosPositionY").c_str());
 	Hero->setPosition(x, y);
 
-	Global::instance()->gameLayer->removeChildByTag(kZmap);
-	Global::instance()->GameMaps.clear();
+	//将当前的map在gameLayer中去除
+	Global::instance()->gameLayer->removeChildByTag(kZmap);  
+	
+	//遍历整个GameMaps数组 将每个原来保存的map释放 并保存新的地图在其中
+	for (auto iter : GameMaps) { 
+		iter.second->release();
+		iter.second = nullptr;
+		int floor = iter.first;
+		std::string floor_str = std::to_string(floor);
+		std::string space = " ";
+		GameMap* map = GameMap::createMap(floor);
+		TMXLayer* DoorLayer = map->DoorLayer;
+		TMXLayer* enemyLayer = map->enemyLayer;
+		TMXLayer* ItemLayer = map->ItemLayer;
+		Size s = DoorLayer->getLayerSize();
+
+		for (int x = 0; x < s.width; x++) {
+			for (int y = 0; y < s.height; y++) {
+
+				std::string x_str = std::to_string(x);
+				std::string y_str = std::to_string(y);
+
+				if (DoorLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //查看地图上的门 是否已经开启过
+					   //有门 返回true 无门 返回false
+					if (!  (Saver->getBoolForKey((order_str + space + "isDoorsClosed" + space + floor_str + space + x_str + space + y_str).c_str(), false) ) ) {
+						DoorLayer->removeTileAt(GameMap::tileCoordForPosition(Vec2(x, y)));
+					}
+				}
+
+				if (ItemLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //查看地图上的物品 是否已经被拿走
+						//东西还在 返回true 不在 返回false
+					if (!  (Saver->getBoolForKey((order_str + space + "isItemHaveNotBeenPickedUp" + space + floor_str + space + x_str + space + y_str).c_str(), false))) {
+						ItemLayer->removeTileAt(GameMap::tileCoordForPosition(Vec2(x, y)));
+					}
+				}
+
+				if (enemyLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //查看地图上的怪物 是否已经被击败
+						//怪物还在 返回true 不在 返回false
+					if (!(Saver->getBoolForKey((order_str + space + "isEnemyExisted" + space + floor_str + space + x_str + space + y_str).c_str(), false))) {
+						enemyLayer->removeTileAt(GameMap::tileCoordForPosition(Vec2(x, y)));
+					}
+				}
+
+			}
+		}
+
+		iter.second = map;
+
+	}
+
+	GameMap* currentMap = GameMaps.at(Global::instance()->currentLevel);
+	Global::instance()->gameMap = currentMap;
+	Global::instance()->gameLayer->addChild(currentMap,kZmap,kZmap);
+	currentMap->setPosition(0, 0);
+
+}
+
+bool SaveControl::checkIfTheSaveExisted(int order)
+{
+	if (!UserDefault::isXMLFileExist()) {
+		return false;
+	}
+
+	if (UserDefault::getInstance()->getBoolForKey(std::to_string(order).c_str(), false)) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 

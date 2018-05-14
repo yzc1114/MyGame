@@ -164,4 +164,41 @@ void GameScene::showTipBarText(std::string str)
 	this->addChild(newLabel, kZTipBar, kZTipBar);
 }
 
+void GameScene::showSaveLayer()
+{
+	auto Saver = SaveControl::instance();
+
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	SaverLayer = LayerColor::create(Color4B::ORANGE,3/4*visibleSize.width,3/4*visibleSize.height);
+	SaverLayer->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	this->addChild(SaverLayer,kZSaveLayer,kZSaveLayer);
+	for (int i = 1; i <= 5; i++) { //五个存档位置
+		auto subLayer = LayerColor::create(Color4B::BLUE, visibleSize.width * 4 / 5, visibleSize.height * 4 / 7 / 5);
+		SaverLayer->addChild(subLayer,kZSaveLayer + 1, i);
+		subLayer->setPosition(SaverLayer->getContentSize().width / 2, (2 * (i - 1) + 1)*SaverLayer->getContentSize().height / 10);
+		if (Saver->checkIfTheSaveExisted(i)) {
+			//存档存在 则显示英雄HP ATK DEF coins currentlevel
+		}
+		else {
+			TTFConfig ttfconfig("fonts/arial.ttf", 12);
+			Label* label = Label::createWithTTF(ttfconfig, "No Save Existed");
+			subLayer->addChild(label, kZSaveLayer + 2);
+			subLayer->setPosition(label->getContentSize().width / 2, label->getContentSize().height / 2);
+		}
+	}
+
+	auto MouseListener = EventListenerMouse::create();
+	MouseListener->onMouseMove = CC_CALLBACK_1(GameScene::SaveLayerOnMouseMove,this);
+	
+
+}
+
+void GameScene::SaveLayerOnMouseMove(Event * event)
+{
+	auto MouseEvent = (EventMouse*)event;
+	float x = MouseEvent->getCursorX();
+	float y = MouseEvent->getCursorY();
+	//for(int i)
+}
+
 

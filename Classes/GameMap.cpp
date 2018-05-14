@@ -11,7 +11,7 @@ GameMap::~GameMap()
 
 GameMap* GameMap::createMap(int floor)
 {
-	if (Global::instance()->GameMaps.count(floor)) {
+	if (Global::instance()->GameMaps.count(floor) == 1 && Global::instance()->GameMaps.at(floor) != nullptr) {
 		Global::instance()->gameMap = Global::instance()->GameMaps.at(floor);
 		Global::instance()->GameMaps.at(floor)->afterSwitchMap();
 		return Global::instance()->GameMaps.at(floor);

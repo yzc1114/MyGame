@@ -259,7 +259,7 @@ void Hero::FightingUpdate(float dt)
 	}
 
 	//ÉèÖÃEnemyATKminusHeroDEFÎªµÐÈË¹¥»÷¼õÈ¥Ó¢ÐÛ·ÀÓù
-	if (enemy->ATK - this->ATK < 0) {
+	if (enemy->ATK - this->DEF < 0) {
 		EnemyATKminusHeroDEF = 0;
 	}
 	else {

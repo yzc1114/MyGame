@@ -10,6 +10,7 @@ public:
 	~SaveControl();
 	void save(int order);
 	void load(int order);
+	bool checkIfTheSaveExisted(int order);
 };
 
 

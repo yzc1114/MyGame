@@ -21,6 +21,12 @@ public:
 	Label* createNewLabelForStatus(Label* oldLabel);
 
 	void showTipBarText(std::string str);
+
+	void showSaveLayer();
+
+	void SaveLayerOnMouseMove(Event* event);
+
+	Layer* SaverLayer;
 };
 
 #endif 
