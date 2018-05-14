@@ -36,7 +36,7 @@ NPC::NPC(const ValueMap &dict, int x, int y)
 	//计算唯一ID
 	int index = tileCoord.x + tileCoord.y * Global::instance()->gameMap->getMapSize().width;
 
-	Global::instance()->gameLayer->addChild(npcSprite, kZnpc, index);
+	Global::instance()->gameMap->addChild(npcSprite, kZnpc, index);
 
 	
 	//从动画管理器中根据npcId获取动画，开始永久播放

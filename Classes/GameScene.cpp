@@ -2,7 +2,7 @@
 
 
 USING_NS_CC;
-#define MAP_SIZE 416
+
 
 Scene* GameScene::createScene()
 {
@@ -20,15 +20,26 @@ bool GameScene::init()
 
 	
 	GameLayer* gamelayer = GameLayer::createGameLayer(0);
-	addChild(gamelayer,1);
-	gamelayer->setPosition(192 , 0);
+	this->addChild(gamelayer,-1);
+	gamelayer->setPosition(192 , TIPBARHEIGHT);
 
-	LayerColor* statusLayer = LayerColor::create(Color4B::YELLOW, 192, 416);
-	addChild(statusLayer, 1);
-	statusLayer->setPosition(0, 0);
+	LayerColor* statusLayer = LayerColor::create(Color4B::YELLOW, STATUSBARWIDTH, MAP_SIZE);
+	this->addChild(statusLayer, -1);
+	statusLayer->setPosition(0, TIPBARHEIGHT);
+
+	LayerColor* downTipBar = LayerColor::create(Color4B::WHITE, STATUSBARWIDTH + MAP_SIZE, TIPBARHEIGHT);
+	this->addChild(downTipBar, -1);
+	downTipBar->setPosition(0, 0);
+
+	TTFConfig ttfconfig1("fonts/arial.ttf", 12);
+	auto tipBarLabel = Label::createWithTTF(ttfconfig1, NORMAL_TIPBAR); //³õÊ¼»¯TipBar
+	this->addChild(tipBarLabel, kZTipBar, kZTipBar);
+	tipBarLabel->setAnchorPoint(Vec2::ZERO);
+	tipBarLabel->setPosition(5, 5);
+	tipBarLabel->setColor(Color3B::BLACK);
 
 	ControlLayer* controllayer = ControlLayer::create();
-	addChild(controllayer, 2);
+	this->addChild(controllayer, 2);
 	controllayer->setPosition(Vec2::ZERO);
 
 
@@ -78,6 +89,7 @@ bool GameScene::init()
 	this->addChild(currentRedKeys, kZRedKeys, kZRedKeys);
 
 	
+
 
 }
 
@@ -139,6 +151,17 @@ Label* GameScene::createNewLabelForStatus(Label* oldLabel) {
 	newLabel->setPosition(oldLabel->getPosition());
 	return newLabel;
 
+}
+
+void GameScene::showTipBarText(std::string str)
+{
+	Label* label = (Label*)(this->getChildByTag(kZTipBar));
+	TTFConfig ttfconfig("fonts/arial.ttf", 8);
+	Label* newLabel = Label::createWithTTF(ttfconfig, str);
+	newLabel->setPosition(label->getPosition());
+	newLabel->setColor(label->getColor());
+	this->removeChildByTag(kZTipBar);
+	this->addChild(newLabel, kZTipBar, kZTipBar);
 }
 
 

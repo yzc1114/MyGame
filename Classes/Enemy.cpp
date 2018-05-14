@@ -5,7 +5,7 @@ Enemy::Enemy(void)
 	HP = 100;
 	ATK = 22;
 	DEF = 5;
-
+	coinsWorth = 4;
 }
 
 Enemy::~Enemy(void)
@@ -18,24 +18,28 @@ Enemy::Enemy(int gid)
 		HP = 100;
 		ATK = 22;
 		DEF = 5;
+		coinsWorth = 4;
 	}
 
 	if (gid >= 4 && gid < 8) {
 		HP = 100;
 		ATK = 22;
 		DEF = 5;
+		coinsWorth = 4;
 	}
 
 	if (gid >= 8 && gid < 12) {  
 		HP = 100;
 		ATK = 22;
 		DEF = 5;
+		coinsWorth = 4;
 	}
 
 	if (gid >= 12) {
 		HP = 100;
 		ATK = 22;
 		DEF = 5;
+		coinsWorth = 4;
 	}
 	/*
 	if (gid == 16) {  

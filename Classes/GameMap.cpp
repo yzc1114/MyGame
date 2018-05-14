@@ -11,12 +11,17 @@ GameMap::~GameMap()
 
 GameMap* GameMap::createMap(int floor)
 {
-
+	if (Global::instance()->GameMaps.count(floor)) {
+		Global::instance()->gameMap = Global::instance()->GameMaps.at(floor);
+		Global::instance()->GameMaps.at(floor)->afterSwitchMap();
+		return Global::instance()->GameMaps.at(floor);
+	}
 	GameMap* map = new GameMap;
 	if (map->initWithTMXFile("tile maps/" + std::to_string(floor) + ".tmx"))
 	{
 		map->extraInit();
-		map->autorelease();
+		map->retain();
+		Global::instance()->GameMaps.insert(std::pair<int, GameMap*>(floor, map));
 		return map;
 	}
 
@@ -130,6 +135,8 @@ void GameMap::updateEnemyAnimation(float time)
 	}
 }
 
+
+
 //初始化对象层
 void GameMap::initObject()
 {
@@ -180,4 +187,55 @@ void GameMap::initObject()
 		}
 		
 	}
+}
+
+void GameMap::afterSwitchMap()
+{
+	//获取对象层
+	TMXObjectGroup* group = this->objectGroupNamed("object");
+
+	//获取对象层内的所有对象
+	const ValueVector &objects = group->getObjects();
+
+	//遍历所有对象
+	for (ValueVector::const_iterator it = objects.begin(); it != objects.end(); it++)
+	{
+		const ValueMap &dict = (*it).asValueMap();
+
+		std::string key = "x";
+
+		//获取x坐标
+		int x = dict.at(key).asInt();
+		key = "y";
+
+		//获取y坐标
+		int y = dict.at(key).asInt();
+		Point tileCoord = tileCoordForPosition(Point(x, y));
+
+		//计算唯一ID
+		int index = tileCoord.x + tileCoord.y * this->getMapSize().width;
+
+		key = "type";
+
+		//获取对象类别
+		std::string type = dict.at(key).asString();
+
+
+
+
+		//如果类型是NPC对象
+		if (type == "npc")
+		{
+			auto npc = npcDict.at(index);
+			//从动画管理器中根据npcId获取动画，开始永久播放
+			Animate* animation = AnimationControl::instance()->createAnimate((npc->npcId).c_str());
+			if (animation != NULL)
+			{
+				ActionInterval* action = RepeatForever::create(animation);
+				npc->npcSprite->runAction(action);
+			}
+		}
+
+	}
+	schedule(schedule_selector(GameMap::updateEnemyAnimation), 0.2f);
 }
