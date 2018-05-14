@@ -13,11 +13,13 @@ bool Hero::init()
 
 	this->addChild(heroSprite);
 	//初始化英雄属性
+
 	ATK = DEF = 20;
 	HP = 1000;
 	YellowKeys = 5;
 	BlueKeys = 1;
 	RedKeys = 1;
+
 
 	isHeroMoving = isHeroFighting = isDoorOpening = false;
 	return true;
@@ -33,6 +35,7 @@ Hero::~Hero()
 {
 }
 
+//向指定方向移动一格
 void Hero::move(HeroDirection direction)
 {
 	//若已经在走 则返回
