@@ -2,7 +2,7 @@
 #define _SAVECONTROL_
 
 #include"MagicTower.h"
-
+#include"sqlite3\include\sqlite3.h"
 class SaveControl : public Singleton<SaveControl>
 {
 public:

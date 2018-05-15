@@ -14,6 +14,14 @@ SaveControl::~SaveControl()
 
 void SaveControl::save(int order)
 {
+	
+	//sqlite3* pDataBase;
+	//if ((sqlite3_open("Save.db", &pDataBase) != SQLITE_OK)) {
+	//	assert("open_failed");
+	//}
+	//sqlite3_exec(pDataBase, "create table test( ID integer primary key autoincrement, name nvarchar(32) )", nullptr, nullptr, nullptr);
+	//sqlite3_exec(pDataBase, "insert into MyTable_1(name) values(¡®×ßÂ·¡¯)", nullptr, nullptr, nullptr);
+
 	std::string order_str = std::to_string(order);
 	std::string space = " ";
 	auto Saver = UserDefault::getInstance();
