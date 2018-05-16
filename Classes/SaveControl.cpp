@@ -5,6 +5,31 @@ DECLARE_SINGLETON_MEMBER(SaveControl);
 
 SaveControl::SaveControl()
 {
+	writablePath = FileUtils::getInstance()->getWritablePath();
+	fullPath = writablePath + "text.xml";
+
+
+	root = Save[0] = Save[1] = Save[2] = Save[3] = Save[4] = nullptr;
+	
+	if (!root) {
+		root = Dictionary::create();
+		root->retain();
+	}
+
+	for (int i = 0; i < 5; i++) {
+		if (!Save[i]) {
+			Save[i] = Dictionary::create();
+			Save[i]->retain();
+			Save[i]->setObject(Bool::create(false), "IfSaved");
+		}
+	}
+
+	root->setObject(Save[0], "Save0");
+	root->setObject(Save[1], "Save1");
+	root->setObject(Save[2], "Save2");
+	root->setObject(Save[3], "Save3");
+	root->setObject(Save[4], "Save4");
+
 }
 
 
@@ -24,9 +49,58 @@ void SaveControl::save(int order)
 
 	std::string order_str = std::to_string(order);
 	std::string space = " ";
-	auto Saver = UserDefault::getInstance();
 	auto Hero = Global::instance()->hero;
 	auto GameMaps = Global::instance()->GameMaps;
+
+	/*
+	if (!root) {
+		root = Dictionary::create();
+		root->retain();
+	}
+	
+	
+	for (int i = 0; i < 5; i++) {
+		if (!Save[i]) {
+			Save[i] = Dictionary::create();
+			Save[i]->retain();
+			Save[i]->setObject(Bool::create(false), "IfSaved");
+		}
+	}
+	root->setObject(Save[0], "Save0");
+	root->setObject(Save[1], "Save1");
+	root->setObject(Save[2], "Save2");
+	root->setObject(Save[3], "Save3");
+	root->setObject(Save[4], "Save4");
+	*/
+
+	auto Saver = Save[order];
+	
+	
+
+
+	Saver->setObject(Bool::create(true), "IfSaved");
+	Saver->setObject(Integer::create(Hero->HP), "HP");
+	Saver->setObject(Integer::create(Hero->ATK), "ATK");
+	Saver->setObject(Integer::create(Hero->DEF), "DEF");
+	Saver->setObject(Integer::create(Hero->coins), "coins");
+	Saver->setObject(Integer::create(Hero->YellowKeys), "YellowKeys");
+	Saver->setObject(Integer::create(Hero->BlueKeys), "BlueKeys");
+	Saver->setObject(Integer::create(Hero->RedKeys), "RedKeys");
+	Saver->setObject(Integer::create(Global::instance()->currentLevel), "currentLevel");
+	Saver->setObject(Double::create(Hero->getPositionX()), "PositionX");
+	Saver->setObject(Double::create(Hero->getPositionY()), "PositionY");
+
+
+	root->setObject(Saver, "Save1");
+	root->writeToFile(fullPath.c_str());
+
+
+
+	
+	
+
+
+	/*
 
 	//保存该存档确实存在
 	Saver->setBoolForKey((order_str).c_str(), true);
@@ -78,6 +152,7 @@ void SaveControl::save(int order)
 
 	Saver->flush();
 	log(UserDefault::getXMLFilePath().c_str());
+	*/
 }
 
 void SaveControl::load(int order)

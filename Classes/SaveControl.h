@@ -11,6 +11,10 @@ public:
 	void save(int order);
 	void load(int order);
 	bool checkIfTheSaveExisted(int order);
+	Dictionary* root;
+	Dictionary* Save[5];
+	std::string writablePath;
+	std::string fullPath;
 };
 
 
