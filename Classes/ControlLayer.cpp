@@ -80,18 +80,22 @@ bool ControlLayer::onTouchBegan(Touch * touch, Event * unused_Event)
 
 	if (UpPart.containsPoint(touch->getStartLocation())) {
 		getChildByTag(up)->setZOrder(100);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ButtonBGS.mp3");
 		return true;
 	}
 	if (DownPart.containsPoint(touch->getStartLocation())) {
-		getChildByTag(down)->setZOrder(100);		
+		getChildByTag(down)->setZOrder(100);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ButtonBGS.mp3");
 		return true;
 	}
 	if (LeftPart.containsPoint(touch->getStartLocation())) {
-		getChildByTag(left)->setZOrder(100);		
+		getChildByTag(left)->setZOrder(100);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ButtonBGS.mp3");
 		return true;
 	}
 	if (RightPart.containsPoint(touch->getStartLocation())) {
-		getChildByTag(right)->setZOrder(100);		
+		getChildByTag(right)->setZOrder(100);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ButtonBGS.mp3");
 		return true;
 	}
 	return false;
