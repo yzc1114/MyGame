@@ -41,16 +41,22 @@ void StartScene::initStartScene()
 	menu->alignItemsVerticallyWithPadding(30);
 	menu->setPosition(origin.x + visibleSize.width / 2, origin.y + 2.5*visibleSize.height / 7);
 	this->addChild(menu, 2);
+
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/StartBGM.mp3");
 	
 
 }
 
 
 void StartScene::buttonStartCALLBACK(Ref* psender) {
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/STARTBGS.mp3");
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
+
 	auto scene = GameScene::createScene();
 	Director::getInstance()->replaceScene(scene);
 
 }
 void StartScene::buttonExitCALLBACK(Ref* psender) {
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/STARTBGS.mp3");
 	Director::getInstance()->end();
 }

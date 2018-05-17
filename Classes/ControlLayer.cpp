@@ -70,6 +70,7 @@ bool ControlLayer::init()
 
 void ControlLayer::exitButtonCallBack(Ref* psender)
 {
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ButtonBGS.mp3");
 	Director::getInstance()->replaceScene(StartScene::createStartScene());
 }
 

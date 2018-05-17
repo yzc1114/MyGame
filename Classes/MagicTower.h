@@ -8,6 +8,7 @@
 
 #include "cocos2d.h"
 #include "GameConstants.h"
+#include "SimpleAudioEngine.h"
 //Layer
 #include "ControlLayer.h"
 #include "GameLayer.h"
@@ -25,5 +26,6 @@
 #include "AnimationControl.h"
 #include "SaveControl.h"
 #include "Global.h"
+#include "AudioControl.h"
 
 #endif

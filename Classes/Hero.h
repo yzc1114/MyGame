@@ -64,7 +64,7 @@ public:
 
 	Sprite* FightingSprite; //战斗图片的精灵
 
-	void FightingUpdate(float dt);
+	void FightingUpdate(float dt);//打架定时器
 
 	Point targetTileCoord; //临时保存的砖块坐标
 
@@ -75,6 +75,8 @@ public:
 	CollisionType checkCollision(Point heroPosition); //碰撞检测函数
 
 	void onMoveDone(Node* pTarget, int data);//移动完成后的回调函数
+
+	void MusicUpdate(float dt);//播放打架音效的定时器
 
 };
 

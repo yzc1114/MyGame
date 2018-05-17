@@ -143,7 +143,7 @@ Animation * AnimationControl::createFightingAnimation()
 	Frames.pushBack(frame3);
 	Frames.pushBack(frame4);
 
-	Animation* animation = Animation::createWithSpriteFrames(Frames, 0.2f);
+	Animation* animation = Animation::createWithSpriteFrames(Frames, 0.15f);
 
 	return animation;
 }

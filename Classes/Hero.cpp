@@ -201,8 +201,9 @@ void Hero::fight()
 	FightingSprite = Sprite::create("sword.png", Rect(0, 0, 192, 192)); 
 	//在map中加入该精灵
 	Global::instance()->gameMap->addChild(FightingSprite,100,kZfighting);
-	//战斗精灵位置计算 在英雄和敌人中点
+	//战斗精灵位置计算 在英雄和敌人中点（因为动画里粒子效果偏左，所以将动画往右调整半个砖块，以使动画更严整地处于中间）
 	Point FightingPosition = (this->getPosition() + targetPosition) / 2;
+	FightingPosition.x += 16;
 	//使用AnimationControl创建永远重复的战斗动作
 	RepeatForever* FightingAction = RepeatForever::create(AnimationControl::instance()->createAnimate("Fighting"));
 	//设置精灵位置
@@ -211,8 +212,11 @@ void Hero::fight()
 	FightingSprite->runAction(FightingAction);
 	//设置正在战斗为true
 	isHeroFighting = true;
+	//设置播放战斗音效的定时器
+	schedule(schedule_selector(Hero::MusicUpdate), 0.5f);
 	//设置战斗的定时器
-	schedule(schedule_selector(Hero::FightingUpdate), 0.2f);
+	schedule(schedule_selector(Hero::FightingUpdate), 0.4f);
+	
 	
 
 }
@@ -238,8 +242,10 @@ void Hero::onMoveDone(Node* pTarget, int data) {
 
 }
 
-void Hero::doTeleport(Teleport *teleport) {
+void Hero::doTeleport(Teleport *teleport)
+{
 	//将Global中保存的复活点设置为新地图的复活点
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/TransportBGS.mp3");
 	Global::instance()->heroSpawnTileCoord = teleport->heroTileCoord;
 	Global::instance()->gameLayer->switchMap(teleport->targetMap);
 }
@@ -275,6 +281,7 @@ void Hero::FightingUpdate(float dt)
 		Global::instance()->gameMap->removeChildByTag(kZfighting); 
 		//取消定时器
 		unschedule(schedule_selector(Hero::FightingUpdate)); 
+		unschedule(schedule_selector(Hero::MusicUpdate));
 		//设置isHeroFighting为false
 		isHeroFighting = false;
 	}
@@ -289,6 +296,7 @@ void Hero::FightingUpdate(float dt)
 		Global::instance()->gameMap->removeChildByTag(kZfighting);
 		//取消定时器
 		unschedule(schedule_selector(Hero::FightingUpdate));
+		unschedule(schedule_selector(Hero::MusicUpdate));
 		//设置isHeroFighting为false
 		isHeroFighting = false;
 		//更换场景
@@ -296,6 +304,12 @@ void Hero::FightingUpdate(float dt)
 		Director::getInstance()->replaceScene(scene);
 	}
 
+
+}
+
+void Hero::MusicUpdate(float dt)
+{
+	if(isHeroFighting) CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/FightingBGS.mp3", false,3.0f);
 
 }
 
@@ -310,6 +324,10 @@ void Hero::openDoor(int gid) {
 	}
 	//保存这个门的GID；
 	targetDoorGID = gid;
+	//播放开门音效；
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/OpenBGS.mp3");
+	
+	
 	//259 黄门
 	//260 蓝门
 	//261 红门
@@ -361,36 +379,43 @@ void Hero::pickUpItem() {
 
 	if (gid == 291) {
 		//黄钥匙
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/KeyBGS.mp3");
 		this->YellowKeys++;
 		tempGameScene->refreshStatus(kZYellowKeys);
 	}
 	if (gid == 292) {
 		//蓝钥匙
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/KeyBGS.mp3");
 		this->BlueKeys++;
 		tempGameScene->refreshStatus(kZBlueKeys);
 	}
 	if (gid == 293) {
 		//红钥匙
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/KeyBGS.mp3");
 		this->RedKeys++;
 		tempGameScene->refreshStatus(kZRedKeys);
 	}
 	if (gid == 275) {
 		//攻击力增加2
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ItemBGS.mp3");
 		this->ATK += 2;
 		tempGameScene->refreshStatus(kZATK);
 	}
 	if (gid == 276) {
 		//防御力增加2
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ItemBGS.mp3");
 		this->DEF += 2;
 		tempGameScene->refreshStatus(kZDEF);
 	}
 	if (gid == 279) {
 		//红血瓶 血量加200
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ItemBGS.mp3");
 		this->HP += 200;
 		tempGameScene->refreshStatus(kZHP);
 	}
 	if (gid == 280) {
 		//蓝血瓶 血量加500
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ItemBGS.mp3");
 		this->HP += 500;
 		tempGameScene->refreshStatus(kZHP);
 	}

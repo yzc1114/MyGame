@@ -1,6 +1,6 @@
 #include "AppDelegate.h"
 #include "SimpleAudioEngine.h"
-#include"MagicTower.h"
+#include "MagicTower.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -77,6 +77,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->setAnimationInterval(1.0f / 60);
 
 	AnimationControl::instance()->initAnimationMap();
+	AudioControl::instance()->PreloadMusic();
 
     // Set the design resolution
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);

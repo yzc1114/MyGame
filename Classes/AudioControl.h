@@ -9,6 +9,7 @@ class AudioControl : public Singleton<AudioControl>
 public:
 	AudioControl();
 	~AudioControl();
+	bool PreloadMusic();
 };
 
 #endif
