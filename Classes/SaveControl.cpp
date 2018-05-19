@@ -5,31 +5,38 @@ DECLARE_SINGLETON_MEMBER(SaveControl);
 
 SaveControl::SaveControl()
 {
+	
 	writablePath = FileUtils::getInstance()->getWritablePath();
 	fullPath = writablePath + "text.xml";
 
-
 	root = Save[0] = Save[1] = Save[2] = Save[3] = Save[4] = nullptr;
-	
-	if (!root) {
+
+	if (!FileUtils::getInstance()->isFileExist(fullPath)) {
+
 		root = Dictionary::create();
 		root->retain();
-	}
-
-	for (int i = 0; i < 5; i++) {
-		if (!Save[i]) {
+		
+		for (int i = 0; i < 5; i++) {
 			Save[i] = Dictionary::create();
 			Save[i]->retain();
 			Save[i]->setObject(Bool::create(false), "IfSaved");
 		}
+
+		root->setObject(Save[0], "Save0");
+		root->setObject(Save[1], "Save1");
+		root->setObject(Save[2], "Save2");
+		root->setObject(Save[3], "Save3");
+		root->setObject(Save[4], "Save4");
 	}
-
-	root->setObject(Save[0], "Save0");
-	root->setObject(Save[1], "Save1");
-	root->setObject(Save[2], "Save2");
-	root->setObject(Save[3], "Save3");
-	root->setObject(Save[4], "Save4");
-
+	else {
+		root = Dictionary::createWithContentsOfFile(fullPath.c_str());
+		root->retain();
+		(Save[0] = (Dictionary*)(root->objectForKey("Save0")))->retain();
+		(Save[1] = (Dictionary*)(root->objectForKey("Save1")))->retain();
+		(Save[2] = (Dictionary*)(root->objectForKey("Save2")))->retain();
+		(Save[3] = (Dictionary*)(root->objectForKey("Save3")))->retain();
+		(Save[4] = (Dictionary*)(root->objectForKey("Save4")))->retain();
+	}
 }
 
 
@@ -40,84 +47,37 @@ SaveControl::~SaveControl()
 void SaveControl::save(int order)
 {
 	
-	//sqlite3* pDataBase;
-	//if ((sqlite3_open("Save.db", &pDataBase) != SQLITE_OK)) {
-	//	assert("open_failed");
-	//}
-	//sqlite3_exec(pDataBase, "create table test( ID integer primary key autoincrement, name nvarchar(32) )", nullptr, nullptr, nullptr);
-	//sqlite3_exec(pDataBase, "insert into MyTable_1(name) values(‘走路’)", nullptr, nullptr, nullptr);
 
-	std::string order_str = std::to_string(order);
+	
 	std::string space = " ";
 	auto Hero = Global::instance()->hero;
 	auto GameMaps = Global::instance()->GameMaps;
 
-	/*
-	if (!root) {
-		root = Dictionary::create();
-		root->retain();
-	}
 	
-	
-	for (int i = 0; i < 5; i++) {
-		if (!Save[i]) {
-			Save[i] = Dictionary::create();
-			Save[i]->retain();
-			Save[i]->setObject(Bool::create(false), "IfSaved");
-		}
-	}
-	root->setObject(Save[0], "Save0");
-	root->setObject(Save[1], "Save1");
-	root->setObject(Save[2], "Save2");
-	root->setObject(Save[3], "Save3");
-	root->setObject(Save[4], "Save4");
-	*/
 
 	auto Saver = Save[order];
 	
-	
+	auto SaverOfHero = Dictionary::create();
 
-
+	//该存档已有存储
 	Saver->setObject(Bool::create(true), "IfSaved");
-	Saver->setObject(Integer::create(Hero->HP), "HP");
-	Saver->setObject(Integer::create(Hero->ATK), "ATK");
-	Saver->setObject(Integer::create(Hero->DEF), "DEF");
-	Saver->setObject(Integer::create(Hero->coins), "coins");
-	Saver->setObject(Integer::create(Hero->YellowKeys), "YellowKeys");
-	Saver->setObject(Integer::create(Hero->BlueKeys), "BlueKeys");
-	Saver->setObject(Integer::create(Hero->RedKeys), "RedKeys");
-	Saver->setObject(Integer::create(Global::instance()->currentLevel), "currentLevel");
-	Saver->setObject(Double::create(Hero->getPositionX()), "PositionX");
-	Saver->setObject(Double::create(Hero->getPositionY()), "PositionY");
 
+	//保存英雄相关信息
+	SaverOfHero->setObject(Integer::create(Hero->HP), "HP");
+	SaverOfHero->setObject(Integer::create(Hero->ATK), "ATK");
+	SaverOfHero->setObject(Integer::create(Hero->DEF), "DEF");
+	SaverOfHero->setObject(Integer::create(Hero->coins), "coins");
+	SaverOfHero->setObject(Integer::create(Hero->YellowKeys), "YellowKeys");
+	SaverOfHero->setObject(Integer::create(Hero->BlueKeys), "BlueKeys");
+	SaverOfHero->setObject(Integer::create(Hero->RedKeys), "RedKeys");
+	SaverOfHero->setObject(Integer::create(Global::instance()->currentLevel), "currentLevel");
+	SaverOfHero->setObject(Integer::create(Hero->getPositionX()), "PositionX");
+	SaverOfHero->setObject(Integer::create(Hero->getPositionY()), "PositionY");
 
-	root->setObject(Saver, "Save1");
-	root->writeToFile(fullPath.c_str());
+	Saver->setObject(SaverOfHero, "SaverOfHero");
 
+	Dictionary* SaverOfMap = Dictionary::create();
 
-
-	
-	
-
-
-	/*
-
-	//保存该存档确实存在
-	Saver->setBoolForKey((order_str).c_str(), true);
-
-	//保存英雄相关属性
-	Saver->setIntegerForKey((order_str + space + "HP").c_str(), Hero->HP);
-	Saver->setIntegerForKey((order_str + space + "ATK").c_str(), Hero->ATK);
-	Saver->setIntegerForKey((order_str + space + "DEF").c_str(), Hero->DEF);
-	Saver->setIntegerForKey((order_str + space + "coins").c_str(), Hero->coins);
-	Saver->setIntegerForKey((order_str + space + "YellowKeys").c_str(), Hero->YellowKeys);
-	Saver->setIntegerForKey((order_str + space + "BlueKeys").c_str(), Hero->BlueKeys);
-	Saver->setIntegerForKey((order_str + space + "RedKeys").c_str(), Hero->RedKeys);
-	Saver->setIntegerForKey((order_str + space + "currentlevel").c_str(), Global::instance()->currentLevel);
-	Saver->setDoubleForKey((order_str + space + "HeroCocosPositionX").c_str(), Hero->getPositionX());
-	Saver->setDoubleForKey((order_str + space + "HeroCocosPositionY").c_str(), Hero->getPositionY());
-
-	
 	for (auto iter = GameMaps.begin(); iter != GameMaps.end(); iter++) {
 		int floor = iter->first;
 		std::string floor_str = std::to_string(floor);
@@ -127,72 +87,123 @@ void SaveControl::save(int order)
 		auto enemyLayer = map->enemyLayer;
 		Size s = DoorLayer->getLayerSize();
 
-		for (int x = 0; x < s.width; x++) {   
+		
+		String* temp;
+
+		for (int x = 0; x < s.width; x++) {
 			for (int y = 0; y < s.height; y++) {
-				
+
 				std::string x_str = std::to_string(x);
 				std::string y_str = std::to_string(y);
 
 				if (DoorLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //保存地图上的门 是否已经开启过
-					Saver->setBoolForKey((order_str + space + "isDoorsClosed" + space + floor_str + space + x_str + space + y_str).c_str(), true);  //门还在 存储为true
+					SaverOfMap->setObject(Bool::create(true),"Door" + space + floor_str + space + x_str + space + y_str);//门还在
 				}
+				else {
+					if (SaverOfMap->objectForKey("Door" + space + floor_str + space + x_str + space + y_str) != nullptr) {
+						SaverOfMap->removeObjectForKey("Door" + space + floor_str + space + x_str + space + y_str);
+					}
+				}
+				
 
 				if (ItemLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //保存地图上的物品 是否已经被拿走
-					Saver->setBoolForKey((order_str + space + "isItemHaveNotBeenPickedUp" + space + floor_str + space + x_str + space + y_str).c_str(), true); //东西还在 存储为true
+					SaverOfMap->setObject(Bool::create(true),"Item" + space + floor_str + space + x_str + space + y_str); //东西还在
 				}
+				else {
+					if (SaverOfMap->objectForKey("Item" + space + floor_str + space + x_str + space + y_str) != nullptr) {
+						SaverOfMap->removeObjectForKey("Item" + space + floor_str + space + x_str + space + y_str);
+					}
+				}
+				
 
 				if (enemyLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //保存地图上的怪物 是否已经被击败
-					Saver->setBoolForKey((order_str + space + "isEnemyExisted" + space + floor_str + space + x_str + space + y_str).c_str(), true); //怪物还在 存储为true
+					SaverOfMap->setObject(Bool::create(true),"Enemy" + space + floor_str + space + x_str + space + y_str); //怪物还在 存储为true
 				}
+				else {
+					if (SaverOfMap->objectForKey("Enemy" + space + floor_str + space + x_str + space + y_str) != nullptr) {
+						SaverOfMap->removeObjectForKey("Enemy" + space + floor_str + space + x_str + space + y_str);
+					}
+				}
+				
 
 			}
 		}
+		
 
 	}
 
-	Saver->flush();
-	log(UserDefault::getXMLFilePath().c_str());
-	*/
+	Saver->setObject(SaverOfMap, "SaverOfMap");
+
+	root->setObject(Saver, "Save1");
+	root->writeToFile(fullPath.c_str());
+
+
 }
 
 void SaveControl::load(int order)
 {
 	if (!checkIfTheSaveExisted(order)) {
+		assert("Loading Save Doesn't Existed");
 		return;
 	}
-	std::string order_str = std::to_string(order);
-	auto Saver = UserDefault::getInstance();
+	
+	//获得全部文件信息的ValueMap
+	auto valueMap = FileUtils::getInstance()->getValueMapFromFile(fullPath);
+	//获得目标存档的Dict值
+	auto Saver = valueMap.at("Save" + std::to_string(order)).asValueMap();
+	//通过ValueMap的key分别获得英雄和地图的字典
+	auto SaverOfHero = Saver.at("SaverOfHero").asValueMap();
+	auto SaverOfMap = Saver.at("SaverOfMap").asValueMap();
+	//获取全局单例对象的Hero和GameMaps字典
 	auto Hero = Global::instance()->hero;
 	auto GameMaps = Global::instance()->GameMaps;
 
-
-	Hero->HP = Saver->getIntegerForKey((order_str + "HP").c_str());
-	Hero->ATK = Saver->getIntegerForKey((order_str + "ATK").c_str());
-	Hero->DEF = Saver->getIntegerForKey((order_str + "DEF").c_str());
-	Hero->coins = Saver->getIntegerForKey((order_str + "coins").c_str());
-	Hero->YellowKeys = Saver->getIntegerForKey((order_str + "YellowKeys").c_str());
-	Hero->BlueKeys = Saver->getIntegerForKey((order_str + "BlueKeys").c_str());
-	Hero->RedKeys = Saver->getIntegerForKey((order_str + "RedKeys").c_str());
-	Global::instance()->currentLevel = Saver->getIntegerForKey((order_str + "currentlevel").c_str());
-	int x = Saver->getFloatForKey((order_str + "HeroCocosPositionX").c_str());
-	int y = Saver->getFloatForKey((order_str + "HeroCocosPositionY").c_str());
+	
+	
+	//储存英雄全部信息
+	Hero->HP = SaverOfHero.at("HP").asInt();
+	Hero->ATK = SaverOfHero.at("ATK").asInt();
+	Hero->DEF = SaverOfHero.at("DEF").asInt();
+	Hero->coins = SaverOfHero.at("coins").asInt();
+	Hero->YellowKeys = SaverOfHero.at("YellowKeys").asInt();
+	Hero->BlueKeys = SaverOfHero.at("BlueKeys").asInt();
+	Hero->RedKeys = SaverOfHero.at("RedKeys").asInt();
+	Global::instance()->currentLevel = SaverOfHero.at("currentLevel").asInt();
+	int x = SaverOfHero.at("PositionX").asInt();
+	int y = SaverOfHero.at("PositionY").asInt();
 	Hero->setPosition(x, y);
 
 	//将当前的map在gameLayer中去除
-	Global::instance()->gameLayer->removeChildByTag(kZmap);  
+	Global::instance()->gameLayer->removeChildByTag(kZmap);
+	Global::instance()->gameMap = nullptr;
 	
+	std::map<int, GameMap*> newGameMaps;
+
 	//遍历整个GameMaps数组 将每个原来保存的map释放 并保存新的地图在其中
-	for (auto iter : GameMaps) { 
+	for(auto iter : GameMaps) {
+		do {
+			iter.second->release();
+		} while (iter.second->getReferenceCount() != 1);
 		iter.second->release();
-		iter.second = nullptr;
+		
+		
+		
+
+		
 		int floor = iter.first;
+		
 		std::string floor_str = std::to_string(floor);
 		std::string space = " ";
-		GameMap* map = GameMap::createMap(floor);
+		GameMap* map = GameMap::createNewMap(floor);
+
 		TMXLayer* DoorLayer = map->DoorLayer;
 		TMXLayer* enemyLayer = map->enemyLayer;
 		TMXLayer* ItemLayer = map->ItemLayer;
+		
 		Size s = DoorLayer->getLayerSize();
+
+		newGameMaps.insert(std::pair<int, GameMap*>(floor,map));
+
 
 		for (int x = 0; x < s.width; x++) {
 			for (int y = 0; y < s.height; y++) {
@@ -201,47 +212,52 @@ void SaveControl::load(int order)
 				std::string y_str = std::to_string(y);
 
 				if (DoorLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //查看地图上的门 是否已经开启过
-					   //有门 返回true 无门 返回false
-					if (!  (Saver->getBoolForKey((order_str + space + "isDoorsClosed" + space + floor_str + space + x_str + space + y_str).c_str(), false) ) ) {
-						DoorLayer->removeTileAt(GameMap::tileCoordForPosition(Vec2(x, y)));
+																   
+					if (SaverOfMap.count("Door" + space + floor_str + space + x_str + space + y_str) != 1){
+						DoorLayer->removeTileAt(Vec2(x, y));
+						
 					}
 				}
 
 				if (ItemLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //查看地图上的物品 是否已经被拿走
-						//东西还在 返回true 不在 返回false
-					if (!  (Saver->getBoolForKey((order_str + space + "isItemHaveNotBeenPickedUp" + space + floor_str + space + x_str + space + y_str).c_str(), false))) {
-						ItemLayer->removeTileAt(GameMap::tileCoordForPosition(Vec2(x, y)));
+																   
+					if (SaverOfMap.count("Item" + space + floor_str + space + x_str + space + y_str) != 1) {
+						ItemLayer->removeTileAt(Vec2(x, y));
 					}
 				}
 
 				if (enemyLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //查看地图上的怪物 是否已经被击败
-						//怪物还在 返回true 不在 返回false
-					if (!(Saver->getBoolForKey((order_str + space + "isEnemyExisted" + space + floor_str + space + x_str + space + y_str).c_str(), false))) {
-						enemyLayer->removeTileAt(GameMap::tileCoordForPosition(Vec2(x, y)));
+																	
+					if (SaverOfMap.count("Enemy" + space + floor_str + space + x_str + space + y_str) != 1) {
+						enemyLayer->removeTileAt(Vec2(x, y));
 					}
 				}
 
 			}
 		}
 
-		iter.second = map;
-
+		
 	}
+	Global::instance()->GameMaps = newGameMaps;
 
-	GameMap* currentMap = GameMaps.at(Global::instance()->currentLevel);
-	Global::instance()->gameMap = currentMap;
-	Global::instance()->gameLayer->addChild(currentMap,kZmap,kZmap);
-	currentMap->setPosition(0, 0);
+	if (Global::instance()->GameMaps.count(Global::instance()->currentLevel) == 1) {
 
+		GameMap* currentMap = Global::instance()->GameMaps.at(Global::instance()->currentLevel);
+		Global::instance()->gameMap = currentMap;
+		Global::instance()->gameLayer->addChild(currentMap, kZmap, kZmap);
+		currentMap->setPosition(0, 0);
+	}
+	else {
+		exit(0);
+	}
+	
+	
 }
 
 bool SaveControl::checkIfTheSaveExisted(int order)
 {
-	if (!UserDefault::isXMLFileExist()) {
-		return false;
-	}
-
-	if (UserDefault::getInstance()->getBoolForKey(std::to_string(order).c_str(), false)) {
+	auto Saver = Save[order];
+	if (((Bool*)(Saver->objectForKey("IfSaved")))->getValue()) {
 		return true;
 	}
 	else {

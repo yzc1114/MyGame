@@ -20,7 +20,11 @@ GameMap* GameMap::createMap(int floor)
 	if (map->initWithTMXFile("tile maps/" + std::to_string(floor) + ".tmx"))
 	{
 		map->extraInit();
+		int i = map->getReferenceCount();
 		map->retain();
+		i = map->getReferenceCount();
+		map->retain();
+		i = map->getReferenceCount();
 		Global::instance()->GameMaps.insert(std::pair<int, GameMap*>(floor, map));
 		return map;
 	}
@@ -28,6 +32,20 @@ GameMap* GameMap::createMap(int floor)
 	CC_SAFE_DELETE(map);
 	return NULL;
 
+}
+
+GameMap * GameMap::createNewMap(int floor)
+{
+	GameMap* map = new GameMap;
+	if (map->initWithTMXFile("tile maps/" + std::to_string(floor) + ".tmx"))
+	{
+		map->extraInit();
+		map->retain();
+		return map;
+	}
+
+	CC_SAFE_DELETE(map);
+	return NULL;
 }
 
 void GameMap::extraInit()

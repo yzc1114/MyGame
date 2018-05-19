@@ -14,7 +14,7 @@ public:
 	~GameMap();
 
 	static GameMap* createMap(int floor);
-
+	static GameMap* createNewMap(int floor);
 	//¸½¼Óinit
 	void extraInit();
 
