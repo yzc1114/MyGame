@@ -256,8 +256,12 @@ void SaveControl::load(int order)
 
 bool SaveControl::checkIfTheSaveExisted(int order)
 {
-	auto Saver = Save[order];
-	if (((Bool*)(Saver->objectForKey("IfSaved")))->getValue()) {
+	//获得全部文件信息的ValueMap
+	auto valueMap = FileUtils::getInstance()->getValueMapFromFile(fullPath);
+	//获得目标存档的Dict值
+	auto Saver = valueMap.at("Save" + std::to_string(order)).asValueMap();
+	
+	if (Saver.at("IfSaved").asBool()) {
 		return true;
 	}
 	else {
