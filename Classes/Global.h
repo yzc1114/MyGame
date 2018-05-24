@@ -41,6 +41,8 @@ public:
 	int highestStorey;
 	//勇士出现的起始位置
 	Point heroSpawnTileCoord;
+
+	std::string fullpath;
 };
 
 

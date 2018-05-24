@@ -21,6 +21,8 @@ Global::Global(void)
 	heroSpawnTileCoord = Point(1, 11);
 
 	highestStorey = 0;
+
+	fullpath = "";
 }
 
 Global::~Global(void)

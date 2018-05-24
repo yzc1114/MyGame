@@ -8,7 +8,7 @@ SaveControl::SaveControl()
 	
 	writablePath = FileUtils::getInstance()->getWritablePath();
 	fullPath = writablePath + "text.xml";
-
+	Global::instance()->fullpath = fullPath;
 	root = Save[0] = Save[1] = Save[2] = Save[3] = Save[4] = nullptr;
 
 	if (!FileUtils::getInstance()->isFileExist(fullPath)) {

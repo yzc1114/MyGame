@@ -168,28 +168,61 @@ void GameScene::showSaveLayer()
 {
 	auto Saver = SaveControl::instance();
 
+
 	Size visibleSize = Director::getInstance()->getVisibleSize();
-	SaverLayer = LayerColor::create(Color4B::ORANGE,3/4*visibleSize.width,3/4*visibleSize.height);
-	SaverLayer->setPosition(visibleSize.width / 2, visibleSize.height / 2);
-	this->addChild(SaverLayer,kZSaveLayer,kZSaveLayer);
-	for (int i = 1; i <= 5; i++) { //五个存档位置
-		auto subLayer = LayerColor::create(Color4B::BLUE, visibleSize.width * 4 / 5, visibleSize.height * 4 / 7 / 5);
-		SaverLayer->addChild(subLayer,kZSaveLayer + 1, i);
-		subLayer->setPosition(SaverLayer->getContentSize().width / 2, (2 * (i - 1) + 1)*SaverLayer->getContentSize().height / 10);
+	auto SaverLayer = LayerColor::create(Color4B::ORANGE);
+	SaverLayer->setScale(1);
+
+	this->addChild(SaverLayer, kZSaveLayer, kZSaveLayer);
+
+	for (int i = 0; i <= 4; i++) { //五个存档子图层的位置
+	
+		auto subLayer = LayerColor::create(Color4B::BLUE, visibleSize.width * 3 / 5, visibleSize.height * 4 / 7 / 5);
+		
+		subLayer->setPosition((SaverLayer->getContentSize().width - subLayer->getContentSize().width) / 2 , (2 * i)*SaverLayer->getContentSize().height / 10 + 18);
+		SaverLayer->addChild(subLayer, kZSaveLayer + 1, i);
+		subLayer->setScale(1);
 		if (Saver->checkIfTheSaveExisted(i)) {
-			//存档存在 则显示英雄HP ATK DEF coins currentlevel
+			TTFConfig ttfconfig("fonts/arial.ttf", 18);
+			ttfconfig.bold = true;
+			//获得全部文件信息的ValueMap
+			auto valueMap = FileUtils::getInstance()->getValueMapFromFile(Global::instance()->fullpath);
+			//获得目标存档的Dict值
+			auto Saver = valueMap.at("Save" + std::to_string(i)).asValueMap();
+			//通过ValueMap的key分别获得英雄和地图的字典
+			auto SaverOfHero = Saver.at("SaverOfHero").asValueMap();
+			
+			int currentLevel = SaverOfHero.at("currentLevel").asInt();
+			int HP = SaverOfHero.at("HP").asInt();
+			int ATK = SaverOfHero.at("ATK").asInt();
+			int DEF = SaverOfHero.at("DEF").asInt();
+
+			std::string stringToShow = "Level : " + std::to_string(currentLevel) + " HP : " + std::to_string(HP) + " ATK : " + std::to_string(ATK) + " DEF : " + std::to_string(DEF);
+
+			Label* label = Label::createWithTTF(ttfconfig, stringToShow);
+			label->setPosition(subLayer->getContentSize().width / 2, subLayer->getContentSize().height / 2);
+			subLayer->addChild(label, kZSaveLayer + 1, i);
 		}
 		else {
-			TTFConfig ttfconfig("fonts/arial.ttf", 12);
+			TTFConfig ttfconfig("fonts/arial.ttf", 24);
 			Label* label = Label::createWithTTF(ttfconfig, "No Save Existed");
-			subLayer->addChild(label, kZSaveLayer + 2);
-			subLayer->setPosition(label->getContentSize().width / 2, label->getContentSize().height / 2);
+			label->setPosition(subLayer->getContentSize().width / 2, subLayer->getContentSize().height / 2);
+			subLayer->addChild(label, kZSaveLayer + 1 , i);
 		}
 	}
 
 	auto MouseListener = EventListenerMouse::create();
-	MouseListener->onMouseMove = CC_CALLBACK_1(GameScene::SaveLayerOnMouseMove,this);
-	
+	MouseListener->onMouseMove = CC_CALLBACK_1(GameScene::SaveLayerOnMouseMove, this);
+	MouseListener->onMouseDown = CC_CALLBACK_1(GameScene::SaveLayerOnMouseDown, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(MouseListener, SaverLayer);
+
+	auto keyBoardListener = EventListenerKeyboard::create();
+	keyBoardListener->onKeyPressed = [&](EventKeyboard::KeyCode keycode, Event* event) {
+		if (keycode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+			this->removeChildByTag(kZSaveLayer);
+		}
+	};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyBoardListener, this);
 
 }
 
@@ -198,7 +231,41 @@ void GameScene::SaveLayerOnMouseMove(Event * event)
 	auto MouseEvent = (EventMouse*)event;
 	float x = MouseEvent->getCursorX();
 	float y = MouseEvent->getCursorY();
-	//for(int i)
+	for (int i = 0; i < 5; i++) {
+		auto subLayer = static_cast<LayerColor*>(this->getChildByTag(kZSaveLayer)->getChildByTag(i));
+
+	
+
+		if (subLayer->getBoundingBox().containsPoint(Vec2(x, y))) {
+			Size size = subLayer->getContentSize();
+			subLayer->setColor(Color3B::YELLOW);
+			auto box = subLayer->getBoundingBox();
+			auto minx = box.getMinX();
+			auto miny = box.getMinY();
+			auto maxx = box.getMaxX();
+			auto maxy = box.getMaxY();
+			auto y = box.getMinY();
+		}
+		else {
+			subLayer->setColor(Color3B::BLUE);
+		}
+	}
+}
+
+void GameScene::SaveLayerOnMouseDown(Event * event)
+{
+	auto MouseEvent = (EventMouse*)event;
+	
+	float x = MouseEvent->getCursorX();
+	float y = MouseEvent->getCursorY();
+	for (int i = 0; i < 5; i++) {
+		auto subLayer = static_cast<LayerColor*>(this->getChildByTag(kZSaveLayer)->getChildByTag(i));
+		if (subLayer->getBoundingBox().containsPoint(Vec2(x, y))) {
+			if (SaveControl::instance()->checkIfTheSaveExisted(i)) {
+				SaveControl::instance()->load(i);
+			}
+		}
+	}
 }
 
 

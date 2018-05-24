@@ -172,8 +172,8 @@ void ControlLayer::onKeyPressed(EventKeyboard::KeyCode keycode, Event * unused_e
 		schedule(schedule_selector(ControlLayer::moveRightUpdate));
 	}
 	if (keycode == EventKeyboard::KeyCode::KEY_S) {
-		SaveControl::instance()->save(1);
-		//Global::instance()->gameScene->showSaveLayer();
+		
+		Global::instance()->gameScene->showSaveLayer();
 	}
 	if (keycode == EventKeyboard::KeyCode::KEY_L) {
 		SaveControl::instance()->load(1);
