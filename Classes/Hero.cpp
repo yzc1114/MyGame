@@ -215,7 +215,7 @@ void Hero::fight()
 	//设置播放战斗音效的定时器
 	schedule(schedule_selector(Hero::MusicUpdate), 0.5f);
 	//设置战斗的定时器
-	schedule(schedule_selector(Hero::FightingUpdate), 0.4f);
+	schedule(schedule_selector(Hero::FightingUpdate), 0.2f);
 	
 	
 
@@ -269,7 +269,7 @@ void Hero::FightingUpdate(float dt)
 		EnemyATKminusHeroDEF = 0;
 	}
 	else {
-		EnemyATKminusHeroDEF = enemy->ATK - this->ATK;
+		EnemyATKminusHeroDEF = enemy->ATK - this->DEF;
 	}
 
 	enemy->HP -= HeroATKminusEnemyDEF; //敌人先受到攻击
@@ -408,9 +408,9 @@ void Hero::pickUpItem() {
 		tempGameScene->refreshStatus(kZDEF);
 	}
 	if (gid == 279) {
-		//红血瓶 血量加200
+		//红血瓶 血量加100
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ItemBGS.mp3");
-		this->HP += 200;
+		this->HP += 100;
 		tempGameScene->refreshStatus(kZHP);
 	}
 	if (gid == 280) {

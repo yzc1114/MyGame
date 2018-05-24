@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="13" height="13" tilewidth="32" tileheight="32" infinite="0" nextobjectid="4">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="13" height="13" tilewidth="32" tileheight="32" infinite="0" nextobjectid="4">
  <tileset firstgid="1" name="terrain" tilewidth="32" tileheight="32" tilecount="2" columns="2">
   <image source="terrain.png" width="64" height="32"/>
  </tileset>
@@ -48,8 +48,8 @@
   </object>
   <object id="2" type="teleport" x="192" y="32" width="32" height="32">
    <properties>
-    <property name="heroTileCoordX" value="5"/>
-    <property name="heroTileCoordY" value="11"/>
+    <property name="heroTileCoordX" value="1"/>
+    <property name="heroTileCoordY" value="10"/>
     <property name="image" value="up_floor.png"/>
     <property name="targetMap" value="1"/>
    </properties>
