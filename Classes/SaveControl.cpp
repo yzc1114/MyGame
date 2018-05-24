@@ -61,7 +61,7 @@ void SaveControl::save(int order)
 
 	//该存档已有存储
 	Saver->setObject(Bool::create(true), "IfSaved");
-
+	Saver->setObject(Integer::create(Global::instance()->highestStorey), "highestStorey");
 	//保存英雄相关信息
 	SaverOfHero->setObject(Integer::create(Hero->HP), "HP");
 	SaverOfHero->setObject(Integer::create(Hero->ATK), "ATK");
@@ -179,18 +179,19 @@ void SaveControl::load(int order)
 	
 	std::map<int, GameMap*> newGameMaps;
 
+	
+
 	//遍历整个GameMaps数组 将每个原来保存的map释放 并保存新的地图在其中
-	for(auto iter : GameMaps) {
+	for (auto iter : GameMaps) {
 		do {
 			iter.second->release();
 		} while (iter.second->getReferenceCount() != 1);
 		iter.second->release();
-		
-		
-		
+	}
 
+	auto highestStorey = Saver.at("highestStorey").asInt();
 		
-		int floor = iter.first;
+	for(int floor = 0 ; floor <= highestStorey ; floor++){
 		
 		std::string floor_str = std::to_string(floor);
 		std::string space = " ";
@@ -215,7 +216,6 @@ void SaveControl::load(int order)
 																   
 					if (SaverOfMap.count("Door" + space + floor_str + space + x_str + space + y_str) != 1){
 						DoorLayer->removeTileAt(Vec2(x, y));
-						
 					}
 				}
 
@@ -238,6 +238,8 @@ void SaveControl::load(int order)
 
 		
 	}
+
+
 	Global::instance()->GameMaps = newGameMaps;
 
 	if (Global::instance()->GameMaps.count(Global::instance()->currentLevel) == 1) {
