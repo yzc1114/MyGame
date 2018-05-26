@@ -212,7 +212,8 @@ void Hero::fight()
 	FightingSprite->runAction(FightingAction);
 	//设置正在战斗为true
 	isHeroFighting = true;
-	//设置播放战斗音效的定时器
+	//设置播放战斗音效的定时器（事先播放一次音效，避免见面秒杀没有音效）
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/FightingBGS.mp3");
 	schedule(schedule_selector(Hero::MusicUpdate), 0.5f);
 	//设置战斗的定时器
 	schedule(schedule_selector(Hero::FightingUpdate), 0.2f);
@@ -324,8 +325,7 @@ void Hero::openDoor(int gid) {
 	}
 	//保存这个门的GID；
 	targetDoorGID = gid;
-	//播放开门音效；
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/OpenBGS.mp3");
+	
 	
 	
 	//259 黄门
@@ -369,6 +369,9 @@ void Hero::openDoor(int gid) {
 
 	//更新门的动画
 	schedule(schedule_selector(Hero::DoorOpeningUpdate), 0.1f);
+
+	//播放开门音效
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/OpenBGS.mp3");
 }
 
 void Hero::pickUpItem() {
