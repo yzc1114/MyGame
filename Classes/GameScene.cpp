@@ -18,6 +18,8 @@ bool GameScene::init()
     }
 	Global::instance()->gameScene = this;
 
+	//NetworkControl networkControl;
+
 	
 	GameLayer* gamelayer = GameLayer::createGameLayer(0);
 	this->addChild(gamelayer,-1);
@@ -89,7 +91,6 @@ bool GameScene::init()
 	this->addChild(currentRedKeys, kZRedKeys, kZRedKeys);
 
 	
-
 
 }
 
