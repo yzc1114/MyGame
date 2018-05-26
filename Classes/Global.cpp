@@ -19,6 +19,10 @@ Global::Global(void)
 
 	//勇士出生位置 初始化为第一层的出生位置
 	heroSpawnTileCoord = Point(1, 11);
+
+	highestStorey = 0;
+
+	fullpath = "";
 }
 
 Global::~Global(void)

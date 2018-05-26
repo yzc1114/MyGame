@@ -26,7 +26,8 @@ public:
 
 	void SaveLayerOnMouseMove(Event* event);
 
-	Layer* SaverLayer;
+	void SaveLayerOnMouseDown(Event* event);
+
 };
 
 #endif 

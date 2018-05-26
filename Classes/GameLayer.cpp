@@ -19,6 +19,7 @@ bool GameLayer::init()
 
 void GameLayer::extraInit(int floor)
 {
+	
 	GameMap* map = GameMap::createMap(floor);
 
 	this->addChild(map, kZmap, kZmap);
@@ -28,6 +29,8 @@ void GameLayer::extraInit(int floor)
 	hero->setPosition(GameMap::positionForTileCoord(Global::instance()->heroSpawnTileCoord));
 	hero->setZOrder(kZhero);
 	this->addChild(hero);
+	
+	
 
 
 }
@@ -46,6 +49,9 @@ void GameLayer::showTip()
 
 void GameLayer::switchMap(int floor)
 {
+	if (floor > Global::instance()->highestStorey) {
+		Global::instance()->highestStorey = floor;
+	}
 
     GameMap* gameMap = Global::instance()->gameMap;
 	this->removeChildByTag(kZmap);

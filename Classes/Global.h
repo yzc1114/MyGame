@@ -37,8 +37,12 @@ public:
 	//目标地图的层数
 	int currentLevel;
 
+	//当前到达过的最高的楼层
+	int highestStorey;
 	//勇士出现的起始位置
 	Point heroSpawnTileCoord;
+
+	std::string fullpath;
 };
 
 
