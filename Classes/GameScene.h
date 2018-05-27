@@ -24,6 +24,8 @@ public:
 
 	void showSaveLayer();
 
+	std::string createTheInfoShowedOnSaveLayer(int order);
+
 	void SaveLayerOnMouseMove(Event* event);
 
 	void SaveLayerOnMouseDown(Event* event);

@@ -78,7 +78,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 	AnimationControl::instance()->initAnimationMap();
 	AudioControl::instance()->PreloadMusic();
-
+	SaveControl::instance()->initSaveControl();
     // Set the design resolution
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
     auto frameSize = glview->getFrameSize();

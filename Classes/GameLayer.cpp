@@ -30,9 +30,6 @@ void GameLayer::extraInit(int floor)
 	hero->setZOrder(kZhero);
 	this->addChild(hero);
 	
-	
-
-
 }
 
 GameLayer* GameLayer::createGameLayer(int floor)
