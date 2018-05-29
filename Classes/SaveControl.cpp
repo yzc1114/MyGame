@@ -5,7 +5,15 @@ DECLARE_SINGLETON_MEMBER(SaveControl);
 
 SaveControl::SaveControl()
 {
-	
+}
+
+
+SaveControl::~SaveControl()
+{
+}
+
+void SaveControl::initSaveControl()
+{
 	writablePath = FileUtils::getInstance()->getWritablePath();
 	fullPath = writablePath + "text.xml";
 	Global::instance()->fullpath = fullPath;
@@ -15,7 +23,7 @@ SaveControl::SaveControl()
 
 		root = Dictionary::create();
 		root->retain();
-		
+
 		for (int i = 0; i < 5; i++) {
 			Save[i] = Dictionary::create();
 			Save[i]->retain();
@@ -37,11 +45,6 @@ SaveControl::SaveControl()
 		(Save[3] = (Dictionary*)(root->objectForKey("Save3")))->retain();
 		(Save[4] = (Dictionary*)(root->objectForKey("Save4")))->retain();
 	}
-}
-
-
-SaveControl::~SaveControl()
-{
 }
 
 void SaveControl::save(int order)
@@ -73,7 +76,7 @@ void SaveControl::save(int order)
 	SaverOfHero->setObject(Integer::create(Global::instance()->currentLevel), "currentLevel");
 	SaverOfHero->setObject(Integer::create(Hero->getPositionX()), "PositionX");
 	SaverOfHero->setObject(Integer::create(Hero->getPositionY()), "PositionY");
-
+	
 	Saver->setObject(SaverOfHero, "SaverOfHero");
 
 	Dictionary* SaverOfMap = Dictionary::create();
@@ -134,7 +137,6 @@ void SaveControl::save(int order)
 
 	Saver->setObject(SaverOfMap, "SaverOfMap");
 
-	root->setObject(Saver, "Save1");
 	root->writeToFile(fullPath.c_str());
 
 
@@ -256,19 +258,36 @@ void SaveControl::load(int order)
 	
 }
 
+void SaveControl::deleteSave(int order)
+{
+	if (!checkIfTheSaveExisted(order)) {
+		assert("Loading Save Doesn't Existed");
+		return;
+	}
+	auto Saver = Save[order];
+	Saver->setObject(Bool::create(false), "IfSaved");
+	root->writeToFile(fullPath.c_str());
+}
+
 bool SaveControl::checkIfTheSaveExisted(int order)
 {
-	//获得全部文件信息的ValueMap
-	auto valueMap = FileUtils::getInstance()->getValueMapFromFile(fullPath);
-	//获得目标存档的Dict值
-	auto Saver = valueMap.at("Save" + std::to_string(order)).asValueMap();
-	
-	if (Saver.at("IfSaved").asBool()) {
-		return true;
-	}
-	else {
+	if (!FileUtils::getInstance()->isFileExist(fullPath)) {
 		return false;
 	}
+	else {
+		//获得全部文件信息的ValueMap
+			auto valueMap = FileUtils::getInstance()->getValueMapFromFile(fullPath);
+			//获得目标存档的Dict值
+			auto Saver = valueMap.at("Save" + std::to_string(order)).asValueMap();
+	
+			if (Saver.at("IfSaved").asBool()) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+	
 }
 
 

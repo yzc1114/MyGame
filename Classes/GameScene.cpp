@@ -18,6 +18,8 @@ bool GameScene::init()
     }
 	Global::instance()->gameScene = this;
 
+	//NetworkControl networkControl;
+
 	
 	GameLayer* gamelayer = GameLayer::createGameLayer(0);
 	this->addChild(gamelayer,-1);
@@ -89,7 +91,6 @@ bool GameScene::init()
 	this->addChild(currentRedKeys, kZRedKeys, kZRedKeys);
 
 	
-
 
 }
 
@@ -179,37 +180,54 @@ void GameScene::showSaveLayer()
 	
 		auto subLayer = LayerColor::create(Color4B::BLUE, visibleSize.width * 3 / 5, visibleSize.height * 4 / 7 / 5);
 		
-		subLayer->setPosition((SaverLayer->getContentSize().width - subLayer->getContentSize().width) / 2 , (2 * i)*SaverLayer->getContentSize().height / 10 + 18);
+		subLayer->setPosition((SaverLayer->getContentSize().width - 1 * subLayer->getContentSize().width) / 4 , (2 * i)*SaverLayer->getContentSize().height / 10 + 18);
 		SaverLayer->addChild(subLayer, kZSaveLayer + 1, i);
 		subLayer->setScale(1);
 		if (Saver->checkIfTheSaveExisted(i)) {
 			TTFConfig ttfconfig("fonts/arial.ttf", 18);
 			ttfconfig.bold = true;
-			//获得全部文件信息的ValueMap
-			auto valueMap = FileUtils::getInstance()->getValueMapFromFile(Global::instance()->fullpath);
-			//获得目标存档的Dict值
-			auto Saver = valueMap.at("Save" + std::to_string(i)).asValueMap();
-			//通过ValueMap的key分别获得英雄和地图的字典
-			auto SaverOfHero = Saver.at("SaverOfHero").asValueMap();
-			
-			int currentLevel = SaverOfHero.at("currentLevel").asInt();
-			int HP = SaverOfHero.at("HP").asInt();
-			int ATK = SaverOfHero.at("ATK").asInt();
-			int DEF = SaverOfHero.at("DEF").asInt();
-
-			std::string stringToShow = "Level : " + std::to_string(currentLevel) + " HP : " + std::to_string(HP) + " ATK : " + std::to_string(ATK) + " DEF : " + std::to_string(DEF);
-
-			Label* label = Label::createWithTTF(ttfconfig, stringToShow);
+			Label* label = Label::createWithTTF(ttfconfig, createTheInfoShowedOnSaveLayer(i));
 			label->setPosition(subLayer->getContentSize().width / 2, subLayer->getContentSize().height / 2);
 			subLayer->addChild(label, kZSaveLayer + 1, i);
 		}
 		else {
-			TTFConfig ttfconfig("fonts/arial.ttf", 24);
+			TTFConfig ttfconfig("fonts/arial.ttf", 18);
+			ttfconfig.bold = true;
 			Label* label = Label::createWithTTF(ttfconfig, "No Save Existed");
 			label->setPosition(subLayer->getContentSize().width / 2, subLayer->getContentSize().height / 2);
 			subLayer->addChild(label, kZSaveLayer + 1 , i);
 		}
 	}
+
+	for (int i = 0; i < 5; i++) { //创建 保存 删除 按钮
+		TTFConfig ttfconfig("fonts/arial.ttf", 18);
+		ttfconfig.bold = true;
+		auto menuSave = MenuItemFont::create("Save", [=](Ref* ref){
+			SaveControl::instance()->save(i);
+			auto subLayer = static_cast<LayerColor*>(SaverLayer->getChildByTag(i));
+			subLayer->removeChildByTag(i);
+			Label* label = Label::createWithTTF(ttfconfig, createTheInfoShowedOnSaveLayer(i));
+			label->setPosition(subLayer->getContentSize().width / 2, subLayer->getContentSize().height / 2);
+			subLayer->addChild(label, kZSaveLayer + 1, i);
+		});
+		menuSave->setFontSize(18);
+		auto menuDelete = MenuItemFont::create("Delete", [=](Ref* ref) {
+			SaveControl::instance()->deleteSave(i);
+			auto subLayer = static_cast<LayerColor*>(SaverLayer->getChildByTag(i));
+			subLayer->removeChildByTag(i);
+			Label* label = Label::createWithTTF(ttfconfig, "No Save Existed");
+			label->setPosition(subLayer->getContentSize().width / 2, subLayer->getContentSize().height / 2);
+			subLayer->addChild(label, kZSaveLayer + 1, i);
+		});
+		menuDelete->setFontSize(18);
+		auto menu = Menu::create(menuSave,menuDelete,NULL);
+		menu->alignItemsHorizontallyWithPadding(30);
+		SaverLayer->addChild(menu);
+		menu->setPosition(7.8 * SaverLayer->getContentSize().width / 9, (2 * i)*SaverLayer->getContentSize().height / 10 + 45);
+
+	}
+
+
 
 	auto MouseListener = EventListenerMouse::create();
 	MouseListener->onMouseMove = CC_CALLBACK_1(GameScene::SaveLayerOnMouseMove, this);
@@ -224,6 +242,23 @@ void GameScene::showSaveLayer()
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyBoardListener, this);
 
+}
+
+std::string GameScene::createTheInfoShowedOnSaveLayer(int order)
+{
+	//获得全部文件信息的ValueMap
+	auto valueMap = FileUtils::getInstance()->getValueMapFromFile(Global::instance()->fullpath);
+	//获得目标存档的Dict值
+	auto Saver = valueMap.at("Save" + std::to_string(order)).asValueMap();
+	//通过ValueMap的key分别获得英雄和地图的字典
+	auto SaverOfHero = Saver.at("SaverOfHero").asValueMap();
+
+	int currentLevel = SaverOfHero.at("currentLevel").asInt();
+	int HP = SaverOfHero.at("HP").asInt();
+	int ATK = SaverOfHero.at("ATK").asInt();
+	int DEF = SaverOfHero.at("DEF").asInt();
+
+	return "Level : " + std::to_string(currentLevel) + " HP : " + std::to_string(HP) + " ATK : " + std::to_string(ATK) + " DEF : " + std::to_string(DEF);
 }
 
 void GameScene::SaveLayerOnMouseMove(Event * event)
@@ -263,6 +298,8 @@ void GameScene::SaveLayerOnMouseDown(Event * event)
 		if (subLayer->getBoundingBox().containsPoint(Vec2(x, y))) {
 			if (SaveControl::instance()->checkIfTheSaveExisted(i)) {
 				SaveControl::instance()->load(i);
+				this->removeChildByTag(kZSaveLayer);
+				return;
 			}
 		}
 	}

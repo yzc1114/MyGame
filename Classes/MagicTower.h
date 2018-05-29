@@ -6,7 +6,10 @@
 #define STATUSBARWIDTH 192
 #define NORMAL_TIPBAR "                 <Space> Help                        <S> Save                       <L> Load                      <R> Restart"
 
+
 #include "cocos2d.h"
+//#include "network\SocketIO.h"
+//#include "NetworkControl.h"
 #include "GameConstants.h"
 #include "SimpleAudioEngine.h"
 //Layer
