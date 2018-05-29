@@ -50,11 +50,15 @@ public:
 
 	bool isDoorOpening; // 标记是否在开门
 
+	bool isTalking; //标记是否在对话
+
 	void pickUpItem(); // 捡东西
 
 	void openDoor(int targetDoorGID); // 开门
 
 	void DoorOpeningUpdate(float dt); //开门时更新图块的schedule函数
+
+	void contactMenuCALLBACK(Ref * psender);
 
 	void actWithNPC(); // 与npc互动
 
@@ -77,6 +81,8 @@ public:
 	void onMoveDone(Node* pTarget, int data);//移动完成后的回调函数
 
 	void MusicUpdate(float dt);//播放打架音效的定时器
+
+	//void contactMenuCALLBACK(Ref* psender);//跟NPC交流菜单的回调函数
 
 };
 

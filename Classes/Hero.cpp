@@ -22,7 +22,7 @@ bool Hero::init()
 	coins = 0;
 
 
-	isHeroMoving = isHeroFighting = isDoorOpening = false;
+	isHeroMoving = isHeroFighting = isDoorOpening = isTalking = false;
 	return true;
 }
 
@@ -40,7 +40,7 @@ Hero::~Hero()
 void Hero::move(HeroDirection direction)
 {
 	//若已经在走 则返回
-	if (isHeroMoving || isHeroFighting || isDoorOpening)
+	if (isHeroMoving || isHeroFighting || isDoorOpening|| isTalking)
 	{
 		return;
 	}
@@ -315,6 +315,29 @@ void Hero::MusicUpdate(float dt)
 }
 
 void Hero::actWithNPC() {
+	if (isTalking) { return; }
+	
+	
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ContactBGS.mp3");
+	isTalking = true;
+	int index = targetTileCoord.x + targetTileCoord.y * Global::instance()->gameMap->getMapSize().width;
+	NPC *npc = Global::instance()->gameMap->npcDict.at(index);
+	
+	auto* pcontactMenu = MenuItemImage::create("ContactWindow.png", "ContactWindow.png", [&](Ref* ref) {
+		Global::instance()->gameLayer->removeChildByTag(kZnpc);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ContactBGS.mp3");
+		isTalking = false;
+																													});
+	auto* contactLabel = MenuItemLabel::create(LabelTTF::create(npc->contactMessage, "Arial", 12), [&](Ref* ref) {
+		Global::instance()->gameLayer->removeChildByTag(kZnpc);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ContactBGS.mp3");
+		isTalking = false;
+																													});
+	auto* contactMenu = Menu::create(pcontactMenu, contactLabel, NULL);
+	contactMenu->setPosition(32 * 10, 32 * 10);
+	contactMenu->setScale(1.5f);
+	Global::instance()->gameLayer->addChild(contactMenu, 250, kZnpc);
+
 
 }
 
@@ -447,3 +470,11 @@ void Hero::DoorOpeningUpdate(float dt) {
 		Global::instance()->gameMap->DoorLayer->setTileGID(NextGid,targetTileCoord);
 	}
 }
+
+/*
+void Hero::contactMenuCALLBACK(Ref* psender) {
+
+	Global::instance()->gameLayer->removeChildByTag(kZnpc);
+
+}
+*/

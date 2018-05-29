@@ -30,7 +30,7 @@ void GameLayer::extraInit(int floor)
 	hero->setZOrder(kZhero);
 	this->addChild(hero);
 	
-	
+	//hero->heroSprite->runAction(RepeatForever::create(AnimationControl::instance()->createAnimate("npc1")));
 
 
 }

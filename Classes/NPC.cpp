@@ -14,6 +14,11 @@ NPC::NPC(const ValueMap &dict, int x, int y)
 	key = "image";
 	imagePath = dict.at(key).asString();
 
+	//获取message项
+	key = "message";
+	contactMessage = dict.at(key).asString();
+
+
 	//获取rectX和rectY
 	key = "rectX";
 	int x1 = dict.at(key).asInt();

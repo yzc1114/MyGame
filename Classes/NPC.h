@@ -29,6 +29,9 @@ public:
 
 	//对应配置中的type项
 	std::string type;
+
+	//这个NPC会对你说的一些屁话，即message项
+	std::string contactMessage;
 };
 
 #endif

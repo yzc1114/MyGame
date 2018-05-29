@@ -32,7 +32,7 @@ bool AnimationControl::initAnimationMap()
 	AnimationCache::getInstance()->addAnimation(createHeroMovingAnimationByDirection(kup), temp);
 
 	//加载NPC动画
-	AnimationCache::getInstance()->addAnimation(createNPCAnimationByImageID(1), std::string("npc" + std::to_string(1)));
+	AnimationCache::getInstance()->addAnimation(createNPCAnimationByImageID(0), std::string("npc" + std::to_string(0)));
 
 	//加载战斗动画
 	AnimationCache::getInstance()->addAnimation(createFightingAnimation(), "Fighting");
