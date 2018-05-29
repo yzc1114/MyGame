@@ -315,25 +315,34 @@ void Hero::MusicUpdate(float dt)
 }
 
 void Hero::actWithNPC() {
-	if (isTalking) { return; }
+	if (isTalking) { return; }              //如果正在BB，那么就在此地不要走动
 	
 	
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ContactBGS.mp3");
-	isTalking = true;
-	int index = targetTileCoord.x + targetTileCoord.y * Global::instance()->gameMap->getMapSize().width;
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ContactBGS.mp3");        //播放BB音效
+	isTalking = true;																			//表示正在BB
+	
+	//计算目标唯一坐标并读取该NPC数据
+	int index = targetTileCoord.x + targetTileCoord.y * Global::instance()->gameMap->getMapSize().width;    
 	NPC *npc = Global::instance()->gameMap->npcDict.at(index);
 	
+	//创建菜单外观与回调的Lambda函数
 	auto* pcontactMenu = MenuItemImage::create("ContactWindow.png", "ContactWindow.png", [&](Ref* ref) {
 		Global::instance()->gameLayer->removeChildByTag(kZnpc);
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ContactBGS.mp3");
 		isTalking = false;
 																													});
-	auto* contactLabel = MenuItemLabel::create(LabelTTF::create(npc->contactMessage, "Arial", 12), [&](Ref* ref) {
+	
+	//创建标签，调整范围至菜单内并创建回调的Lambda函数
+	auto contactLabel = LabelTTF::create(npc->contactMessage, "Arial", 14);
+	contactLabel->setDimensions(Size(170, 190));
+	auto* pcontactLabel = MenuItemLabel::create(contactLabel, [&](Ref* ref) {
 		Global::instance()->gameLayer->removeChildByTag(kZnpc);
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ContactBGS.mp3");
 		isTalking = false;
 																													});
-	auto* contactMenu = Menu::create(pcontactMenu, contactLabel, NULL);
+	
+	//建立菜单并添加节点
+	auto* contactMenu = Menu::create(pcontactMenu, pcontactLabel, NULL);
 	contactMenu->setPosition(32 * 10, 32 * 10);
 	contactMenu->setScale(1.5f);
 	Global::instance()->gameLayer->addChild(contactMenu, 250, kZnpc);
