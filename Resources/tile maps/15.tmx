@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="13" height="13" tilewidth="32" tileheight="32" infinite="0" nextobjectid="3">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="13" height="13" tilewidth="32" tileheight="32" infinite="0" nextobjectid="6">
  <tileset firstgid="1" source="terrain.tsx"/>
  <tileset firstgid="3" source="enemy.tsx"/>
  <tileset firstgid="259" source="door.tsx"/>
@@ -25,32 +25,32 @@
   <data encoding="csv">
 2,2,2,2,2,2,2,2,2,2,2,2,2,
 2,0,0,0,0,0,0,0,0,0,0,0,2,
-2,0,2,2,0,0,0,0,0,2,2,0,2,
-2,0,2,2,0,0,0,0,0,2,2,0,2,
-2,0,0,0,0,2,2,2,0,0,0,0,2,
-2,0,0,0,2,0,0,0,2,0,0,0,2,
-2,0,0,0,2,0,0,0,2,0,0,0,2,
-2,0,0,0,2,0,0,0,2,0,0,0,2,
-2,0,2,0,0,2,0,2,0,0,2,0,2,
-2,0,2,2,0,2,0,2,0,2,2,0,2,
-2,0,0,2,2,2,0,2,2,2,0,0,2,
 2,0,0,0,0,0,0,0,0,0,0,0,2,
+2,2,2,2,0,2,2,2,2,2,2,2,2,
+2,0,0,0,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,0,0,0,2,
+2,2,2,0,2,2,2,0,2,2,0,2,2,
+2,0,0,0,0,2,0,0,0,2,0,0,2,
+2,0,0,0,0,2,0,0,0,2,0,0,2,
+2,0,0,0,0,2,0,0,0,2,0,0,2,
 2,2,2,2,2,2,2,2,2,2,2,2,2
 </data>
  </layer>
  <layer name="enemy" width="13" height="13">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,59,0,0,0,0,0,59,0,0,0,
+0,0,0,191,0,0,0,0,191,0,0,0,0,
+0,0,0,191,0,0,0,0,191,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,59,0,0,67,0,0,0,67,0,0,59,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,67,0,0,0,0,0,0,0,0,0,67,0,
+0,0,0,0,195,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,195,0,0,0,0,0,0,
+0,0,0,195,0,0,0,195,0,0,195,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,191,0,0,0,191,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
@@ -58,17 +58,17 @@
  <layer name="door" width="13" height="13">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,259,0,0,0,259,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,259,0,0,0,0,0,0,0,0,0,259,0,
+0,0,0,0,259,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,261,0,0,0,0,0,0,0,0,0,261,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,260,0,0,0,260,0,0,259,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,261,0,261,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
@@ -79,31 +79,40 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,291,275,291,0,0,0,0,0,
-0,0,0,0,0,291,275,291,0,0,0,0,0,
-0,0,0,0,0,291,275,291,0,0,0,0,0,
-0,0,0,0,0,0,275,0,0,0,0,0,0,
-0,0,0,0,291,0,275,0,292,0,0,0,0,
-0,0,279,0,0,0,0,0,0,0,279,0,0,
-0,275,279,275,279,0,0,0,279,276,279,276,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,291,0,0,0,0,0,0,0,0,0,280,0,
+0,291,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,279,275,0,0,0,275,275,279,0,0,0,0,
+0,279,275,292,292,0,292,292,279,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <objectgroup name="object">
-  <object id="1" type="teleport" x="32" y="32" width="32" height="32">
+  <object id="1" type="teleport" x="352" y="32" width="32" height="32">
    <properties>
-    <property name="heroTileCoordX" type="int" value="1"/>
-    <property name="heroTileCoordY" type="int" value="2"/>
+    <property name="heroTileCoordX" type="int" value="10"/>
+    <property name="heroTileCoordY" type="int" value="1"/>
     <property name="image" value="down_floor.png"/>
-    <property name="targetMap" value="9"/>
+    <property name="targetMap" value="14"/>
    </properties>
   </object>
-  <object id="2" type="teleport" x="352" y="32" width="32" height="32">
+  <object id="4" type="teleport" x="352" y="352" width="32" height="32">
    <properties>
     <property name="heroTileCoordX" type="int" value="11"/>
-    <property name="heroTileCoordY" type="int" value="2"/>
+    <property name="heroTileCoordY" type="int" value="10"/>
     <property name="image" value="up_floor.png"/>
-    <property name="targetMap" value="11"/>
+    <property name="targetMap" value="0"/>
+   </properties>
+  </object>
+  <object id="5" name="JumpToolMessage" type="npc" x="352" y="128" width="32" height="32">
+   <properties>
+    <property name="image" value="npc0.png"/>
+    <property name="message" value="Hey guy! Have you heard of the hiden seventeenth floor? Only by using the jump tool can you get into the floor. Tales say that a legendary weapon is guarded in this floor. But the guardian is very agressive. Without the Doran's Sheild, you should not get close to him."/>
+    <property name="name" value="npc0"/>
+    <property name="rectX" value="0"/>
+    <property name="rectY" value="0"/>
    </properties>
   </object>
  </objectgroup>

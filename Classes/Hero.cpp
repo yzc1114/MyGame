@@ -333,7 +333,7 @@ void Hero::actWithNPC() {
 																													});
 	
 	//创建标签，调整范围至菜单内并创建回调的Lambda函数
-	auto contactLabel = LabelTTF::create(npc->contactMessage, "Arial", 14);
+	auto contactLabel = LabelTTF::create(npc->contactMessage, "Arial", 13);
 	contactLabel->setDimensions(Size(170, 190));
 	auto* pcontactLabel = MenuItemLabel::create(contactLabel, [&](Ref* ref) {
 		Global::instance()->gameLayer->removeChildByTag(kZnpc);
@@ -343,8 +343,8 @@ void Hero::actWithNPC() {
 	
 	//建立菜单并添加节点
 	auto* contactMenu = Menu::create(pcontactMenu, pcontactLabel, NULL);
-	contactMenu->setPosition(32 * 10, 32 * 10);
-	contactMenu->setScale(1.5f);
+	contactMenu->setPosition(32 * 14, 32 * 12);
+	contactMenu->setScale(1.8f);
 	Global::instance()->gameLayer->addChild(contactMenu, 250, kZnpc);
 
 
