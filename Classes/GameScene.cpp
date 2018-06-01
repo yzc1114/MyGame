@@ -133,7 +133,7 @@ void GameScene::refreshStatus(kZorder order)
 
 	
 }
-
+//创建状态栏的新状态条
 Label* GameScene::createNewLabelForStatus(Label* oldLabel) {
 	TTFConfig ttfconfig("fonts/arial.ttf", 12);
 	std::string newString;
@@ -227,9 +227,7 @@ void GameScene::showSaveLayer()
 
 	}
 
-
-
-	auto MouseListener = EventListenerMouse::create();
+	auto MouseListener = EventListenerMouse::create(); //鼠标事件监听器
 	MouseListener->onMouseMove = CC_CALLBACK_1(GameScene::SaveLayerOnMouseMove, this);
 	MouseListener->onMouseDown = CC_CALLBACK_1(GameScene::SaveLayerOnMouseDown, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(MouseListener, SaverLayer);
@@ -244,6 +242,7 @@ void GameScene::showSaveLayer()
 
 }
 
+//获得该处存档的游戏基本信息的std::string
 std::string GameScene::createTheInfoShowedOnSaveLayer(int order)
 {
 	//获得全部文件信息的ValueMap
@@ -261,6 +260,7 @@ std::string GameScene::createTheInfoShowedOnSaveLayer(int order)
 	return "Level : " + std::to_string(currentLevel) + " HP : " + std::to_string(HP) + " ATK : " + std::to_string(ATK) + " DEF : " + std::to_string(DEF);
 }
 
+//在鼠标移动时 在SaveLayer的存档条处变色
 void GameScene::SaveLayerOnMouseMove(Event * event)
 {
 	auto MouseEvent = (EventMouse*)event;
@@ -287,6 +287,7 @@ void GameScene::SaveLayerOnMouseMove(Event * event)
 	}
 }
 
+//在鼠标点击后 读档
 void GameScene::SaveLayerOnMouseDown(Event * event)
 {
 	auto MouseEvent = (EventMouse*)event;

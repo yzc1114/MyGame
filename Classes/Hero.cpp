@@ -102,6 +102,8 @@ void Hero::move(HeroDirection direction)
 CollisionType Hero::checkCollision(Point heroPosition)
 {
 	auto map = Global::instance()->gameMap;
+	TMXLayer* tempPtr;
+	int targetTileGID = 0;
 	targetTileCoord = map->tileCoordForPosition(heroPosition);
 
 	//超出边界
@@ -113,43 +115,51 @@ CollisionType Hero::checkCollision(Point heroPosition)
 		return kwall;
 	}
 
-	//获取墙壁层对应坐标的图块ID
-	int targetTileGID = Global::instance()->gameMap->WallLayer->getTileGIDAt(targetTileCoord);
-
-	//如果图块ID不为0，表示有墙
-	if (targetTileGID)
-	{
-		return kwall;
+	if (tempPtr = Global::instance()->gameMap->WallLayer) {
+		//获取墙壁层对应坐标的图块ID
+		targetTileGID = tempPtr->getTileGIDAt(targetTileCoord);
+		//如果图块ID不为0，表示有墙
+		if (targetTileGID)
+		{
+			return kwall;
+		}
 	}
-
+	
+	if (tempPtr = Global::instance()->gameMap->ItemLayer) {
 	//获得物品层对应坐标的图块ID
-	targetTileGID = Global::instance()->gameMap->ItemLayer->getTileGIDAt(targetTileCoord);
-
-	//如果图块ID不为0，表示有物品
-	if (targetTileGID) {
-		pickUpItem();
-		return kitem;
+		targetTileGID = tempPtr->getTileGIDAt(targetTileCoord);
+		//如果图块ID不为0，表示有物品
+		if (targetTileGID) {
+			pickUpItem();
+			return kitem;
+		}
 	}
+	
 
 	//获得门层对应坐标的图块ID
-	targetTileGID = Global::instance()->gameMap->DoorLayer->getTileGIDAt(targetTileCoord);
+	if (tempPtr = Global::instance()->gameMap->DoorLayer) {
+		targetTileGID = tempPtr->getTileGIDAt(targetTileCoord);
+		//如果图块ID不为0，表示有门
+		if (targetTileGID) {
+			openDoor(targetTileGID);
+			return kdoor;
+		}
+	}
+		
 	
-	//如果图块ID不为0，表示有门
-	if (targetTileGID) {
-		openDoor(targetTileGID);
-		return kdoor;
+	
+	if (tempPtr = Global::instance()->gameMap->enemyLayer) {
+		//获得怪物层对应坐标的图块ID
+		targetTileGID = tempPtr->getTileGIDAt(targetTileCoord);
+		//如果图块ID不为0，表示有敌人
+		if (targetTileGID) {
+			enemy = new Enemy(targetTileGID); //用GID初始化面对的敌人
+			fight();
+			return kenemy;
+		}
 	}
 
-
-	//获得怪物层对应坐标的图块ID
-	targetTileGID = Global::instance()->gameMap->enemyLayer->getTileGIDAt(targetTileCoord);
-
-	//如果图块ID不为0，表示有敌人
-	if (targetTileGID) {
-		enemy = new Enemy(targetTileGID); //用GID初始化面对的敌人
-		fight();
-		return kenemy;
-	}
+	
 
 
 

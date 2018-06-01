@@ -18,6 +18,7 @@
 //Scene
 #include "StartScene.h"
 #include "GameScene.h"
+#include "ChatRoom.h"
 //地图中元素以及地图本身
 #include "Hero.h"
 #include "Enemy.h"

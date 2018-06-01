@@ -17,7 +17,7 @@ bool ControlLayer::init()
 
 	auto exit = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(ControlLayer::exitButtonCallBack, this));
 	exitButton = Menu::create(exit, NULL);
-	exitButton->setPosition(20, 416 - 20);
+	exitButton->setPosition(20, 416);
 	addChild(exitButton, 0);
 
 
@@ -172,11 +172,16 @@ void ControlLayer::onKeyPressed(EventKeyboard::KeyCode keycode, Event * unused_e
 		schedule(schedule_selector(ControlLayer::moveRightUpdate));
 	}
 	if (keycode == EventKeyboard::KeyCode::KEY_S) {
-		
 		Global::instance()->gameScene->showSaveLayer();
 	}
 	if (keycode == EventKeyboard::KeyCode::KEY_L) {
 		SaveControl::instance()->load(1);
+	}
+	if (keycode == EventKeyboard::KeyCode::KEY_PG_UP) {
+		Global::instance()->gameLayer->switchMap(++ Global::instance()->currentLevel);
+	}
+	if (keycode == EventKeyboard::KeyCode::KEY_PG_DOWN) {
+		Global::instance()->gameLayer->switchMap(-- Global::instance()->currentLevel);
 	}
 }
 
