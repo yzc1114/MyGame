@@ -13,7 +13,9 @@ bool ChatRoom::init()
 	}
 	
 	LayerColor* BGLayer = LayerColor::create(Color4B::BLACK);
-	this->addChild(BGLayer);
+	this->addChild(BGLayer,kZBGLayer,kZBGLayer);
 
-	
+	LayerColor* InputBoxBGLayer = LayerColor::create(Color4B::WHITE);
+	this->addChild(InputBoxBGLayer, kZInputBoxBGLayer, kZInputBoxBGLayer);
+
 }

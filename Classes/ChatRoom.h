@@ -7,5 +7,10 @@ public:
 	~ChatRoom();
 	virtual bool init();
 	CREATE_FUNC(ChatRoom);
+	enum {
+		kZBGLayer,
+		kZInputBoxBGLayer,
+		kZTextBoxBGLayer
+	};
 };
 
