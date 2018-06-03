@@ -15,6 +15,7 @@ public:
 	int BlueKeys; //蓝钥匙
 	int RedKeys; //红钥匙
 	int coins; //金币
+	bool HavingAxes; //是否有镐子
 	CREATE_FUNC(Hero);
 	bool init(); //初始化英雄
 	Hero();

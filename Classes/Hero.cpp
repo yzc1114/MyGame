@@ -20,6 +20,7 @@ bool Hero::init()
 	BlueKeys = 1;
 	RedKeys = 1;
 	coins = 0;
+	HavingAxes = false;
 
 
 	isHeroMoving = isHeroFighting = isDoorOpening = isTalking = false;
@@ -403,8 +404,17 @@ void Hero::openDoor(int gid) {
 	} 
 
 	if (gid == 262) {
-		//dosomething
-		return;
+		if (HavingAxes) {
+			HavingAxes = false;
+			CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/AxesDamageBGS.mp3");
+			isDoorOpening = true;
+			schedule(schedule_selector(Hero::DoorOpeningUpdate), 0.1f);
+			return;
+		}
+		else {
+			return;
+		}
+		
 	}
 	//设置正在开门为TRUE
 	isDoorOpening = true;
@@ -463,6 +473,32 @@ void Hero::pickUpItem() {
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ItemBGS.mp3");
 		this->HP += 500;
 		tempGameScene->refreshStatus(kZHP);
+	}
+	if (gid == 308) {
+		//镐子 可以挖门
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/PickAxesBGS.mp3");
+		this->HavingAxes = true;
+	}
+	if (gid == 326) {
+		//无尽之刃 攻击加100
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/WeaponBGS.mp3");
+		this->ATK += 100;
+		tempGameScene->refreshStatus(kZATK);
+	}
+	if (gid == 332) {
+		//多兰之盾 防御加100
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/WeaponBGS.mp3");
+		this->DEF += 100;
+		tempGameScene->refreshStatus(kZDEF);
+	}
+	if (gid == 311) {
+		//跳楼符 跳到下面一层（即隐藏的17层）
+		Global::instance()->gameMap->ItemLayer->removeTileAt(targetTileCoord);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/TransportBGS.mp3");
+		Global::instance()->heroSpawnTileCoord = Point(6, 11);
+		Global::instance()->gameLayer->switchMap(17);
+		
+		return;
 	}
 
 	

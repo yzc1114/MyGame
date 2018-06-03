@@ -103,7 +103,7 @@
     <property name="heroTileCoordX" type="int" value="11"/>
     <property name="heroTileCoordY" type="int" value="10"/>
     <property name="image" value="up_floor.png"/>
-    <property name="targetMap" value="0"/>
+    <property name="targetMap" value="16"/>
    </properties>
   </object>
   <object id="5" name="JumpToolMessage" type="npc" x="352" y="128" width="32" height="32">

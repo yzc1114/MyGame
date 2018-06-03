@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="13" height="13" tilewidth="32" tileheight="32" infinite="0" nextobjectid="4">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="13" height="13" tilewidth="32" tileheight="32" infinite="0" nextobjectid="3">
  <tileset firstgid="1" source="terrain.tsx"/>
  <tileset firstgid="3" source="enemy.tsx"/>
  <tileset firstgid="259" source="door.tsx"/>
@@ -24,33 +24,33 @@
  <layer name="wall" width="13" height="13">
   <data encoding="csv">
 2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,0,0,0,2,2,2,2,2,
+2,2,2,2,0,0,0,0,0,2,2,2,2,
+2,2,2,0,0,0,0,0,0,0,2,2,2,
+2,2,2,0,0,0,0,0,0,0,2,2,2,
+2,2,2,0,0,0,0,0,0,0,2,2,2,
+2,2,2,2,0,0,0,0,0,2,2,2,2,
+2,2,2,2,2,0,0,0,2,2,2,2,2,
+2,2,2,2,2,2,0,2,2,2,2,2,2,
 2,0,0,0,0,0,0,0,0,0,0,0,2,
 2,0,0,0,0,0,0,0,0,0,0,0,2,
-2,2,0,2,2,2,2,2,0,2,2,2,2,
-2,0,0,0,2,0,0,0,0,0,0,0,2,
-2,0,0,0,2,0,0,0,0,0,0,0,2,
-2,2,0,2,2,0,0,0,0,0,0,0,2,
-2,0,0,0,2,0,0,0,0,0,0,0,2,
-2,0,0,0,2,0,0,0,0,0,0,0,2,
-2,2,0,2,2,2,0,2,2,2,2,2,2,
-2,0,0,0,2,0,0,0,0,0,0,0,2,
-2,0,0,0,2,0,0,0,0,0,0,0,2,
 2,2,2,2,2,2,2,2,2,2,2,2,2
 </data>
  </layer>
  <layer name="enemy" width="13" height="13">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,71,0,0,0,63,0,0,0,
-0,0,0,0,0,71,0,0,0,63,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,75,75,75,0,0,79,0,79,0,79,0,0,
-0,0,0,0,0,0,0,79,0,79,0,0,0,
-0,0,0,0,0,0,0,0,79,0,0,0,0,
-0,75,75,75,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,75,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,75,75,75,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,239,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
@@ -60,13 +60,13 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,259,0,0,0,0,0,259,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,260,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,261,0,0,0,259,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -76,13 +76,13 @@
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,326,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,279,279,279,0,0,0,0,0,0,0,280,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -90,29 +90,20 @@
 </data>
  </layer>
  <objectgroup name="object">
-  <object id="1" type="teleport" x="32" y="32" width="32" height="32">
-   <properties>
-    <property name="heroTileCoordX" type="int" value="2"/>
-    <property name="heroTileCoordY" type="int" value="1"/>
-    <property name="image" value="down_floor.png"/>
-    <property name="targetMap" value="12"/>
-   </properties>
-  </object>
-  <object id="2" type="teleport" x="352" y="352" width="32" height="32">
+  <object id="1" type="teleport" x="352" y="352" width="32" height="32">
    <properties>
     <property name="heroTileCoordX" type="int" value="10"/>
     <property name="heroTileCoordY" type="int" value="11"/>
-    <property name="image" value="up_floor.png"/>
-    <property name="targetMap" value="14"/>
+    <property name="image" value="down_floor.png"/>
+    <property name="targetMap" value="16"/>
    </properties>
   </object>
-  <object id="3" name="SwordMessage" type="npc" x="64" y="352" width="32" height="32">
+  <object id="2" type="teleport" x="32" y="352" width="32" height="32">
    <properties>
-    <property name="image" value="npc0.png"/>
-    <property name="message" value="Thank you for saving me, hero. But no one could leave the tower which is under Dark Lord's control. Don't try to fight with him. Without the Infinity Sword, no one could take damage to him. The sword is hiden in a secret floor where normal stairs can't get to. A fierce knight called Happy Wind Man also guards there. Be careful!"/>
-    <property name="name" value="npc0"/>
-    <property name="rectX" value="0"/>
-    <property name="rectY" value="0"/>
+    <property name="heroTileCoordX" type="int" value="2"/>
+    <property name="heroTileCoordY" type="int" value="11"/>
+    <property name="image" value="up_floor.png"/>
+    <property name="targetMap" value="18"/>
    </properties>
   </object>
  </objectgroup>

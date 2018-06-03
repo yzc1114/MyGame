@@ -60,7 +60,7 @@
     <property name="heroTileCoordX" value="11"/>
     <property name="heroTileCoordY" value="10"/>
     <property name="image" value="down_floor.png"/>
-    <property name="targetMap" value="15"/>
+    <property name="targetMap" value="21"/>
    </properties>
   </object>
  </objectgroup>
