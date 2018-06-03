@@ -18,7 +18,7 @@ public:
 
 	bool checkIfTheSaveExisted(int order);
 
-private:
+//private:
 	Dictionary* root;
 
 	Dictionary* Save[5];

@@ -49,7 +49,7 @@ public:
 	void MusicUpdate(float dt);
 	//跟NPC交流菜单的回调函数
 	//void contactMenuCALLBACK(Ref* psender);
-private:
+//private:
 	Enemy* enemy;//当前面对的敌人
 	int targetDoorGID; //门的GID
 	Point targetTileCoord; //临时保存的砖块坐标
