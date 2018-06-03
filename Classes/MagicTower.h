@@ -28,8 +28,9 @@
 //单例对象以及动画音频存档控制引擎
 #include "Singleton.h"
 #include "AnimationControl.h"
+#include "AudioControl.h"
 #include "SaveControl.h"
 #include "Global.h"
-#include "AudioControl.h"
+
 
 #endif

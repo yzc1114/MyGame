@@ -1,10 +1,7 @@
 #ifndef __GAME_SCENE_H__
 #define __GAME_SCENE_H__
 
-#include"cocos2d.h"
-#include"GameLayer.h"
-#include"ControlLayer.h"
-#include"GameConstants.h"
+#include"MagicTower.h"
 USING_NS_CC;
 
 class GameScene : public cocos2d::Scene
