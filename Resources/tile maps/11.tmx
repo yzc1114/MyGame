@@ -108,11 +108,11 @@
   </object>
   <object id="3" name="BGStory" type="npc" x="224" y="352" width="32" height="32">
    <properties>
-    <property name="image" value="npc0.png"/>
+    <property name="image" value="enemy.png"/>
     <property name="message" value="How long haven't there appeared new hero? Man, this is a magic tower which is in the charge of a Dark Lord. Once you get into here, you can not leave unless you can defeat him. Hundreds of years passing, no one did that. My poor man, look at this. The bones piled up as stairs of the tower."/>
-    <property name="name" value="npc0"/>
+    <property name="name" value="Princess"/>
     <property name="rectX" value="0"/>
-    <property name="rectY" value="0"/>
+    <property name="rectY" value="32*26"/>
    </properties>
   </object>
  </objectgroup>

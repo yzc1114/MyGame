@@ -108,11 +108,11 @@
   </object>
   <object id="3" name="SwordMessage" type="npc" x="64" y="352" width="32" height="32">
    <properties>
-    <property name="image" value="npc0.png"/>
+    <property name="image" value="enemy.png"/>
     <property name="message" value="Thank you for saving me, hero. But no one could leave the tower which is under Dark Lord's control. Don't try to fight with him. Without the Infinity Sword, no one could take damage to him. The sword is hiden in a secret floor where normal stairs can't get to. A fierce knight called Happy Wind Man also guards there. Be careful!"/>
-    <property name="name" value="npc0"/>
+    <property name="name" value="Princess"/>
     <property name="rectX" value="0"/>
-    <property name="rectY" value="0"/>
+    <property name="rectY" value="32*26"/>
    </properties>
   </object>
  </objectgroup>

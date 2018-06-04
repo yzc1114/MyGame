@@ -92,11 +92,11 @@
  <objectgroup name="object">
   <object id="1" name="JumpNotice" type="npc" x="192" y="64" width="32" height="32">
    <properties>
-    <property name="image" value="npc0.png"/>
+    <property name="image" value="enemy.png"/>
     <property name="message" value="Oh hero, how could you get here? I've waited such a long time. Behind me is the floor jumping spell which can help you get into the lower floor. I don't know its use but the Dark Lord protects it so well. You have only one chance to use it. So make sure you can already deal with the situations before using it."/>
-    <property name="name" value="npc0"/>
+    <property name="name" value="Princess"/>
     <property name="rectX" value="0"/>
-    <property name="rectY" value="0"/>
+    <property name="rectY" value="32*26"/>
    </properties>
   </object>
   <object id="2" type="teleport" x="32" y="32" width="32" height="32">

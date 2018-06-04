@@ -32,7 +32,8 @@ bool AnimationControl::initAnimationMap()
 	AnimationCache::getInstance()->addAnimation(createHeroMovingAnimationByDirection(kup), temp);
 
 	//加载NPC动画
-	AnimationCache::getInstance()->addAnimation(createNPCAnimationByImageID(0), std::string("npc" + std::to_string(0)));
+	AnimationCache::getInstance()->addAnimation(createNPCAnimationByImageID(26), "Princess");
+	AnimationCache::getInstance()->addAnimation(createNPCAnimationByImageID(54), "Master");
 
 	//加载战斗动画
 	AnimationCache::getInstance()->addAnimation(createFightingAnimation(), "Fighting");
@@ -102,14 +103,14 @@ Animation * AnimationControl::createHeroMovingAnimationByDirection(HeroDirection
 
 Animation * AnimationControl::createNPCAnimationByImageID(int ID)
 {
-	std::string ImagePath("npc" + std::to_string(ID) + ".png");
+	std::string ImagePath("enemy.png");
 	Texture2D *heroTexture = TextureCache::getInstance()->addImage(ImagePath);
 
 	//第二个参数表示显示区域的x, y, width, height，根据direction来确定显示的y坐标
-	SpriteFrame *frame0 = SpriteFrame::createWithTexture(heroTexture, Rect(32 * 0, 0, 32, 32));
-	SpriteFrame *frame1 = SpriteFrame::createWithTexture(heroTexture, Rect(32 * 1, 0, 32, 32));
-	SpriteFrame *frame2 = SpriteFrame::createWithTexture(heroTexture, Rect(32 * 2, 0, 32, 32));
-	SpriteFrame *frame3 = SpriteFrame::createWithTexture(heroTexture, Rect(32 * 3, 0, 32, 32));
+	SpriteFrame *frame0 = SpriteFrame::createWithTexture(heroTexture, Rect(32 * 0, 32 * ID, 32, 32));
+	SpriteFrame *frame1 = SpriteFrame::createWithTexture(heroTexture, Rect(32 * 1, 32 * ID, 32, 32));
+	SpriteFrame *frame2 = SpriteFrame::createWithTexture(heroTexture, Rect(32 * 2, 32 * ID, 32, 32));
+	SpriteFrame *frame3 = SpriteFrame::createWithTexture(heroTexture, Rect(32 * 3, 32 * ID, 32, 32));
 
 	Vector<SpriteFrame*> animFrames;
 
