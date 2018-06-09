@@ -108,11 +108,11 @@
   </object>
   <object id="3" name="PickaxeNotice" type="npc" x="224" y="64" width="32" height="32">
    <properties>
-    <property name="image" value="npc0.png"/>
+    <property name="image" value="enemy.png"/>
     <property name="message" value="I hope I can help you, hero. Next to me is a cross pickaxe which can help you destroy any unbreakable thing. I guess you can take advantage of it to achieve your goal. Remember, only defeating the Dark Lord can help all of us get free."/>
-    <property name="name" value="npc0"/>
+    <property name="name" value="Master"/>
     <property name="rectX" value="0"/>
-    <property name="rectY" value="0"/>
+    <property name="rectY" value="32*54"/>
    </properties>
   </object>
  </objectgroup>

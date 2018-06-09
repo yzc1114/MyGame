@@ -108,11 +108,11 @@
   </object>
   <object id="5" name="JumpToolMessage" type="npc" x="352" y="128" width="32" height="32">
    <properties>
-    <property name="image" value="npc0.png"/>
+    <property name="image" value="enemy.png"/>
     <property name="message" value="Hey guy! Have you heard of the hiden seventeenth floor? Only by using the jump tool can you get into the floor. Tales say that a legendary weapon is guarded in this floor. But the guardian is very agressive. Without the Doran's Sheild, you should not get close to him."/>
-    <property name="name" value="npc0"/>
+    <property name="name" value="Master"/>
     <property name="rectX" value="0"/>
-    <property name="rectY" value="0"/>
+    <property name="rectY" value="32*54"/>
    </properties>
   </object>
  </objectgroup>

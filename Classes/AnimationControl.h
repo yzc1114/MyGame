@@ -12,6 +12,8 @@ public:
 	AnimationControl();
 	~AnimationControl();
 
+	int npcAnimationId = 26;
+
 	//初始化动画模版缓存表
 	bool initAnimationMap();
 
