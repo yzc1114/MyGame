@@ -11,16 +11,25 @@ public:
 	CREATE_FUNC(ChatRoom);
 	enum {
 		kZBGLayer,
+		kZMSGBox,
+		kZBarrier1,
+		kZBarrier2,
 		kZInputBoxBGLayer,
 		kZEditBox,
-		kZTextBoxBGLayer
+		
 	};
 	virtual bool onTouchBegan(Touch* touch, Event* ev);
 	void sendMsg();
 	void createTextField();
+	Label* createMSGLabel(std::string str);
+	void addLabel(Label* label);
+	void rollUpWhenNewMsg();
 private:
 	TextFieldTTF* textEdit;
 	Layer* BGLayer;
+	Layer* Barrier1;
+	Layer* Barrier2;
+	std::queue<Label*> LabelQueue;
 };
 
 #endif

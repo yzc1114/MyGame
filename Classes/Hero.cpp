@@ -368,9 +368,6 @@ void Hero::openDoor(int gid) {
 	}
 	//保存这个门的GID；
 	targetDoorGID = gid;
-	
-	
-	
 	//259 黄门
 	//260 蓝门
 	//261 红门
