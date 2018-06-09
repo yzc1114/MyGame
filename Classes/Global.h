@@ -7,9 +7,11 @@ USING_NS_CC;
 
 class GameScene;
 class GameLayer;
+class ChatRoom;
 class ControlLayer;
 class GameMap;
 class Hero;
+
 
 class Global : public Singleton<Global>
 {
@@ -33,6 +35,9 @@ public:
 
 	//勇士
 	Hero *hero;
+
+	//聊天室
+	ChatRoom* chatRoom;
 
 	//目标地图的层数
 	int currentLevel;

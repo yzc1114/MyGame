@@ -4,12 +4,13 @@
 #define TIPBARHEIGHT 25
 #define MAP_SIZE 416
 #define STATUSBARWIDTH 192
-#define NORMAL_TIPBAR "                 <Space> Help                        <S> Save                       <L> Load                      <R> Restart"
+#define ADDED_WIDTH (MAP_SIZE+STATUSBARWIDTH)
+#define ADDED_HEIGHT (MAP_SIZE+TIPBARHEIGHT)
+#define NORMAL_TIPBAR "                 <Space> Help                        <S> Save                       <L> Load"
 
 
 #include "cocos2d.h"
-//#include "network\SocketIO.h"
-//#include "NetworkControl.h"
+//#include "chat_client.h"
 #include "GameConstants.h"
 #include "SimpleAudioEngine.h"
 //Layer
@@ -30,6 +31,7 @@
 #include "AnimationControl.h"
 #include "AudioControl.h"
 #include "SaveControl.h"
+
 #include "Global.h"
 
 

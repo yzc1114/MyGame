@@ -14,6 +14,8 @@ Global::Global(void)
 
 	hero = NULL;
 
+	chatRoom = NULL;
+
 	//新游戏，当前地图层数为0
 	currentLevel = 0;
 
