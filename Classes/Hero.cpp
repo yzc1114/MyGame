@@ -14,11 +14,11 @@ bool Hero::init()
 	this->addChild(heroSprite);
 	//³õÊ¼»¯Ó¢ÐÛÊôÐÔ
 
-	ATK = DEF = 20;
-	HP = 1000;
-	YellowKeys = 5;
-	BlueKeys = 1;
-	RedKeys = 1;
+	ATK = DEF = 10;
+	HP = 1;
+	YellowKeys = 0;
+	BlueKeys = 0;
+	RedKeys = 0;
 	coins = 0;
 	HavingAxes = false;
 
@@ -466,9 +466,9 @@ void Hero::pickUpItem() {
 		tempGameScene->refreshStatus(kZHP);
 	}
 	if (gid == 280) {
-		//À¶ÑªÆ¿ ÑªÁ¿¼Ó500
+		//À¶ÑªÆ¿ ÑªÁ¿¼Ó300
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ItemBGS.mp3");
-		this->HP += 500;
+		this->HP += 300;
 		tempGameScene->refreshStatus(kZHP);
 	}
 	if (gid == 308) {

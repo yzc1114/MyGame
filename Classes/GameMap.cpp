@@ -84,6 +84,10 @@ void GameMap::initEnemy()
 	//获取怪物层
 	enemyLayer = this->getLayer("enemy");
 
+	if (!enemyLayer) {
+		return;
+	}
+
 	Size s = enemyLayer->getLayerSize();
 
 	//遍历enemy层，将存在的怪物保存到数组中
