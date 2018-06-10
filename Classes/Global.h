@@ -11,7 +11,7 @@ class ChatRoom;
 class ControlLayer;
 class GameMap;
 class Hero;
-
+class chat_client;
 
 class Global : public Singleton<Global>
 {

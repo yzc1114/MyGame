@@ -15,6 +15,8 @@ public:
 
 	void refreshStatus(kZorder kzorder);
 
+	void refreshAllStatus();
+
 	Label* createNewLabelForStatus(Label* oldLabel);
 
 	void showTipBarText(std::string str);

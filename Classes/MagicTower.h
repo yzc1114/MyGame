@@ -6,6 +6,8 @@
 #define STATUSBARWIDTH 192
 #define ADDED_WIDTH (MAP_SIZE+STATUSBARWIDTH)
 #define ADDED_HEIGHT (MAP_SIZE+TIPBARHEIGHT)
+#define TILE_WIDTH 32
+#define TILE_COUNT 13
 #define NORMAL_TIPBAR "                 <Space> Help                        <S> Save                       <L> Load"
 
 
@@ -19,7 +21,7 @@
 //Scene
 #include "StartScene.h"
 #include "GameScene.h"
-#include "ChatRoom.h"
+
 //地图中元素以及地图本身
 #include "Hero.h"
 #include "Enemy.h"
@@ -31,8 +33,6 @@
 #include "AnimationControl.h"
 #include "AudioControl.h"
 #include "SaveControl.h"
-
+#include "ChatRoom.h"
 #include "Global.h"
-
-
 #endif

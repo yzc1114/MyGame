@@ -35,9 +35,9 @@ void StartScene::initStartScene()
 	caption->setPosition(origin.x + visibleSize.width / 2, origin.y + 3 * visibleSize.height / 4);
 	this->addChild(caption, 1);
 
-	auto buttonStart = MenuItemFont::create("Start", CC_CALLBACK_1(StartScene::buttonStartCALLBACK, this));
+	auto buttonNewGame = MenuItemFont::create("Start", CC_CALLBACK_1(StartScene::buttonStartCALLBACK, this));
 	auto buttonExit = MenuItemFont::create("Exit", CC_CALLBACK_1(StartScene::buttonExitCALLBACK, this));
-	auto menu = Menu::create(buttonStart, buttonExit ,NULL);
+	auto menu = Menu::create(buttonNewGame, buttonExit ,NULL);
 	menu->alignItemsVerticallyWithPadding(30);
 	menu->setPosition(origin.x + visibleSize.width / 2, origin.y + 2.5*visibleSize.height / 7);
 	this->addChild(menu, 2);
@@ -60,3 +60,5 @@ void StartScene::buttonExitCALLBACK(Ref* psender) {
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/STARTBGS.mp3");
 	Director::getInstance()->end();
 }
+
+

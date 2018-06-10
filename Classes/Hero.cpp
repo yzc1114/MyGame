@@ -316,7 +316,6 @@ void Hero::FightingUpdate(float dt)
 		Director::getInstance()->replaceScene(scene);
 	}
 
-
 }
 
 void Hero::MusicUpdate(float dt)

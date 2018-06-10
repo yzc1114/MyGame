@@ -19,7 +19,12 @@ bool GameLayer::init()
 
 void GameLayer::extraInit(int floor)
 {
-	
+	if (!Global::instance()->GameMaps.empty()) {
+		for (auto pair : Global::instance()->GameMaps) {
+			pair.second->release();
+		}
+		Global::instance()->GameMaps.clear();
+	}
 	GameMap* map = GameMap::createMap(floor);
 
 	this->addChild(map, kZmap, kZmap);
@@ -67,4 +72,5 @@ void GameLayer::switchMap(int floor)
 									NULL
 	);
 	Global::instance()->hero->runAction(action);
+	
 }

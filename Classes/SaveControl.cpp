@@ -88,45 +88,50 @@ void SaveControl::save(int order)
 		auto DoorLayer = map->DoorLayer;
 		auto ItemLayer = map->ItemLayer;
 		auto enemyLayer = map->enemyLayer;
-		Size s = DoorLayer->getLayerSize();
+		Size s = Size(TILE_COUNT, TILE_COUNT);
 
 		
 		String* temp;
-
 		for (int x = 0; x < s.width; x++) {
 			for (int y = 0; y < s.height; y++) {
 
 				std::string x_str = std::to_string(x);
 				std::string y_str = std::to_string(y);
-
-				if (DoorLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //保存地图上的门 是否已经开启过
-					SaverOfMap->setObject(Bool::create(true),"Door" + space + floor_str + space + x_str + space + y_str);//门还在
-				}
-				else {
-					if (SaverOfMap->objectForKey("Door" + space + floor_str + space + x_str + space + y_str) != nullptr) {
-						SaverOfMap->removeObjectForKey("Door" + space + floor_str + space + x_str + space + y_str);
+				if (DoorLayer != nullptr) {
+					if (DoorLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //保存地图上的门 是否已经开启过
+						SaverOfMap->setObject(Bool::create(true),"Door" + space + floor_str + space + x_str + space + y_str);//门还在
+					}
+					else {
+						if (SaverOfMap->objectForKey("Door" + space + floor_str + space + x_str + space + y_str) != nullptr) {
+							SaverOfMap->removeObjectForKey("Door" + space + floor_str + space + x_str + space + y_str);
+						}
 					}
 				}
 				
-
-				if (ItemLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //保存地图上的物品 是否已经被拿走
-					SaverOfMap->setObject(Bool::create(true),"Item" + space + floor_str + space + x_str + space + y_str); //东西还在
-				}
-				else {
-					if (SaverOfMap->objectForKey("Item" + space + floor_str + space + x_str + space + y_str) != nullptr) {
-						SaverOfMap->removeObjectForKey("Item" + space + floor_str + space + x_str + space + y_str);
+				
+				if (ItemLayer != nullptr) {
+					if (ItemLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //保存地图上的物品 是否已经被拿走
+						SaverOfMap->setObject(Bool::create(true),"Item" + space + floor_str + space + x_str + space + y_str); //东西还在
+					}
+					else {
+						if (SaverOfMap->objectForKey("Item" + space + floor_str + space + x_str + space + y_str) != nullptr) {
+							SaverOfMap->removeObjectForKey("Item" + space + floor_str + space + x_str + space + y_str);
+						}
 					}
 				}
 				
-
-				if (enemyLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //保存地图上的怪物 是否已经被击败
-					SaverOfMap->setObject(Bool::create(true),"Enemy" + space + floor_str + space + x_str + space + y_str); //怪物还在 存储为true
-				}
-				else {
-					if (SaverOfMap->objectForKey("Enemy" + space + floor_str + space + x_str + space + y_str) != nullptr) {
-						SaverOfMap->removeObjectForKey("Enemy" + space + floor_str + space + x_str + space + y_str);
+				
+				if (enemyLayer != nullptr) {
+					if (enemyLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //保存地图上的怪物 是否已经被击败
+						SaverOfMap->setObject(Bool::create(true),"Enemy" + space + floor_str + space + x_str + space + y_str); //怪物还在 存储为true
+					}
+					else {
+						if (SaverOfMap->objectForKey("Enemy" + space + floor_str + space + x_str + space + y_str) != nullptr) {
+							SaverOfMap->removeObjectForKey("Enemy" + space + floor_str + space + x_str + space + y_str);
+						}
 					}
 				}
+				
 				
 
 			}
@@ -203,7 +208,7 @@ void SaveControl::load(int order)
 		TMXLayer* enemyLayer = map->enemyLayer;
 		TMXLayer* ItemLayer = map->ItemLayer;
 		
-		Size s = DoorLayer->getLayerSize();
+		Size s = Size(TILE_COUNT, TILE_COUNT);
 
 		newGameMaps.insert(std::pair<int, GameMap*>(floor,map));
 
@@ -213,27 +218,33 @@ void SaveControl::load(int order)
 
 				std::string x_str = std::to_string(x);
 				std::string y_str = std::to_string(y);
-
-				if (DoorLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //查看地图上的门 是否已经开启过
+				if (DoorLayer != nullptr) {
+					if (DoorLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //查看地图上的门 是否已经开启过
 																   
-					if (SaverOfMap.count("Door" + space + floor_str + space + x_str + space + y_str) != 1){
-						DoorLayer->removeTileAt(Vec2(x, y));
+						if (SaverOfMap.count("Door" + space + floor_str + space + x_str + space + y_str) != 1){
+							DoorLayer->removeTileAt(Vec2(x, y));
+						}
 					}
 				}
-
-				if (ItemLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //查看地图上的物品 是否已经被拿走
+				
+				if (ItemLayer != nullptr) {
+					if (ItemLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //查看地图上的物品 是否已经被拿走
 																   
-					if (SaverOfMap.count("Item" + space + floor_str + space + x_str + space + y_str) != 1) {
-						ItemLayer->removeTileAt(Vec2(x, y));
+						if (SaverOfMap.count("Item" + space + floor_str + space + x_str + space + y_str) != 1) {
+							ItemLayer->removeTileAt(Vec2(x, y));
+						}
 					}
 				}
-
-				if (enemyLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //查看地图上的怪物 是否已经被击败
+				
+				if (enemyLayer != nullptr) {
+					if (enemyLayer->getTileGIDAt(Vec2(x, y)) != 0) {    //查看地图上的怪物 是否已经被击败
 																	
-					if (SaverOfMap.count("Enemy" + space + floor_str + space + x_str + space + y_str) != 1) {
-						enemyLayer->removeTileAt(Vec2(x, y));
+						if (SaverOfMap.count("Enemy" + space + floor_str + space + x_str + space + y_str) != 1) {
+							enemyLayer->removeTileAt(Vec2(x, y));
+						}
 					}
 				}
+				
 
 			}
 		}
@@ -255,7 +266,7 @@ void SaveControl::load(int order)
 		exit(0);
 	}
 	
-	
+	Global::instance()->gameScene->refreshAllStatus();
 }
 
 void SaveControl::deleteSave(int order)

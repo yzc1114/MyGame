@@ -18,8 +18,6 @@ bool GameScene::init()
     }
 	Global::instance()->gameScene = this;
 
-	//NetworkControl networkControl;
-
 	
 	GameLayer* gamelayer = GameLayer::createGameLayer(0);
 	this->addChild(gamelayer,-1);
@@ -133,6 +131,31 @@ void GameScene::refreshStatus(kZorder order)
 
 	
 }
+
+void GameScene::refreshAllStatus()
+{
+	Label* newLabel;
+	GameScene* tempGameScene = Global::instance()->gameScene;
+	newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZHP)));
+	this->removeChildByTag(kZHP);
+	this->addChild(newLabel, kZHP, kZHP);
+	newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZATK)));
+	this->removeChildByTag(kZATK);
+	this->addChild(newLabel, kZATK, kZATK);
+	newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZDEF)));
+	this->removeChildByTag(kZDEF);
+	this->addChild(newLabel, kZDEF, kZDEF);
+	newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZYellowKeys)));
+	this->removeChildByTag(kZYellowKeys);
+	this->addChild(newLabel, kZYellowKeys, kZYellowKeys);
+	newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZBlueKeys)));
+	this->removeChildByTag(kZBlueKeys);
+	this->addChild(newLabel, kZBlueKeys, kZBlueKeys);
+	newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZRedKeys)));
+	this->removeChildByTag(kZRedKeys);
+	this->addChild(newLabel, kZRedKeys, kZRedKeys);
+}
+
 //创建状态栏的新状态条
 Label* GameScene::createNewLabelForStatus(Label* oldLabel) {
 	TTFConfig ttfconfig("fonts/arial.ttf", 12);

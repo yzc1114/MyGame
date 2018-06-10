@@ -1,6 +1,8 @@
 #include "ChatRoom.h"
 
 
+boost::asio::io_service io_service;
+
 bool ChatRoom::init()
 {
 	if (!Scene::init()) {
@@ -48,7 +50,6 @@ bool ChatRoom::init()
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
 
-
 	return true;
 }
 
@@ -60,31 +61,19 @@ ChatRoom::ChatRoom()
 ChatRoom::~ChatRoom()
 {
 	Global::instance()->chatRoom = NULL;
+	client->close();
+	t.join();
 }
 
 void ChatRoom::boot_client()
 {
-	boost::asio::io_service io_service;
 
-	tcp::resolver resolver(io_service);
-	tcp::resolver::query query("127.0.0.1", "1000"); // ip port:本机  
-	tcp::resolver::iterator iterator = resolver.resolve(query);
+	resolver = new tcp::resolver(io_service);
+	query = new tcp::resolver::query("127.0.0.1", "1000");
 
-	chat_client c(io_service, iterator); // 初始化、连接  
-	client = &c;
-	boost::thread t(boost::bind(&boost::asio::io_service::run, &io_service)); // 线程  
-
-	char line[chat_message::max_body_length + 1];
-	while (std::cin.getline(line, chat_message::max_body_length + 1))
-	{
-		chat_message msg;
-		msg.body_length(strlen(line));
-		memcpy(msg.body(), line, msg.body_length());// line to msg  
-		msg.encode_header();
-		c.write(msg);
-	}
-
-	 
+	tcp::resolver::iterator iterator = (*resolver).resolve(*query);
+	client = new chat_client(io_service, iterator); // 初始化、连接  
+	t = boost::thread(boost::bind(&boost::asio::io_service::run, &io_service)); // 线程 
 }
 
 bool ChatRoom::onTouchBegan(Touch * touch, Event * ev)
@@ -114,9 +103,13 @@ bool ChatRoom::onTouchBegan(Touch * touch, Event * ev)
 
 void ChatRoom::sendMsg()
 {
+	std::string str = textEdit->getString();
+	this->addLabel(createMSGLabel(str));
+	textEdit->setString("");
+	
 	stringstream sstr;
 	sstr.clear();
-	sstr << textEdit->getString();
+	sstr << str;
 	char line[chat_message::max_body_length + 1];
 	sstr >> line;
 	chat_message msg;
@@ -124,7 +117,6 @@ void ChatRoom::sendMsg()
 	memcpy(msg.body(), line, msg.body_length());// line to msg  
 	msg.encode_header();
 	client->write(msg);
-	textEdit->setString("");
 }
 //创建输入框
 void ChatRoom::createTextField()
@@ -264,5 +256,35 @@ void ChatRoom::moveDown(float dt)
 		for (auto label : LabelList) {
 			label->setPositionY(label->getPositionY() + label->getContentSize().height);
 		}
+	}
+}
+
+bool chat_client::init()
+{
+	if (!Node::init()) {
+		return false;
+	}
+	return true;
+}
+
+void chat_client::handle_read_body(const boost::system::error_code & error)
+{
+	cout << __FUNCTION__ << endl;
+	if (!error)
+	{
+		std::string str = std::string(read_msg_.body(), read_msg_.body_length());
+		Label* label = Global::instance()->chatRoom->createMSGLabel(str);
+		Global::instance()->chatRoom->addLabel(label);
+		/*std::cout.write(read_msg_.body(), read_msg_.body_length()); // print read_msg_'s body
+		std::cout << "\n";*/
+
+		boost::asio::async_read(socket_,
+			boost::asio::buffer(read_msg_.data(), chat_message::header_length),
+			boost::bind(&chat_client::handle_read_header, this, // 4  
+				boost::asio::placeholders::error));
+	}
+	else
+	{
+		do_close();
 	}
 }

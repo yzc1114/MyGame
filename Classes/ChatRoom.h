@@ -21,7 +21,6 @@ public:
 	ChatRoom();
 	~ChatRoom();
 	virtual bool init();
-	~ChatRoom();
 	CREATE_FUNC(ChatRoom);
 	enum {
 		kZBGLayer,
@@ -47,7 +46,7 @@ public:
 	void moveDown(float dt);
 private:
 	chat_client* client;
-
+	boost::thread t;
 	TextFieldTTF* textEdit;
 	Layer* BGLayer;
 	Layer* Barrier1;
@@ -62,11 +61,15 @@ private:
 	float MessageLength;//消息加起来的总长
 	float buttonLength = 25;//向上及向下按钮的宽与长
 	float ScrollerLength;//滚动条的长度
+
+	tcp::resolver* resolver;
+	tcp::resolver::query* query; // ip port:本机  
 };
 
-class chat_client
+class chat_client : public Node
 {
 public:
+	bool init();
 	chat_client(boost::asio::io_service& io_service, // 1  
 		tcp::resolver::iterator endpoint_iterator)
 		: io_service_(io_service),
@@ -130,25 +133,8 @@ private:
 		}
 	}
 
-	void handle_read_body(const boost::system::error_code& error) // 4  
-	{
-		cout << __FUNCTION__ << endl;
-		if (!error)
-		{
-			Global::instance()->chatRoom->addLabel(Global::instance()->chatRoom->createMSGLabel(std::string(read_msg_.body())));
-			/*std::cout.write(read_msg_.body(), read_msg_.body_length()); // print read_msg_'s body
-			std::cout << "\n";*/
-
-			boost::asio::async_read(socket_,
-				boost::asio::buffer(read_msg_.data(), chat_message::header_length),
-				boost::bind(&chat_client::handle_read_header, this, // 4  
-					boost::asio::placeholders::error));
-		}
-		else
-		{
-			do_close();
-		}
-	}
+	void handle_read_body(const boost::system::error_code& error);
+	
 
 	void do_write(chat_message msg) // 6  
 	{
