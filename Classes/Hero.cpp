@@ -15,7 +15,7 @@ bool Hero::init()
 	//³õÊ¼»¯Ó¢ÐÛÊôÐÔ
 
 	ATK = DEF = 10;
-	HP = 5000;
+	HP = 11000;
 	YellowKeys = 0;
 	BlueKeys = 0;
 	RedKeys = 0;
@@ -469,9 +469,9 @@ void Hero::pickUpItem() {
 		tempGameScene->refreshStatus(kZHP);
 	}
 	if (gid == 280) {
-		//À¶ÑªÆ¿ ÑªÁ¿¼Ó400
+		//À¶ÑªÆ¿ ÑªÁ¿¼Ó300
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ItemBGS.mp3");
-		this->HP += 400;
+		this->HP += 300;
 		tempGameScene->refreshStatus(kZHP);
 	}
 	if (gid == 308) {

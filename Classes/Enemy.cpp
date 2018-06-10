@@ -44,36 +44,36 @@ Enemy::Enemy(int gid)
 
 	//¾«Ó¢÷¼÷Ã
 	if (gid >= 11 && gid < 15) {
-		ATK = 34;
-		DEF = 20;
+		ATK = 36;
+		DEF = 24;
 		HP = 60;
 	}
 
 	//ÓÄÁé
 	if (gid >= 51 && gid < 55) {
-		ATK = 46;
-		DEF = 26;
+		ATK = 48;
+		DEF = 28;
 		HP = 55;
 	}
 
 	//¿ø¼×÷¼÷Ã
 	if (gid >= 15 && gid < 19) {
-		ATK = 40;
-		DEF = 36;
-		HP = 80;
+		ATK = 44;
+		DEF = 38;
+		HP = 85;
 	}
 
 	//ÑªÉ«ÓÄÁé
 	if (gid >= 55 && gid < 59) {
-		ATK = 56;
+		ATK = 58;
 		DEF = 30;
 		HP = 70;
 	}
 
 	//ÊÞÈË
 	if(gid >= 67 && gid < 71) {
-		ATK = 46;
-		DEF = 48;
+		ATK = 54;
+		DEF = 50;
 		HP = 90;
 	}
 
@@ -86,71 +86,78 @@ Enemy::Enemy(int gid)
 
 	//´óÎ×Ê¦
 	if (gid >= 63 && gid < 67) {
-		ATK = 80;
-		DEF = 44;
+		ATK = 78;
+		DEF = 46;
 		HP = 85;
 	}
 
 	//ÊÞÈËÕ½Ê¿
 	if (gid >= 71 && gid < 75) {
-		ATK = 53;
-		DEF = 56;
+		ATK = 62;
+		DEF = 58;
 		HP = 110;
 	}
 
 	//Ê¯Ïñ¹í
 	if (gid >= 75 && gid < 79) {
-		ATK = 130;
-		DEF = 30;
-		HP = 55;
+		ATK = 150;
+		DEF = 55;
+		HP = 40;
 	}
 
 	//Õ³ÒºÈË
 	if (gid >= 79 && gid < 83) {
-		ATK = 58;
-		DEF = 68;
-		HP = 150;
+		ATK = 65;
+		DEF = 65;
+		HP = 160;
 	}
 
 	//ÉîÀ¶ÆïÊ¿
 	if (gid >= 191 && gid < 195) {
-		ATK = 66;
-		DEF = 66;
-		HP = 160;
+		ATK = 75;
+		DEF = 70;
+		HP = 150;
 	}
 
 	//²ÔÓ°ÓÄ»ê
 	if (gid >= 195 && gid < 199) {
-		ATK = 100;
-		DEF = 45;
-		HP = 120;
+		ATK = 115;
+		DEF = 50;
+		HP = 110;
 	}
 
 	//¿ìÀÖ·çÄÐ
 	if (gid >= 127 && gid < 131) {
-		ATK = 220;
-		DEF = 80;
-		HP = 600;
+		ATK = 230;
+		DEF = 75;
+		HP = 500;
 	}
 
 	//Ðþ¼×ÖØÆï
 	if (gid >= 99 && gid < 103) {
-		ATK = 78;
-		DEF = 78;
+		ATK = 80;
+		DEF = 80;
 		HP = 200;
 	}
 
 	//Ë«½£ÏÀ¿Í
 	if (gid >= 95 && gid < 99) {
-		ATK = 100;
-		DEF = 65;
-		HP = 160;
+		ATK = 115;
+		DEF = 60;
+		HP = 150;
+	}
+
+	//¹íÍ·
+	if (gid >= 103 && gid < 107) {
+		ATK = 120;
+		DEF = 90;
+		HP = 100;
 	}
 
 	//´óÄ§Íõ
 	if (gid >= 211 && gid < 215) {
 		ATK = 250;
-		DEF = 200;
+		DEF = 160;
 		HP = 1000;
 	}
 }
