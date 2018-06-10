@@ -28,7 +28,8 @@ public:
 	void SaveLayerOnMouseMove(Event* event);
 
 	void SaveLayerOnMouseDown(Event* event);
-
+private:
+	TTFConfig ttfconfigStatusBar;
 };
 
 #endif 

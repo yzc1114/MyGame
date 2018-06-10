@@ -54,7 +54,7 @@ void GameLayer::switchMap(int floor)
 	if (floor > Global::instance()->highestStorey) {
 		Global::instance()->highestStorey = floor;
 	}
-
+	
     GameMap* gameMap = Global::instance()->gameMap;
 	this->removeChildByTag(kZmap);
 	gameMap = GameMap::createMap(floor);
@@ -72,5 +72,5 @@ void GameLayer::switchMap(int floor)
 									NULL
 	);
 	Global::instance()->hero->runAction(action);
-	
+	Global::instance()->currentLevel = floor;
 }

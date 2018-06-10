@@ -174,14 +174,35 @@ void ControlLayer::onKeyPressed(EventKeyboard::KeyCode keycode, Event * unused_e
 	if (keycode == EventKeyboard::KeyCode::KEY_S) {
 		Global::instance()->gameScene->showSaveLayer();
 	}
-	if (keycode == EventKeyboard::KeyCode::KEY_L) {
-		SaveControl::instance()->load(1);
-	}
 	if (keycode == EventKeyboard::KeyCode::KEY_PG_UP) {
-		Global::instance()->gameLayer->switchMap(++ Global::instance()->currentLevel);
+		auto dict = Global::instance()->gameMap->teleportDict;
+		for (auto teleport : dict) {
+			Vec2 hero = GameMap::tileCoordForPosition(Global::instance()->hero->getPosition());
+			Vec2 stair = teleport.second->tileCoord;
+			if (abs((hero.getDistance(stair) - 1.0f)) <= 1e-6) {
+				for (auto teleport : dict) {
+					if (teleport.second->targetMap > Global::instance()->currentLevel && teleport.second->targetMap <= Global::instance()->highestStorey) {
+						Global::instance()->hero->doTeleport(teleport.second);
+					}
+				}
+				
+			}
+				
+		}
 	}
 	if (keycode == EventKeyboard::KeyCode::KEY_PG_DOWN) {
-		Global::instance()->gameLayer->switchMap(-- Global::instance()->currentLevel);
+		auto dict = Global::instance()->gameMap->teleportDict;
+		for (auto teleport : dict) {
+			Vec2 hero = GameMap::tileCoordForPosition(Global::instance()->hero->getPosition());
+			Vec2 stair = teleport.second->tileCoord;
+			if (abs((hero.getDistance(stair) - 1.0f)) <= 1e-6) {
+				for (auto teleport : dict) {
+					if (teleport.second->targetMap < Global::instance()->currentLevel && teleport.second->targetMap >= 0) {
+						Global::instance()->hero->doTeleport(teleport.second);
+					}
+				}
+			}	
+		}
 	}
 }
 

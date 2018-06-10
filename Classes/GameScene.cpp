@@ -4,6 +4,7 @@
 USING_NS_CC;
 
 
+
 Scene* GameScene::createScene()
 {
     return GameScene::create();
@@ -44,48 +45,56 @@ bool GameScene::init()
 
 
 	//创建左侧显示人物信息的状态条
+	ttfconfigStatusBar = TTFConfig("fonts/arial.ttf", 14);
+	ttfconfigStatusBar.bold = true;
+	//显示当前楼层
+	std::string temp = std::to_string(Global::instance()->currentLevel);
+	auto currentlevel = Label::createWithTTF(ttfconfigStatusBar, "current level : " + temp);
+	currentlevel->setAnchorPoint(Vec2::ZERO);
+	currentlevel->setColor(Color3B::BLACK);
+	currentlevel->setPosition(192 / 4.5, 32 * 12);
+	this->addChild(currentlevel, kZcurrentlevel, kZcurrentlevel);
 	//显示血量
-	TTFConfig ttfconfig("fonts/arial.ttf", 12);
-	std::string temp = std::to_string(Global::instance()->hero->HP);
-	auto currentHP = Label::createWithTTF(ttfconfig, "Hero HP : " + temp);
+	temp = std::to_string(Global::instance()->hero->HP);
+	auto currentHP = Label::createWithTTF(ttfconfigStatusBar, "Hero HP : " + temp);
 	currentHP->setAnchorPoint(Vec2::ZERO);
 	currentHP->setColor(Color3B::BLACK);
-	currentHP->setPosition(192 / 3, 32 * 11);
+	currentHP->setPosition(192 / 4.5, 32 * 11);
 	this->addChild(currentHP, kZHP, kZHP);
 	//显示攻击力
 	temp = std::to_string(Global::instance()->hero->ATK);
-	auto currentATK = Label::createWithTTF(ttfconfig, "Hero ATK : " + temp);
+	auto currentATK = Label::createWithTTF(ttfconfigStatusBar, "Hero ATK : " + temp);
 	currentATK->setAnchorPoint(Vec2::ZERO);
 	currentATK->setColor(Color3B::BLACK);
-	currentATK->setPosition(192 / 3, 32 * 10);
+	currentATK->setPosition(192 / 4.5, 32 * 10);
 	this->addChild(currentATK, kZATK, kZATK);
 	//显示防御力
 	temp = std::to_string(Global::instance()->hero->DEF);
-	auto currentDEF = Label::createWithTTF(ttfconfig, "Hero DEF : " + temp);
+	auto currentDEF = Label::createWithTTF(ttfconfigStatusBar, "Hero DEF : " + temp);
 	currentDEF->setAnchorPoint(Vec2::ZERO);
 	currentDEF->setColor(Color3B::BLACK);
-	currentDEF->setPosition(192 / 3, 32 * 9);
+	currentDEF->setPosition(192 / 4.5, 32 * 9);
 	this->addChild(currentDEF, kZDEF, kZDEF);
 	//显示黄钥匙数量
 	temp = std::to_string(Global::instance()->hero->YellowKeys);
-	auto currentYellowKeys = Label::createWithTTF(ttfconfig, "Hero YellowKeys : " + temp);
+	auto currentYellowKeys = Label::createWithTTF(ttfconfigStatusBar, "Hero YellowKeys : " + temp);
 	currentYellowKeys->setAnchorPoint(Vec2::ZERO);
 	currentYellowKeys->setColor(Color3B::BLACK);
-	currentYellowKeys->setPosition(192 / 3, 32 * 8);
+	currentYellowKeys->setPosition(192 / 4.5, 32 * 8);
 	this->addChild(currentYellowKeys, kZYellowKeys, kZYellowKeys);
 	//显示蓝钥匙数量
 	temp = std::to_string(Global::instance()->hero->BlueKeys);
-	auto currentBlueKeys = Label::createWithTTF(ttfconfig, "Hero BlueKeys : " + temp);
+	auto currentBlueKeys = Label::createWithTTF(ttfconfigStatusBar, "Hero BlueKeys : " + temp);
 	currentBlueKeys->setAnchorPoint(Vec2::ZERO);
 	currentBlueKeys->setColor(Color3B::BLACK);
-	currentBlueKeys->setPosition(192 / 3, 32 * 7);
+	currentBlueKeys->setPosition(192 / 4.5, 32 * 7);
 	this->addChild(currentBlueKeys, kZBlueKeys, kZBlueKeys);
 	//显示红钥匙数量
 	temp = std::to_string(Global::instance()->hero->RedKeys);
-	auto currentRedKeys = Label::createWithTTF(ttfconfig, "Hero RedKeys : " + temp);
+	auto currentRedKeys = Label::createWithTTF(ttfconfigStatusBar, "Hero RedKeys : " + temp);
 	currentRedKeys->setAnchorPoint(Vec2::ZERO);
 	currentRedKeys->setColor(Color3B::BLACK);
-	currentRedKeys->setPosition(192 / 3, 32 * 6);
+	currentRedKeys->setPosition(192 / 4.5, 32 * 6);
 	this->addChild(currentRedKeys, kZRedKeys, kZRedKeys);
 
 	
@@ -97,8 +106,12 @@ void GameScene::refreshStatus(kZorder order)
 {
 	Label* newLabel;
 	GameScene* tempGameScene = Global::instance()->gameScene;
-
-	if (order == kZHP) {
+	if (order == kZcurrentlevel) {
+		newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZcurrentlevel)));
+		this->removeChildByTag(kZcurrentlevel);
+		this->addChild(newLabel, kZcurrentlevel, kZcurrentlevel);
+	}
+	else if (order == kZHP) {
 		newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZHP)));
 		this->removeChildByTag(kZHP);
 		this->addChild(newLabel, kZHP, kZHP);
@@ -139,6 +152,9 @@ void GameScene::refreshAllStatus()
 	newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZHP)));
 	this->removeChildByTag(kZHP);
 	this->addChild(newLabel, kZHP, kZHP);
+	newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZHP)));
+	this->removeChildByTag(kZHP);
+	this->addChild(newLabel, kZHP, kZHP);
 	newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZATK)));
 	this->removeChildByTag(kZATK);
 	this->addChild(newLabel, kZATK, kZATK);
@@ -158,7 +174,6 @@ void GameScene::refreshAllStatus()
 
 //创建状态栏的新状态条
 Label* GameScene::createNewLabelForStatus(Label* oldLabel) {
-	TTFConfig ttfconfig("fonts/arial.ttf", 12);
 	std::string newString;
 	switch (oldLabel->getZOrder()) {
 	case kZHP:newString = std::string("Hero HP : " + std::to_string(Global::instance()->hero->HP)); break;
@@ -169,7 +184,7 @@ Label* GameScene::createNewLabelForStatus(Label* oldLabel) {
 	case kZRedKeys:newString = std::string("Hero RedKeys : " + std::to_string(Global::instance()->hero->RedKeys)); break;
 	default:;
 	}
-	Label* newLabel = Label::createWithTTF(ttfconfig, newString);
+	Label* newLabel = Label::createWithTTF(ttfconfigStatusBar, newString);
 	newLabel->setAnchorPoint(Vec2::ZERO);
 	newLabel->setColor(oldLabel->getColor());
 	newLabel->setPosition(oldLabel->getPosition());

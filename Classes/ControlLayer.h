@@ -2,7 +2,7 @@
 #define _CONTROLLAYER_
 
 #include"MagicTower.h"
-
+class Teleport;
 USING_NS_CC;
 class ControlLayer : public Layer {
 public:

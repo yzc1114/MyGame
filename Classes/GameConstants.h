@@ -30,6 +30,7 @@ typedef enum {
 	kZitem,
 	kZhero,
 	kZfighting,
+	kZcurrentlevel,
 	kZHP,
 	kZATK,
 	kZDEF,

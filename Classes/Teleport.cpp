@@ -4,6 +4,7 @@ Teleport::Teleport(const ValueMap &dict, int x, int y)
 {
 	Point position = Point(x, y);
 
+
 	//传送点所在的TileMap位置
 	tileCoord = Global::instance()->gameMap->tileCoordForPosition(Point(x, y));
 
@@ -15,7 +16,7 @@ Teleport::Teleport(const ValueMap &dict, int x, int y)
 	int y1 = dict.at(key).asInt();
 
 	//计算index
-	int index = tileCoord.x + tileCoord.y * Global::instance()->gameMap->getMapSize().width;
+	index = tileCoord.x + tileCoord.y * Global::instance()->gameMap->getMapSize().width;
 
 	heroTileCoord = Point(x1, y1);
 
