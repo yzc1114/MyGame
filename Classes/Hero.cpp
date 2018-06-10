@@ -15,7 +15,7 @@ bool Hero::init()
 	//≥ı ºªØ”¢–€ Ù–‘
 
 	ATK = DEF = 10;
-	HP = 11000;
+	HP = 1;
 	YellowKeys = 0;
 	BlueKeys = 0;
 	RedKeys = 0;
