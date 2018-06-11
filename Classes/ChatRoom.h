@@ -8,6 +8,7 @@
 #include <boost/bind.hpp>  
 #include <boost/asio.hpp>  
 #include <boost/thread.hpp>  
+#include <thread>
 #include "chat_message.hpp"  
 #include "MagicTower.h"
 using boost::asio::ip::tcp;
@@ -35,8 +36,9 @@ public:
 	void boot_client();
 	virtual bool onTouchBegan(Touch* touch, Event* ev);
 	void sendMsg();
+	void receiveMsg(const std::string & str);
 	void createTextField();
-	Label* createMSGLabel(std::string str);
+	Label* createMSGLabel(const std::string & str);
 	
 	void rollUpWhenNewMsg();
 	void createScrollLayerIfitHasNotBeenCreated();
@@ -48,6 +50,7 @@ private:
 	chat_client* client;
 	boost::thread t;
 	TextFieldTTF* textEdit;
+	
 	Layer* BGLayer;
 	Layer* Barrier1;
 	Layer* Barrier2;

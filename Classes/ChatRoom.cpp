@@ -3,6 +3,7 @@
 
 boost::asio::io_service io_service;
 
+
 bool ChatRoom::init()
 {
 	if (!Scene::init()) {
@@ -67,13 +68,12 @@ ChatRoom::~ChatRoom()
 
 void ChatRoom::boot_client()
 {
-
 	resolver = new tcp::resolver(io_service);
 	query = new tcp::resolver::query("127.0.0.1", "1000");
-
 	tcp::resolver::iterator iterator = (*resolver).resolve(*query);
 	client = new chat_client(io_service, iterator); // 初始化、连接  
 	t = boost::thread(boost::bind(&boost::asio::io_service::run, &io_service)); // 线程 
+
 }
 
 bool ChatRoom::onTouchBegan(Touch * touch, Event * ev)
@@ -104,20 +104,22 @@ bool ChatRoom::onTouchBegan(Touch * touch, Event * ev)
 void ChatRoom::sendMsg()
 {
 	std::string str = textEdit->getString();
-	this->addLabel(createMSGLabel(str));
+	//this->addLabel(createMSGLabel(str));
 	textEdit->setString("");
-	
-	stringstream sstr;
-	sstr.clear();
-	sstr << str;
-	char line[chat_message::max_body_length + 1];
-	sstr >> line;
+	char line[chat_message::max_body_length + 1] = { '\0' };
+	memcpy(line, str.c_str(), str.size());
 	chat_message msg;
 	msg.body_length(strlen(line));
 	memcpy(msg.body(), line, msg.body_length());// line to msg  
 	msg.encode_header();
 	client->write(msg);
 }
+
+void ChatRoom::receiveMsg(const std::string & str)
+{
+	this->addLabel(this->createMSGLabel(str));
+}
+
 //创建输入框
 void ChatRoom::createTextField()
 {
@@ -126,12 +128,12 @@ void ChatRoom::createTextField()
 	textEdit->setAnchorPoint(Vec2::ZERO);
 	textEdit->setPosition(Vec2(40, 30));
 	textEdit->setColorSpaceHolder(Color3B::WHITE);
-	textEdit->setMaxLineWidth(5);
+	
 
 	BGLayer->addChild(textEdit, kZEditBox, kZEditBox);
 }
 //创建消息文本的Label
-Label * ChatRoom::createMSGLabel(std::string str)
+Label * ChatRoom::createMSGLabel(const std::string & str )
 {
 	TTFConfig ttfconfig("fonts/arial.ttf", 18);
 	Label* label = Label::createWithTTF(ttfconfig, str, TextHAlignment::LEFT, 4 * BGLayer->getContentSize().width / 5);
@@ -229,8 +231,6 @@ bool ChatRoom::onMouseDown(Touch* touch, Event* ev)
 	return true;
 }
 
-
-
 void ChatRoom::onMouseUp(Touch * touch, Event * ev)
 {
 	if (buttonLayer1->getBoundingBox().containsPoint(touch->getStartLocation())) { //点击向上按钮
@@ -273,11 +273,9 @@ void chat_client::handle_read_body(const boost::system::error_code & error)
 	if (!error)
 	{
 		std::string str = std::string(read_msg_.body(), read_msg_.body_length());
-		Label* label = Global::instance()->chatRoom->createMSGLabel(str);
-		Global::instance()->chatRoom->addLabel(label);
-		/*std::cout.write(read_msg_.body(), read_msg_.body_length()); // print read_msg_'s body
-		std::cout << "\n";*/
-
+		log(str.c_str());
+		std::function<void()> func = std::bind(&ChatRoom::receiveMsg, Global::instance()->chatRoom, str);
+		Director::getInstance()->getScheduler()->performFunctionInCocosThread(func);
 		boost::asio::async_read(socket_,
 			boost::asio::buffer(read_msg_.data(), chat_message::header_length),
 			boost::bind(&chat_client::handle_read_header, this, // 4  
