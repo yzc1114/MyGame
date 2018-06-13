@@ -15,17 +15,17 @@ bool ControlLayer::init()
 		return false;
 	}
 
-	auto exit = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(ControlLayer::exitButtonCallBack, this));
+	auto exit = MenuItemImage::create("Close/CloseNormal.png", "Close/CloseSelected.png", CC_CALLBACK_1(ControlLayer::exitButtonCallBack, this));
 	exitButton = Menu::create(exit, NULL);
 	exitButton->setPosition(20, 416);
 	addChild(exitButton, 0);
 
 
-	directionControl = Sprite::create("btn_normal.png");
-	TouchLeft = Sprite::create("btn_left.png");
-	TouchRight = Sprite::create("btn_right.png");
-	TouchUp = Sprite::create("btn_up.png");
-	TouchDown = Sprite::create("btn_down.png");
+	directionControl = Sprite::create("DirectionButtons/btn_normal.png");
+	TouchLeft = Sprite::create("DirectionButtons/btn_left.png");
+	TouchRight = Sprite::create("DirectionButtons/btn_right.png");
+	TouchUp = Sprite::create("DirectionButtons/btn_up.png");
+	TouchDown = Sprite::create("DirectionButtons/btn_down.png");
 
 	directionControl->setPosition(32 * 3, 32 * 3);
 	TouchLeft->setPosition(32 * 3, 32 * 3);

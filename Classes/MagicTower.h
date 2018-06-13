@@ -18,6 +18,7 @@
 //Layer
 #include "ControlLayer.h"
 #include "GameLayer.h"
+#include "SettingLayer.h"
 //Scene
 #include "StartScene.h"
 #include "GameScene.h"
@@ -28,11 +29,13 @@
 #include "Teleport.h"
 #include "NPC.h"
 #include "GameMap.h"
-//单例对象以及动画音频存档控制引擎
+//单例对象以及动画音频存档控制引擎 
 #include "Singleton.h"
 #include "AnimationControl.h"
 #include "AudioControl.h"
 #include "SaveControl.h"
+//聊天室
 #include "ChatRoom.h"
+//全局变量
 #include "Global.h"
 #endif

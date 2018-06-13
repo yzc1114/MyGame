@@ -36,8 +36,9 @@ void StartScene::initStartScene()
 	this->addChild(caption, 1);
 
 	auto buttonNewGame = MenuItemFont::create("Start", CC_CALLBACK_1(StartScene::buttonStartCALLBACK, this));
+	auto Setting = MenuItemFont::create("Setting", [&](Ref* psender) {this->addChild(SettingLayer::create(),100); });
 	auto buttonExit = MenuItemFont::create("Exit", CC_CALLBACK_1(StartScene::buttonExitCALLBACK, this));
-	auto menu = Menu::create(buttonNewGame, buttonExit ,NULL);
+	auto menu = Menu::create(buttonNewGame, Setting, buttonExit ,NULL);
 	menu->alignItemsVerticallyWithPadding(30);
 	menu->setPosition(origin.x + visibleSize.width / 2, origin.y + 2.5*visibleSize.height / 7);
 	this->addChild(menu, 2);
