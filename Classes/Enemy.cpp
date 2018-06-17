@@ -142,7 +142,7 @@ Enemy::Enemy(int gid)
 
 	//Ë«½£ÏÀ¿Í
 	if (gid >= 95 && gid < 99) {
-		ATK = 115;
+		ATK = 120;
 		DEF = 60;
 		HP = 150;
 	}

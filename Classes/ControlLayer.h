@@ -8,6 +8,8 @@ class ControlLayer : public Layer {
 public:
 	ControlLayer();
 	~ControlLayer();
+	bool isHelping = false;
+	
 
 	typedef enum {
 		up = 1,
@@ -22,7 +24,6 @@ private:
 
 	virtual bool init();
 
-	
 
 	//普通状态的方向按钮
 	Sprite* directionControl;

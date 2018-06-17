@@ -19,6 +19,7 @@
 #include "ControlLayer.h"
 #include "GameLayer.h"
 #include "SettingLayer.h"
+#include "HelpLayer.h"
 //Scene
 #include "StartScene.h"
 #include "GameScene.h"
