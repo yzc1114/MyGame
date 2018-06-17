@@ -8,7 +8,7 @@
 #define ADDED_HEIGHT (MAP_SIZE+TIPBARHEIGHT)
 #define TILE_WIDTH 32
 #define TILE_COUNT 13
-#define NORMAL_TIPBAR "                 <Space> Help                        <S> Save                       <L> Load"
+#define NORMAL_TIPBAR "                 <Space> Help                        <S> SaveMenu                       "
 
 
 #include "cocos2d.h"
@@ -19,6 +19,7 @@
 #include "ControlLayer.h"
 #include "GameLayer.h"
 #include "SettingLayer.h"
+#include "HelpLayer.h"
 //Scene
 #include "StartScene.h"
 #include "GameScene.h"
@@ -35,7 +36,7 @@
 #include "AudioControl.h"
 #include "SaveControl.h"
 //聊天室
-#include "ChatRoom.h"
+//#include "ChatRoom.h"
 //全局变量
 #include "Global.h"
 #endif

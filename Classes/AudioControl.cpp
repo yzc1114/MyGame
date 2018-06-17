@@ -26,6 +26,9 @@ bool AudioControl::PreloadMusic()
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("music/KeyBGS.mp3");
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("music/OpenBGS.mp3");
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("music/TransportBGS.mp3");
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("music/AxesDamageBGS.mp3");
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("music/PickAxesBGS.mp3");
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("music/WeaponBGS.mp3");
 
 
 	return true;

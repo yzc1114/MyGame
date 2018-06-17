@@ -27,18 +27,32 @@ void StartScene::initStartScene()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 
-	auto LayerColorBG = LayerColor::create(Color4B::BLACK);
-	this->addChild(LayerColorBG, 0);
+	auto* StartSceneBG = Sprite::create("StartBG.png");
+	StartSceneBG->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
+	addChild(StartSceneBG, 0);
 
-	TTFConfig ttfconfig("fonts/arial.ttf", 72);
+	TTFConfig ttfconfig("fonts/HGrep.ttf", 108);
 	auto caption = Label::createWithTTF(ttfconfig, "The Tower");
+	caption->setColor(Color3B::RED);
+	caption->enableGlow(Color4B::RED);
+	caption->enableShadow(Color4B::RED, Size(4, 4));
 	caption->setPosition(origin.x + visibleSize.width / 2, origin.y + 3 * visibleSize.height / 4);
 	this->addChild(caption, 1);
 
-	auto buttonNewGame = MenuItemFont::create("Start", CC_CALLBACK_1(StartScene::buttonStartCALLBACK, this));
-	auto Setting = MenuItemFont::create("Setting", [&](Ref* psender) {this->addChild(SettingLayer::create(),100); });
-	auto buttonExit = MenuItemFont::create("Exit", CC_CALLBACK_1(StartScene::buttonExitCALLBACK, this));
-	auto menu = Menu::create(buttonNewGame, Setting, buttonExit ,NULL);
+	TTFConfig MenuConfig("fonts/Redocn.ttf", 34);
+	auto StartLabel = Label::createWithTTF(MenuConfig,"Start");
+	StartLabel->setColor(ccc3(204,0,0));
+	auto buttonNewGame = MenuItemLabel::create(StartLabel, CC_CALLBACK_1(StartScene::buttonStartCALLBACK, this));
+	auto SettingLabel = Label::createWithTTF(MenuConfig, "Setting");
+	SettingLabel->setColor(ccc3(204, 0, 0));
+	auto buttonSetting = MenuItemLabel::create(SettingLabel, [&](Ref* psender) {this->addChild(SettingLayer::create(), 100); });
+	auto ExitLabel = Label::createWithTTF(MenuConfig, "Exit");
+	ExitLabel->setColor(ccc3(204, 0, 0));
+	auto buttonExit = MenuItemLabel::create(ExitLabel, CC_CALLBACK_1(StartScene::buttonExitCALLBACK, this));
+
+
+	auto menu = Menu::create(buttonNewGame, buttonSetting, buttonExit ,NULL);
+	
 	menu->alignItemsVerticallyWithPadding(30);
 	menu->setPosition(origin.x + visibleSize.width / 2, origin.y + 2.5*visibleSize.height / 7);
 	this->addChild(menu, 2);

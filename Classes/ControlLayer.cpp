@@ -174,6 +174,13 @@ void ControlLayer::onKeyPressed(EventKeyboard::KeyCode keycode, Event * unused_e
 	if (keycode == EventKeyboard::KeyCode::KEY_S) {
 		Global::instance()->gameScene->showSaveLayer();
 	}
+	if (keycode == EventKeyboard::KeyCode::KEY_H) {
+		if(!isHelping) {
+			Global::instance()->gameScene->addChild(HelpLayer::create(), 200);
+		}
+		
+	}
+
 	if (keycode == EventKeyboard::KeyCode::KEY_PG_UP) {
 		auto dict = Global::instance()->gameMap->teleportDict;
 		for (auto teleport : dict) {
