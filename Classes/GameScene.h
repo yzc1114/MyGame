@@ -28,8 +28,12 @@ public:
 	void SaveLayerOnMouseMove(Event* event);
 
 	void SaveLayerOnMouseDown(Event* event);
+
+	void setIfShowingSaveLayer(bool b) { isShowingSaveLayer = b; };
 private:
 	TTFConfig ttfconfigStatusBar;
+
+	bool isShowingSaveLayer = false;
 };
 
 #endif 

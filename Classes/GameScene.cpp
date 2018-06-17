@@ -205,8 +205,11 @@ void GameScene::showTipBarText(std::string str)
 
 void GameScene::showSaveLayer()
 {
+	if (isShowingSaveLayer) { return; };
+	
+	isShowingSaveLayer = true;
 	auto Saver = SaveControl::instance();
-
+	
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	auto SaverLayer = LayerColor::create(Color4B::ORANGE);
@@ -270,9 +273,15 @@ void GameScene::showSaveLayer()
 	MouseListener->onMouseDown = CC_CALLBACK_1(GameScene::SaveLayerOnMouseDown, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(MouseListener, SaverLayer);
 
+	auto TouchListener = EventListenerTouchOneByOne::create();
+	TouchListener->onTouchBegan = [&](Touch* touch, Event* event) {return true; };
+	TouchListener->setSwallowTouches(true);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(TouchListener, SaverLayer);
+
 	auto keyBoardListener = EventListenerKeyboard::create();
 	keyBoardListener->onKeyPressed = [&](EventKeyboard::KeyCode keycode, Event* event) {
 		if (keycode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+			this->setIfShowingSaveLayer(false);
 			this->removeChildByTag(kZSaveLayer);
 		}
 	};
