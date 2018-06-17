@@ -8,7 +8,7 @@
 #define ADDED_HEIGHT (MAP_SIZE+TIPBARHEIGHT)
 #define TILE_WIDTH 32
 #define TILE_COUNT 13
-#define NORMAL_TIPBAR "                 <Space> Help                        <S> SaveMenu                       "
+#define NORMAL_TIPBAR "                 <H> Help                        <S> SaveMenu                       "
 
 
 #include "cocos2d.h"

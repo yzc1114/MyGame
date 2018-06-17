@@ -149,9 +149,9 @@ void GameScene::refreshAllStatus()
 {
 	Label* newLabel;
 	GameScene* tempGameScene = Global::instance()->gameScene;
-	newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZHP)));
-	this->removeChildByTag(kZHP);
-	this->addChild(newLabel, kZHP, kZHP);
+	newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZcurrentlevel)));
+	this->removeChildByTag(kZcurrentlevel);
+	this->addChild(newLabel, kZcurrentlevel, kZcurrentlevel);
 	newLabel = createNewLabelForStatus((Label*)(tempGameScene->getChildByTag(kZHP)));
 	this->removeChildByTag(kZHP);
 	this->addChild(newLabel, kZHP, kZHP);
@@ -176,6 +176,7 @@ void GameScene::refreshAllStatus()
 Label* GameScene::createNewLabelForStatus(Label* oldLabel) {
 	std::string newString;
 	switch (oldLabel->getZOrder()) {
+	case kZcurrentlevel:newString = std::string("current level : " + std::to_string(Global::instance()->currentLevel)); break;
 	case kZHP:newString = std::string("Hero HP : " + std::to_string(Global::instance()->hero->HP)); break;
 	case kZATK:newString = std::string("Hero ATK : " + std::to_string(Global::instance()->hero->ATK)); break;
 	case kZDEF:newString = std::string("Hero DEF : " + std::to_string(Global::instance()->hero->DEF)); break;
@@ -346,6 +347,7 @@ void GameScene::SaveLayerOnMouseDown(Event * event)
 		if (subLayer->getBoundingBox().containsPoint(Vec2(x, y))) {
 			if (SaveControl::instance()->checkIfTheSaveExisted(i)) {
 				SaveControl::instance()->load(i);
+				this->isShowingSaveLayer = false;
 				this->removeChildByTag(kZSaveLayer);
 				return;
 			}

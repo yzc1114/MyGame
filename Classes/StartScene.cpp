@@ -68,6 +68,9 @@ void StartScene::buttonStartCALLBACK(Ref* psender) {
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
 
 	auto scene = GameScene::createScene();
+	while (scene == nullptr) {
+		scene = GameScene::createScene();
+	}
 	Director::getInstance()->replaceScene(scene);
 
 }

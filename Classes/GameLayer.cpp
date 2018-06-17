@@ -73,4 +73,5 @@ void GameLayer::switchMap(int floor)
 	);
 	Global::instance()->hero->runAction(action);
 	Global::instance()->currentLevel = floor;
+	Global::instance()->gameScene->refreshStatus(kZcurrentlevel);
 }
