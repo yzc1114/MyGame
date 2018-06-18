@@ -34,7 +34,14 @@ void GameLayer::extraInit(int floor)
 	hero->setPosition(GameMap::positionForTileCoord(Global::instance()->heroSpawnTileCoord));
 	hero->setZOrder(kZhero);
 	this->addChild(hero);
-	
+
+	auto touchListenerForAutoWalking = EventListenerTouchOneByOne::create();
+	touchListenerForAutoWalking->onTouchBegan = [&](Touch* touch, Event* eve) {
+		Vec2 tilecoord = GameMap::tileCoordForPosition(Vec2(touch->getStartLocation().x - STATUSBARWIDTH , touch->getStartLocation().y - TIPBARHEIGHT - 32));
+		Global::instance()->hero->moveToSomePointAutomatically(tilecoord);
+		return true;
+	};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListenerForAutoWalking, this);
 }
 
 GameLayer* GameLayer::createGameLayer(int floor)
@@ -59,6 +66,7 @@ void GameLayer::switchMap(int floor)
 	this->removeChildByTag(kZmap);
 	gameMap = GameMap::createMap(floor);
 	this->addChild(gameMap, kZmap, kZmap);
+	Global::instance()->gameMap = gameMap;
 	Global::instance()->hero->setPosition(GameMap::positionForTileCoord(Global::instance()->heroSpawnTileCoord));
 	Global::instance()->hero->setFaceDirection(kdown);
 

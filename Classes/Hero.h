@@ -34,8 +34,6 @@ public:
 	void openDoor(int targetDoorGID); 
 	//开门时更新图块的schedule函数
 	void DoorOpeningUpdate(float dt);
-	//
-	void contactMenuCALLBACK(Ref * psender);
 	// 与npc互动
 	void actWithNPC(); 
 	 //传送
@@ -48,9 +46,10 @@ public:
 	void onMoveDone(Node* pTarget, int data);
 	//播放打架音效的定时器
 	void MusicUpdate(float dt);
-	//跟NPC交流菜单的回调函数
-	//void contactMenuCALLBACK(Ref* psender);
-//private:
+	//自动寻路至某点 coco坐标
+	void moveToSomePointAutomatically(Vec2 TileCoord);
+	//自动寻路中 检查是否可达
+	bool ifReachable(Vec2 tilecoord);
 	Enemy* enemy;//当前面对的敌人
 	int targetDoorGID; //门的GID
 	Point targetTileCoord; //临时保存的砖块坐标

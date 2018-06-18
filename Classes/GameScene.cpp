@@ -196,8 +196,9 @@ Label* GameScene::createNewLabelForStatus(Label* oldLabel) {
 void GameScene::showTipBarText(std::string str)
 {
 	Label* label = (Label*)(this->getChildByTag(kZTipBar));
-	TTFConfig ttfconfig("fonts/arial.ttf", 8);
+	TTFConfig ttfconfig("fonts/arial.ttf", 12);
 	Label* newLabel = Label::createWithTTF(ttfconfig, str);
+	newLabel->setAnchorPoint(Vec2::ZERO);
 	newLabel->setPosition(label->getPosition());
 	newLabel->setColor(label->getColor());
 	this->removeChildByTag(kZTipBar);

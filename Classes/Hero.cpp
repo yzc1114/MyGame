@@ -1,5 +1,6 @@
 #include"Hero.h"
-
+#include<list>
+#include<fstream>
 bool Hero::init()
 {
 	if (!Node::init())
@@ -88,6 +89,12 @@ void Hero::move(HeroDirection direction)
 
 	//heroSprite仅播放行走动画
 	heroSprite->runAction(AnimationControl::instance()->createAnimate(direction));
+
+	//如果不是捡起物品的话 将底部提示条设为普通状态
+	if (collisionType != kitem) {
+		Global::instance()->gameScene->showTipBarText(NORMAL_TIPBAR);
+	}
+	
 
 	//主体进行位移，结束时调用onMoveDone方法 把方向信息传递给onMoveDone方法
 	Action *action = Sequence::create(
@@ -204,7 +211,7 @@ void Hero::fight()
 	bool isEnemyCanBeHurt = ifTheEnemyCanBeHurt(enemy);
 
 	if (!isEnemyCanBeHurt) {
-		//无法攻击 showTip()
+		Global::instance()->gameScene->showTipBarText("The enemy is too powerful");
 		return;
 	}
 
@@ -326,6 +333,173 @@ void Hero::MusicUpdate(float dt)
 
 }
 
+//A*算法实现自动寻路
+void Hero::moveToSomePointAutomatically(Vec2 TileCoord)
+{
+	if (!ifReachable(TileCoord))return;
+
+	TMXLayer* wallLayer = Global::instance()->gameMap->WallLayer;
+	
+	Vec2 startPoint = GameMap::tileCoordForPosition(this->getPosition()); //some fucking crazy offsets; shit
+	Vec2 endPoint = TileCoord;
+	struct node {
+	private:
+		Vec2 endp;
+		Vec2 point;
+		node* parentNode;
+		int F;
+		int G;
+		int H;
+	public:
+		node() {}
+		node(Vec2 p,Vec2 endP) : point(p),endp(endP) { F = H = INT_MAX; G = 0; parentNode = nullptr; }//只用来生成起点
+		node(Vec2 p, node* parent) : point(p), parentNode(parent) { endp = parent->getEndP();  G = parent->getG() + 1; H = std::abs(endp.x - point.x) + std::abs(endp.y - point.y); F = G + H; }
+		int getF() { return F; }
+		int getG() { return G; }
+		int getH() { return H; }
+		node* getThisNodePtr() { return this; }
+		void setF(int f) { F = f; }
+		void setG(int g) { G = g; }
+		void setH(int h) { H = h; }
+		void setParent(node* p) { parentNode = p; };
+		Vec2 getVec2() { return point; }
+		Vec2 getEndP() { return endp; }
+		node* getParent() { return parentNode; }
+		bool operator<(node other) { return F < other.getF(); }
+		bool operator==(node other) {
+			return point == other.getVec2()
+				&& parentNode == other.getParent()
+				&& F == other.getF()
+				&& G == other.getG()
+				&& H == other.getH();
+		}
+	};
+	std::list<node> openList;
+	std::list<node> closeList;
+	openList.push_back(node(startPoint,endPoint));
+	std::list<node>::iterator currentNode = openList.begin();
+
+	//输出调试
+	std::ofstream out("d:\\out.txt");
+	
+
+	while (true) {
+		//查找F最小的node
+		currentNode = openList.begin();
+		if (openList.empty())return;
+		for (auto iter = openList.begin(); iter != openList.end();iter++) {
+			if (*iter < *currentNode) {
+				currentNode = iter; //用最小F的node作为当前node
+			}
+		}
+		//输出调试
+		std::string str;
+		str = " x : " + std::to_string(currentNode->getVec2().x) + " y : " + std::to_string(currentNode->getVec2().y) + "\n";
+		log(str.c_str());
+
+		//如果第零层点击右上角白块
+
+		closeList.push_back(*currentNode);
+		openList.erase(currentNode);
+		currentNode = closeList.end();
+		currentNode--;
+		
+		Vec2 Left = currentNode->getVec2() - Vec2(1, 0);
+		
+		Vec2 Up = currentNode->getVec2() - Vec2(0, 1);
+		
+		Vec2 Right = currentNode->getVec2() + Vec2(1, 0);
+		
+		Vec2 Down = currentNode->getVec2() + Vec2(0, 1);
+		
+		std::vector<Vec2> points = { Left,Up,Right,Down };
+		
+		for (int i = 0; i < 4; i++) {
+			Vec2 p = points.at(i);
+			bool pIsInCloseList = false;
+			//查找p是否在CloseList内
+			for (auto v : closeList) {
+				if (v.getVec2() == p) {
+					pIsInCloseList = true;
+				}
+			}//查找完毕
+			//它是可抵达的并且它不在 close list 中 
+			if (ifReachable(p) && !pIsInCloseList) {
+				//查找p是否在openList内
+				bool pIsInOpenList = false;
+				std::list<node>::iterator iter; //用来存储找到的node
+				for (iter = openList.begin(); iter != openList.end() ; iter++){
+					if (iter->getVec2() == p) {
+						pIsInOpenList = true;
+						break;
+					}
+				}//查找完毕
+
+				if (!pIsInOpenList) { //如果这个点不在openlist里面 把它加入 open list ，并且把当前方格设置为它的父亲，记录该方格的 F ，G 和 H 值。
+					openList.push_back(node(p, currentNode->getThisNodePtr()));
+				}
+				else {
+					//检查这条路径(即经由当前方格到达它那里) 是否更好，用 G 值作参考。更小的 G 值表示这是更好的路径。如果是这样，把它的父亲设置为当前方格，并重新计算它的 G 和 F 值。
+					if (currentNode->getG() + 1 < iter->getG()) { //若这条路径(即经由当前方格到达它那里)更好
+						iter->setParent(currentNode->getThisNodePtr());
+						iter->setG(currentNode->getG() + 1);
+						iter->setF(iter->getH() + iter->getG());
+					}
+				}
+
+
+			}
+		}
+
+
+		//检测终点是否被加入
+		bool added = false;
+		for (auto iter : openList) {
+			if (iter.getVec2() == endPoint) {
+				added = true; //被加入了
+			}
+		}
+		if (added)break;
+
+	}
+	log("ok");
+
+	std::list<node>::iterator iter;
+	for (iter = openList.begin(); iter != openList.end();iter++){
+		if (iter->getVec2() == endPoint) {
+			break;
+		}
+	}
+	node* nodeP = iter->getThisNodePtr();
+	while (nodeP->getParent() != nullptr) {
+		Vec2 p = nodeP->getVec2();
+		double x = p.x;
+		double y = p.y;
+		log("%lf %lf\n",x,y);
+		nodeP = nodeP->getParent();
+	}
+
+}
+
+bool Hero::ifReachable(Vec2 tilecoord)
+{
+	if (Global::instance()->gameMap == Global::instance()->GameMaps[1]) {
+		
+	}
+	if (auto tempPtr = Global::instance()->gameMap->WallLayer) {
+		//获取墙壁层对应坐标的图块ID
+		int targetTileGID = tempPtr->getTileGIDAt(tilecoord);
+		//如果图块ID不为0，表示有墙
+		if (targetTileGID)
+		{
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+}
+
 void Hero::actWithNPC() {
 	if (isTalking) { return; }              //如果正在BB，那么就在此地不要走动
 	
@@ -433,59 +607,69 @@ void Hero::pickUpItem() {
 	if (gid == 291) {
 		//黄钥匙
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/KeyBGS.mp3");
+		tempGameScene->showTipBarText("You have picked up a yellow key");
 		this->YellowKeys++;
 		tempGameScene->refreshStatus(kZYellowKeys);
 	}
 	if (gid == 292) {
 		//蓝钥匙
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/KeyBGS.mp3");
+		tempGameScene->showTipBarText("You have picked up a blue key");
 		this->BlueKeys++;
 		tempGameScene->refreshStatus(kZBlueKeys);
 	}
 	if (gid == 293) {
 		//红钥匙
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/KeyBGS.mp3");
+		tempGameScene->showTipBarText("You have picked up a red key");
 		this->RedKeys++;
 		tempGameScene->refreshStatus(kZRedKeys);
 	}
 	if (gid == 275) {
 		//攻击力增加2
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ItemBGS.mp3");
+		tempGameScene->showTipBarText("You have picked up an Attack Stone , Attack plus 2");
 		this->ATK += 2;
 		tempGameScene->refreshStatus(kZATK);
 	}
 	if (gid == 276) {
 		//防御力增加2
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ItemBGS.mp3");
+		tempGameScene->showTipBarText("You have picked up a Defence Stone , Defence plus 2");
 		this->DEF += 2;
 		tempGameScene->refreshStatus(kZDEF);
 	}
 	if (gid == 279) {
 		//红血瓶 血量加100
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ItemBGS.mp3");
+		tempGameScene->showTipBarText("You have picked up a small liquid medicine , HP plus 100");
 		this->HP += 100;
 		tempGameScene->refreshStatus(kZHP);
 	}
 	if (gid == 280) {
 		//蓝血瓶 血量加300
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ItemBGS.mp3");
+		tempGameScene->showTipBarText("You have picked up a big liquid medicine , HP plus 300");
 		this->HP += 300;
 		tempGameScene->refreshStatus(kZHP);
 	}
 	if (gid == 308) {
 		//镐子 可以挖门
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/PickAxesBGS.mp3");
+		tempGameScene->showTipBarText("You have picked up a Pickaxe");
 		this->HavingAxes = true;
 	}
 	if (gid == 326) {
 		//无尽之刃 攻击加100
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/WeaponBGS.mp3");
+		tempGameScene->showTipBarText("You have picked up the Infinity Blade");
 		this->ATK += 100;
 		tempGameScene->refreshStatus(kZATK);
 	}
 	if (gid == 332) {
 		//多兰之盾 防御加100
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/WeaponBGS.mp3");
+		tempGameScene->showTipBarText("You have picked up the Dolan shield");
 		this->DEF += 100;
 		tempGameScene->refreshStatus(kZDEF);
 	}
@@ -524,10 +708,3 @@ void Hero::DoorOpeningUpdate(float dt) {
 	}
 }
 
-/*
-void Hero::contactMenuCALLBACK(Ref* psender) {
-
-	Global::instance()->gameLayer->removeChildByTag(kZnpc);
-
-}
-*/
