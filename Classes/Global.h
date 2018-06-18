@@ -49,6 +49,8 @@ public:
 	Point heroSpawnTileCoord;
 
 	std::string fullpath;
+
+	void resetGlobal();
 };
 
 

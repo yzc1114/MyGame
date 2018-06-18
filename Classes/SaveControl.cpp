@@ -195,8 +195,10 @@ void SaveControl::load(int order)
 		} while (iter.second->getReferenceCount() != 1);
 		iter.second->release();
 	}
+	GameMaps.clear();
 
 	auto highestStorey = Saver.at("highestStorey").asInt();
+	Global::instance()->highestStorey = highestStorey;
 		
 	for(int floor = 0 ; floor <= highestStorey ; floor++){
 		

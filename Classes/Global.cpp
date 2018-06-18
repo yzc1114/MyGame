@@ -4,6 +4,17 @@ DECLARE_SINGLETON_MEMBER(Global);
 
 Global::Global(void)
 {
+	resetGlobal();
+	fullpath = "";
+}
+
+Global::~Global(void)
+{
+
+}
+
+void Global::resetGlobal()
+{
 	gameScene = NULL;
 
 	gameLayer = NULL;
@@ -23,12 +34,5 @@ Global::Global(void)
 	heroSpawnTileCoord = Point(1, 11);
 
 	highestStorey = 0;
-
-	fullpath = "";
-}
-
-Global::~Global(void)
-{
-
 }
 
