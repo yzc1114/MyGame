@@ -1,6 +1,4 @@
 #include"Hero.h"
-#include<list>
-#include<fstream>
 bool Hero::init()
 {
 	if (!Node::init())
@@ -24,7 +22,7 @@ bool Hero::init()
 	HavingAxes = false;
 
 
-	isHeroMoving = isHeroFighting = isDoorOpening = isTalking = false;
+	isHeroMoving = isHeroFighting = isDoorOpening = isTalking = isAutomaticallyMoving = false;
 	return true;
 }
 
@@ -42,7 +40,7 @@ Hero::~Hero()
 void Hero::move(HeroDirection direction)
 {
 	//若已经在走 则返回
-	if (isHeroMoving || isHeroFighting || isDoorOpening|| isTalking)
+	if (isHeroMoving || isHeroFighting || isDoorOpening|| isTalking || isAutomaticallyMoving)
 	{
 		return;
 	}
@@ -71,7 +69,7 @@ void Hero::move(HeroDirection direction)
 	targetPosition = this->getPosition() + moveByPosition;
 
 	//调用checkCollision检测碰撞类型，如果是墙壁、怪物、门，则只需要设置勇士的朝向
-	CollisionType collisionType = checkCollision(targetPosition);
+	CollisionType collisionType = checkCollision(targetPosition, false);
 
 	if (collisionType == kwall
 		|| collisionType == kenemy
@@ -105,9 +103,10 @@ void Hero::move(HeroDirection direction)
 	this->runAction(action);
 
 	isHeroMoving = true;
+
 }
 
-CollisionType Hero::checkCollision(Point heroPosition)
+CollisionType Hero::checkCollision(Point heroPosition,bool isAutoMoving)
 {
 	auto map = Global::instance()->gameMap;
 	TMXLayer* tempPtr;
@@ -138,7 +137,8 @@ CollisionType Hero::checkCollision(Point heroPosition)
 		targetTileGID = tempPtr->getTileGIDAt(targetTileCoord);
 		//如果图块ID不为0，表示有物品
 		if (targetTileGID) {
-			pickUpItem();
+			if(!isAutoMoving) //如果在自动行走 则不捡起来
+				pickUpItem();
 			return kitem;
 		}
 	}
@@ -149,7 +149,8 @@ CollisionType Hero::checkCollision(Point heroPosition)
 		targetTileGID = tempPtr->getTileGIDAt(targetTileCoord);
 		//如果图块ID不为0，表示有门
 		if (targetTileGID) {
-			openDoor(targetTileGID);
+			if(!isAutoMoving)
+				openDoor(targetTileGID); //如果在自动行走 则不开门
 			return kdoor;
 		}
 	}
@@ -161,8 +162,10 @@ CollisionType Hero::checkCollision(Point heroPosition)
 		targetTileGID = tempPtr->getTileGIDAt(targetTileCoord);
 		//如果图块ID不为0，表示有敌人
 		if (targetTileGID) {
-			enemy = new Enemy(targetTileGID); //用GID初始化面对的敌人
-			fight();
+			if (!isAutoMoving) {
+				enemy = new Enemy(targetTileGID); //用GID初始化面对的敌人
+				fight();
+			}
 			return kenemy;
 		}
 	}
@@ -177,7 +180,8 @@ CollisionType Hero::checkCollision(Point heroPosition)
 	NPC *npc = Global::instance()->gameMap->npcDict.at(index);
 	if (npc != NULL)
 	{
-		actWithNPC();
+		if(!isAutoMoving)
+			actWithNPC();//如果正在自动移动 则不互动
 		return knpc;
 	}
 
@@ -185,7 +189,8 @@ CollisionType Hero::checkCollision(Point heroPosition)
 	Teleport *teleport = Global::instance()->gameMap->teleportDict.at(index);
 	if (teleport != NULL)
 	{
-		doTeleport(teleport);
+		if(!isAutoMoving)
+			doTeleport(teleport);//如果正在自动移动 则不做传送
 		return kteleport;
 	}
 
@@ -205,8 +210,6 @@ void Hero::fight()
 	if (isHeroFighting) {
 		return;
 	}
-
-	int targetTileGID = Global::instance()->gameMap->WallLayer->getTileGIDAt(targetTileCoord);
 
 	bool isEnemyCanBeHurt = ifTheEnemyCanBeHurt(enemy);
 
@@ -257,7 +260,16 @@ void Hero::onMoveDone(Node* pTarget, int data) {
 	int direction = data;
 	setFaceDirection((HeroDirection)direction);
 	//将正在移动设置为false
-	isHeroMoving = false;
+	if (isHeroMoving) {
+		isHeroMoving = false;
+	}
+	else if (isAutomaticallyMoving) {
+		isAutomaticallyMoving = false;
+		steps.pop();
+		if (GameMap::tileCoordForPosition(this->getPosition()) == EndPointOfAutoMoving) {
+			unschedule(schedule_selector(Hero::AutoMovingUpdate, this));
+		}
+	}
 
 }
 
@@ -336,12 +348,17 @@ void Hero::MusicUpdate(float dt)
 //A*算法实现自动寻路
 void Hero::moveToSomePointAutomatically(Vec2 TileCoord)
 {
-	if (!ifReachable(TileCoord))return;
+	//若已经在做事情 则返回
+	if (isHeroMoving || isHeroFighting || isDoorOpening || isTalking || isAutomaticallyMoving)
+	{
+		return;
+	}
+	if (!ifReachable(TileCoord))return;//若目标不可达 则返回
 
 	TMXLayer* wallLayer = Global::instance()->gameMap->WallLayer;
 	
 	Vec2 startPoint = GameMap::tileCoordForPosition(this->getPosition()); //some fucking crazy offsets; shit
-	Vec2 endPoint = TileCoord;
+	this->EndPointOfAutoMoving = TileCoord;
 	struct node {
 	private:
 		Vec2 endp;
@@ -376,7 +393,7 @@ void Hero::moveToSomePointAutomatically(Vec2 TileCoord)
 	};
 	std::list<node> openList;
 	std::list<node> closeList;
-	openList.push_back(node(startPoint,endPoint));
+	openList.push_back(node(startPoint, EndPointOfAutoMoving));
 	std::list<node>::iterator currentNode = openList.begin();
 
 	//输出调试
@@ -455,7 +472,7 @@ void Hero::moveToSomePointAutomatically(Vec2 TileCoord)
 		//检测终点是否被加入
 		bool added = false;
 		for (auto iter : openList) {
-			if (iter.getVec2() == endPoint) {
+			if (iter.getVec2() == EndPointOfAutoMoving) {
 				added = true; //被加入了
 			}
 		}
@@ -466,39 +483,138 @@ void Hero::moveToSomePointAutomatically(Vec2 TileCoord)
 
 	std::list<node>::iterator iter;
 	for (iter = openList.begin(); iter != openList.end();iter++){
-		if (iter->getVec2() == endPoint) {
+		if (iter->getVec2() == EndPointOfAutoMoving) {
 			break;
 		}
 	}
 	node* nodeP = iter->getThisNodePtr();
+
+	//记录下所有的步数 用stack记录 使用时pop出来即可
+	while (!steps.empty()) {
+		steps.pop();
+	}
 	while (nodeP->getParent() != nullptr) {
 		Vec2 p = nodeP->getVec2();
+		steps.push(p);
 		double x = p.x;
 		double y = p.y;
 		log("%lf %lf\n",x,y);
 		nodeP = nodeP->getParent();
 	}
 
+	schedule(schedule_selector(Hero::AutoMovingUpdate, this));
+
+}
+
+void Hero::AutoMovingUpdate(float dt)
+{
+	if (!steps.empty()) {
+		//如果还在自动行进中 则代表没有到达目标 继续循环
+		if (isAutomaticallyMoving) {
+			return;
+		}
+		else if (!isAutomaticallyMoving) { //如果没有自动行进中 则代表已经到达目标位置 将目前的point从steps中pop出来 并打破无限循环 进行下一个位置的移动
+			Vec2 point = steps.top();
+			//移动至point 逻辑 ：如果碰到任何东西 立刻停止前进 使用循环确保英雄能够移动到下一个位置
+			AutoMovingTest type = moveToPointAroundHeroWhenAutomaticallyMoving(point);
+			//如果检测到撞到东西 或者出错 则立刻停止更新
+			if (type == hitSomethingBad || type == badThingHappened)unschedule(schedule_selector(Hero::AutoMovingUpdate, this));;
+		}
+	}
+	else {
+		log("call AutoMovingUpdate even when steps is empty");
+	}
+	
 }
 
 bool Hero::ifReachable(Vec2 tilecoord)
 {
-	if (Global::instance()->gameMap == Global::instance()->GameMaps[1]) {
-		
+	if (checkCollision(GameMap::positionForTileCoord(tilecoord), true) != knull) {
+		return false;
 	}
-	if (auto tempPtr = Global::instance()->gameMap->WallLayer) {
-		//获取墙壁层对应坐标的图块ID
-		int targetTileGID = tempPtr->getTileGIDAt(tilecoord);
-		//如果图块ID不为0，表示有墙
-		if (targetTileGID)
-		{
-			return false;
-		}
-		else {
-			return true;
-		}
+	else {
+		return true;
 	}
+
 }
+
+AutoMovingTest Hero::moveToPointAroundHeroWhenAutomaticallyMoving(Vec2 point)
+{
+	//若已经在走 则返回
+	if (isAutomaticallyMoving)
+	{
+		return heroIsAutoMoving;
+	}
+	//英雄当前坐标
+	Vec2 heroPosition = GameMap::tileCoordForPosition(this->getPosition()); //some fucking crazy offsets; shit
+	//移动的方向单位向量 末位置减去初位置向量 注意：使用Tile坐标
+	Vec2 IdentityDirection = point - heroPosition;
+	//移动的向量 注意：使用cocos像素坐标
+	Vec2 moveByPosition;
+	//英雄移动方向
+	HeroDirection direction;
+	if (IdentityDirection == Vec2(1, 0)) {
+		direction = kright;
+	}
+	else if (IdentityDirection == Vec2(-1, 0)) {
+		direction = kleft;
+	}
+	else if (IdentityDirection == Vec2(0, 1)) {
+		direction = kdown;
+	}
+	else if (IdentityDirection == Vec2(0, -1)) {
+		direction = kup;
+	}
+	else {
+		log("HeroAutomatically moving went some wrong");
+		return badThingHappened;
+	}
+	
+	//根据方向计算移动的距离
+	switch (direction)
+	{
+	case kdown:
+		moveByPosition = Point(0, -32);
+		break;
+	case kleft:
+		moveByPosition = Point(-32, 0);
+		break;
+	case kright:
+		moveByPosition = Point(32, 0);
+		break;
+	case kup:
+		moveByPosition = Point(0, 32);
+		break;
+	}
+
+	//计算目标坐标，用当前勇士坐标加上移动距离 为像素坐标
+	NextPoint = this->getPosition() + moveByPosition;
+
+	//调用checkCollision检测碰撞类型，如果是墙壁、怪物、门，则只需要设置勇士的朝向
+	CollisionType collisionType = checkCollision(NextPoint,true);
+
+	if (collisionType != knull) //如果撞到任何东西 立刻返回hitSomethingBad
+	{
+		return hitSomethingBad;
+	}
+
+	//heroSprite仅播放行走动画
+	heroSprite->runAction(AnimationControl::instance()->createAnimate(direction));
+
+	//主体进行位移，结束时调用onMoveDone方法 把方向信息传递给onMoveDone方法
+	Action *action = Sequence::create(
+		MoveBy::create(0.20f, moveByPosition),
+		CallFuncN::create(CC_CALLBACK_1(Hero::onMoveDone, this, (int)direction)),
+		NULL);
+
+	this->runAction(action);
+
+	isAutomaticallyMoving = true;
+
+	return moveCommondExecuted;
+}
+
+
 
 void Hero::actWithNPC() {
 	if (isTalking) { return; }              //如果正在BB，那么就在此地不要走动
