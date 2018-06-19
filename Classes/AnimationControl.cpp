@@ -127,6 +127,7 @@ Animation * AnimationControl::createNPCAnimationByImageID(int ID)
 
 Animation * AnimationControl::createFightingAnimation()
 {
+	//创建战斗动画
 	std::string ImagePath("sword.png");
 	Texture2D *fightingTexture = TextureCache::getInstance()->addImage(ImagePath);
 

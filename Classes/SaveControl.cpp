@@ -14,11 +14,12 @@ SaveControl::~SaveControl()
 
 void SaveControl::initSaveControl()
 {
+	//³õÊ¼»¯´æµµ»úÆ÷ÈË
 	writablePath = FileUtils::getInstance()->getWritablePath();
 	fullPath = writablePath + "text.xml";
 	Global::instance()->fullpath = fullPath;
 	root = Save[0] = Save[1] = Save[2] = Save[3] = Save[4] = nullptr;
-
+	//Èô´æµµÒÑ´æÔÚ
 	if (!FileUtils::getInstance()->isFileExist(fullPath)) {
 
 		root = Dictionary::create();
@@ -36,7 +37,7 @@ void SaveControl::initSaveControl()
 		root->setObject(Save[3], "Save3");
 		root->setObject(Save[4], "Save4");
 	}
-	else {
+	else { //Èô´æµµ²»´æÔÚ
 		root = Dictionary::createWithContentsOfFile(fullPath.c_str());
 		root->retain();
 		(Save[0] = (Dictionary*)(root->objectForKey("Save0")))->retain();

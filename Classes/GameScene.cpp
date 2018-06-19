@@ -19,26 +19,26 @@ bool GameScene::init()
     }
 	Global::instance()->gameScene = this;
 
-	
+	//创建GameLayer 作为GameMap的框架
 	GameLayer* gamelayer = GameLayer::createGameLayer(0);
 	this->addChild(gamelayer,-1);
 	gamelayer->setPosition(192 , TIPBARHEIGHT);
-
+	//创建左边的状态栏
 	LayerColor* statusLayer = LayerColor::create(Color4B::YELLOW, STATUSBARWIDTH, MAP_SIZE);
 	this->addChild(statusLayer, -1);
 	statusLayer->setPosition(0, TIPBARHEIGHT);
-
+	//创建最下面的信息栏
 	LayerColor* downTipBar = LayerColor::create(Color4B::WHITE, STATUSBARWIDTH + MAP_SIZE, TIPBARHEIGHT);
 	this->addChild(downTipBar, -1);
 	downTipBar->setPosition(0, 0);
-
+	//初始化信息栏
 	TTFConfig ttfconfig1("fonts/arial.ttf", 12);
 	auto tipBarLabel = Label::createWithTTF(ttfconfig1, NORMAL_TIPBAR); //初始化TipBar
 	this->addChild(tipBarLabel, kZTipBar, kZTipBar);
 	tipBarLabel->setAnchorPoint(Vec2::ZERO);
 	tipBarLabel->setPosition(5, 5);
 	tipBarLabel->setColor(Color3B::BLACK);
-
+	//创建控制层
 	ControlLayer* controllayer = ControlLayer::create();
 	this->addChild(controllayer, 2);
 	controllayer->setPosition(Vec2::ZERO);

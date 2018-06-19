@@ -14,19 +14,19 @@ bool ControlLayer::init()
 	if (!Layer::init()) {
 		return false;
 	}
-
+	//退出按钮
 	auto exit = MenuItemImage::create("Close/CloseNormal.png", "Close/CloseSelected.png", CC_CALLBACK_1(ControlLayer::exitButtonCallBack, this));
 	exitButton = Menu::create(exit, NULL);
 	exitButton->setPosition(20, 416);
 	addChild(exitButton, 0);
 
-
+	//四个方向控制的按钮精灵
 	directionControl = Sprite::create("DirectionButtons/btn_normal.png");
 	TouchLeft = Sprite::create("DirectionButtons/btn_left.png");
 	TouchRight = Sprite::create("DirectionButtons/btn_right.png");
 	TouchUp = Sprite::create("DirectionButtons/btn_up.png");
 	TouchDown = Sprite::create("DirectionButtons/btn_down.png");
-
+	//把他们挨个放好位置
 	directionControl->setPosition(32 * 3, 32 * 3);
 	TouchLeft->setPosition(32 * 3, 32 * 3);
 	TouchRight->setPosition(32 * 3, 32 * 3);
@@ -42,7 +42,7 @@ bool ControlLayer::init()
 	auto touchListener = EventListenerTouchOneByOne::create();
 	touchListener->setSwallowTouches(true);
 	
-
+	//鼠标点击方向盘的上下左右四个区域
 	auto rect = directionControl->getBoundingBox();
 	UpPart = Rect(rect.getMinX() + rect.size.width / 3, rect.getMinY() + 2 * (rect.size.height / 3), rect.size.width / 3, rect.size.height / 3);
 	DownPart = Rect(rect.getMinX() + rect.size.width / 3, rect.getMinY(), rect.size.width / 3, rect.size.height / 3);
@@ -76,6 +76,7 @@ void ControlLayer::exitButtonCallBack(Ref* psender)
 
 bool ControlLayer::onTouchBegan(Touch * touch, Event * unused_Event)
 {
+	//如果鼠标点击到对应位置后移开 则不执行移动
 	MouseGoesAway = false;
 
 	if (UpPart.containsPoint(touch->getStartLocation())) {
@@ -159,6 +160,7 @@ void ControlLayer::onTouchEnded(Touch * touch, Event * unused_Event)
 
 void ControlLayer::onKeyPressed(EventKeyboard::KeyCode keycode, Event * unused_event)
 {
+	//行走的按键函数
 	if (keycode == EventKeyboard::KeyCode::KEY_UP_ARROW) {
 		schedule(schedule_selector(ControlLayer::moveUpUpdate));
 	}
@@ -171,17 +173,19 @@ void ControlLayer::onKeyPressed(EventKeyboard::KeyCode keycode, Event * unused_e
 	if (keycode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW) {
 		schedule(schedule_selector(ControlLayer::moveRightUpdate));
 	}
+	//按下S进入存档界面
 	if (keycode == EventKeyboard::KeyCode::KEY_S) {
 		Global::instance()->gameScene->showSaveLayer();
 	}
+	//按下H进入帮助界面
 	if (keycode == EventKeyboard::KeyCode::KEY_H) {
 		if(!isHelping) {
 			Global::instance()->gameScene->addChild(HelpLayer::create(), 200);
 		}
 		
 	}
-
-	if (keycode == EventKeyboard::KeyCode::KEY_PG_UP) {
+	//快速上下楼 在楼梯旁边站着时 按PageUp和PageDown上下楼 只能去已经去过的楼层
+	if (keycode == EventKeyboard::KeyCode::KEY_PG_UP) { 
 		auto dict = Global::instance()->gameMap->teleportDict;
 		for (auto teleport : dict) {
 			Vec2 hero = GameMap::tileCoordForPosition(Global::instance()->hero->getPosition());

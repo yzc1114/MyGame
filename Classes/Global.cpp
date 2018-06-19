@@ -27,6 +27,15 @@ void Global::resetGlobal()
 
 	chatRoom = NULL;
 
+	for (auto map : GameMaps) {
+		while (map.second->getReferenceCount() > 1) {
+			map.second->release();
+		}
+		map.second->release();
+	}
+
+	GameMaps.clear();
+
 	//新游戏，当前地图层数为0
 	currentLevel = 0;
 

@@ -8,7 +8,7 @@ GameMap::GameMap()
 GameMap::~GameMap()
 {
 }
-
+//如果Global中的GameMaps字典已经存储了我想要创建的地图 则返回该地图 若没有存储 则返回一个全新的地图
 GameMap* GameMap::createMap(int floor)
 {
 	if (Global::instance()->GameMaps.count(floor) == 1 && Global::instance()->GameMaps.at(floor) != nullptr) {
@@ -20,11 +20,7 @@ GameMap* GameMap::createMap(int floor)
 	if (map->initWithTMXFile("tile maps/" + std::to_string(floor) + ".tmx"))
 	{
 		map->extraInit();
-		int i = map->getReferenceCount();
 		map->retain();
-		i = map->getReferenceCount();
-		map->retain();
-		i = map->getReferenceCount();
 		Global::instance()->GameMaps.insert(std::pair<int, GameMap*>(floor, map));
 		return map;
 	}
@@ -33,7 +29,7 @@ GameMap* GameMap::createMap(int floor)
 	return NULL;
 
 }
-
+//不以Global中存储的GameMaps为参照的创建一个全新的地图 用于读档时
 GameMap * GameMap::createNewMap(int floor)
 {
 	GameMap* map = new GameMap;
@@ -55,12 +51,12 @@ void GameMap::extraInit()
 	WallLayer = this->getLayer("wall");
 	ItemLayer = this->getLayer("item");
 	DoorLayer = this->getLayer("door");
-
+	//初始化敌人和对象
 	initEnemy();
 	initObject();
 }
 
-
+//根据cocos坐标获得砖块坐标
 Point GameMap::tileCoordForPosition(Point position)
 {
 	auto map = Global::instance()->gameMap;
@@ -70,7 +66,7 @@ Point GameMap::tileCoordForPosition(Point position)
 	return Point(x, y);
 }
 
-
+//根据砖块坐标获得cocos坐标
 Point GameMap::positionForTileCoord(Point tileCoord)
 {
 	auto map = Global::instance()->gameMap;

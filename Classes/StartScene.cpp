@@ -26,7 +26,7 @@ void StartScene::initStartScene()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-
+	//这部分没啥技术含量就不加注释了
 	auto* StartSceneBG = Sprite::create("StartBG.png");
 	StartSceneBG->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
 	addChild(StartSceneBG, 0);

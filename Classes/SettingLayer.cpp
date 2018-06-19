@@ -42,7 +42,7 @@ bool SettingLayer::init()
 	_newSlider->loadSlidBallTextures("Slider/Slider.png", "Slider/Slider.png", "Slider/Slider.png");
 
 	//设置slider的进度（范围：0~100）  
-	_newSlider->setPercent(100);
+	_newSlider->setPercent(Global::instance()->per);
 
 	//获得slider的进度  
 	int percent = _newSlider->getPercent();
@@ -59,7 +59,8 @@ void SettingLayer::sliderCallback(cocos2d::Ref * ref, Slider::EventType type)
 {
 	if (type == Slider::EventType::ON_PERCENTAGE_CHANGED) {
 		Slider * slider = dynamic_cast<Slider*>(ref);
-		int per = slider->getPercent();
+		Global::instance()->per = slider->getPercent();
+		int per = Global::instance()->per;
 		CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(per / 100.0);
 		CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(per / 100.0);
 	}

@@ -19,7 +19,7 @@ class Global : public Singleton<Global>
 public:
 	Global(void);
 	~Global(void);
-
+	//游戏主场景
 	GameScene *gameScene;
 
 	//游戏主图层
@@ -45,11 +45,15 @@ public:
 
 	//当前到达过的最高的楼层
 	int highestStorey;
+
+	//音量大小
+	int per = 100;
+
 	//勇士出现的起始位置
 	Point heroSpawnTileCoord;
 
 	std::string fullpath;
-
+	//重置Global的全部变量为空
 	void resetGlobal();
 };
 
