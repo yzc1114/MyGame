@@ -159,5 +159,6 @@ Enemy::Enemy(int gid)
 		ATK = 250;
 		DEF = 160;
 		HP = 1000;
+		startGID = 211;
 	}
 }

@@ -30,10 +30,17 @@ public:
 	void SaveLayerOnMouseDown(Event* event);
 
 	void setIfShowingSaveLayer(bool b) { isShowingSaveLayer = b; };
+
+	void GameVictory();
+
+	void continueCALLBACK();
+
 private:
 	TTFConfig ttfconfigStatusBar;
 
 	bool isShowingSaveLayer = false;
+
+	Layer* victoryLayer;
 };
 
 #endif 
