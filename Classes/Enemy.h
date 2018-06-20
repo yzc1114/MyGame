@@ -22,7 +22,7 @@ public:
 	Point position;
 
 	//怪物初始的图块ID
-	int startGID;
+	int startGID = 0;
 
 	//怪物在字典中的index
 	int index;

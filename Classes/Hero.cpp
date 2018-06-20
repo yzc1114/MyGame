@@ -315,6 +315,12 @@ void Hero::FightingUpdate(float dt)
 		unschedule(schedule_selector(Hero::MusicUpdate));
 		//设置isHeroFighting为false
 		isHeroFighting = false;
+
+		if (enemy->startGID == 211) 
+		{
+			Global::instance()->gameScene->GameVictory();
+		}
+
 	}
 
 	this->HP -= EnemyATKminusHeroDEF; //英雄受到攻击

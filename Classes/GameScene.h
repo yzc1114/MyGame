@@ -28,12 +28,22 @@ public:
 	void SaveLayerOnMouseMove(Event* event);
 	void SaveLayerOnMouseDown(Event* event);
 	void setIfShowingSaveLayer(bool b) { isShowingSaveLayer = b; };
+<<<<<<< HEAD
 	//
+=======
+
+	void GameVictory();
+
+	void continueCALLBACK();
+
+>>>>>>> NoWeb'sJ
 private:
 	//状态栏所用的字符格式
 	TTFConfig ttfconfigStatusBar;
 	//记录是否在展示存档界面 初始为false
 	bool isShowingSaveLayer = false;
+
+	Layer* victoryLayer;
 };
 
 #endif 

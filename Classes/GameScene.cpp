@@ -356,4 +356,41 @@ void GameScene::SaveLayerOnMouseDown(Event * event)
 	}
 }
 
+void GameScene::GameVictory()
+{
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/VictoryBGM.mp3");
+	
+	std::string vicMessage = 
+		"With the dead of the Dark Lord, lightning shines and loud noises are made. All parts of the tower start to shake. There is a crack appear on the wall. You got into it and finally get out the tower. The Dark Lords who has sliently lived in the tower so long was killed by you, same as the lifes in the tower. You don't know how did you get into the tower, but in order to get out of the tower, you do things at any cost, without even a word asked.\n\nWhich one is the dark one?";
+
+	victoryLayer = LayerColor::create(Color4B::BLACK);
+	TTFConfig vicConfig("fonts/Marker Felt.ttf", 36);
+	auto victoryLabel = Label::createWithTTF(vicConfig, vicMessage);
+	victoryLabel->setColor(Color3B::WHITE);
+	victoryLabel->setAnchorPoint(Vec2::ZERO);
+	victoryLabel->setDimensions(400, 700);
+	victoryLabel->setPosition(104, -700);
+	victoryLayer->addChild(victoryLabel);
+
+	auto continueLabel = Label::createWithTTF(vicConfig, "Continue");
+	continueLabel->setColor(Color3B::RED);
+	auto* continueButton = Menu::create(MenuItemLabel::create(continueLabel, CC_CALLBACK_0(GameScene::continueCALLBACK, this)), NULL);
+	continueButton->setPosition(200, -50);
+	victoryLabel->addChild(continueButton);
+	
+	this->addChild(victoryLayer,500);
+	victoryLabel->runAction(MoveTo::create(30.0f, Vec2(104, 100)));
+
+
+}
+
+void GameScene::continueCALLBACK()
+{
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ButtonBGS.mp3");
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
+	Global::instance()->resetGlobal();
+	auto scene = StartScene::createStartScene();
+	Director::getInstance()->replaceScene(scene);
+}
+
 
