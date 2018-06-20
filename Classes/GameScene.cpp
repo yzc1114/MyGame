@@ -386,6 +386,7 @@ void GameScene::GameVictory()
 
 void GameScene::continueCALLBACK()
 {
+	Global::instance()->gameMap->removeFromParent();
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ButtonBGS.mp3");
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
 	Global::instance()->resetGlobal();

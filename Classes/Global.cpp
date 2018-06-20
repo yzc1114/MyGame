@@ -28,10 +28,13 @@ void Global::resetGlobal()
 	chatRoom = NULL;
 
 	for (auto map : GameMaps) {
-		while (map.second->getReferenceCount() > 1) {
+		if (map.second != nullptr) {
+			while (map.second->getReferenceCount() > 1) {
+				map.second->release();
+			}
 			map.second->release();
 		}
-		map.second->release();
+		
 	}
 
 	GameMaps.clear();
