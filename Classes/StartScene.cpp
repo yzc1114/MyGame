@@ -32,7 +32,7 @@ void StartScene::initStartScene()
 	addChild(StartSceneBG, 0);
 
 	TTFConfig ttfconfig("fonts/HGrep.ttf", 108);
-	auto caption = Label::createWithTTF(ttfconfig, "The Tower");
+	auto caption = Label::createWithTTF(ttfconfig, "Magic Tower");
 	caption->setColor(Color3B::RED);
 	caption->enableGlow(Color4B::RED);
 	caption->enableShadow(Color4B::RED, Size(4, 4));
@@ -66,7 +66,7 @@ void StartScene::initStartScene()
 void StartScene::buttonStartCALLBACK(Ref* psender) {
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/STARTBGS.mp3");
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
-
+	Global::instance()->heroSpawnTileCoord = Vec2(1, 11);
 	auto scene = GameScene::createScene();
 	while (scene == nullptr) {
 		scene = GameScene::createScene();

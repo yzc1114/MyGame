@@ -75,6 +75,7 @@ public:
 	bool isHeroFighting = false; // 标记是否在打架
 	bool isDoorOpening = false; // 标记是否在开门
 	bool isTalking = false;; //标记是否在对话
+	bool isCheckingAutomaticallyMovePath = false;//标记正在查找寻路的路径
 	bool isAutomaticallyMoving = false;//标记是否在自动行走
 	std::stack<Vec2> steps; //用于存储自动行走时的步骤
 	Vec2 EndPointOfAutoMoving;//用于存储自动行走时的目标位置

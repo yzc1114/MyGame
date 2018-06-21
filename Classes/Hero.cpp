@@ -137,8 +137,9 @@ CollisionType Hero::checkCollision(Point heroPosition,bool isAutoMoving)
 		targetTileGID = tempPtr->getTileGIDAt(targetTileCoord);
 		//如果图块ID不为0，表示有物品
 		if (targetTileGID) {
-			if(!isAutoMoving) //如果在自动行走 则不捡起来
+			if (!isCheckingAutomaticallyMovePath) {
 				pickUpItem();
+			}
 			return kitem;
 		}
 	}
@@ -197,7 +198,6 @@ CollisionType Hero::checkCollision(Point heroPosition,bool isAutoMoving)
 
 	return knull;
 }
-
 
 void Hero::setFaceDirection(HeroDirection direction) {
 	//设置面部朝向
@@ -403,12 +403,10 @@ void Hero::moveToSomePointAutomatically(Vec2 TileCoord)
 	std::list<node> closeList;
 	openList.push_back(node(startPoint, EndPointOfAutoMoving));
 	std::list<node>::iterator currentNode = openList.begin();
-
-	//输出调试
-	std::ofstream out("d:\\out.txt");
 	
-
+	isCheckingAutomaticallyMovePath = true;
 	while (true) {
+		
 		//查找F最小的node
 		currentNode = openList.begin();
 		if (openList.empty())return;
@@ -421,8 +419,6 @@ void Hero::moveToSomePointAutomatically(Vec2 TileCoord)
 		std::string str;
 		str = " x : " + std::to_string(currentNode->getVec2().x) + " y : " + std::to_string(currentNode->getVec2().y) + "\n";
 		log(str.c_str());
-
-		//如果第零层点击右上角白块
 
 		closeList.push_back(*currentNode);
 		openList.erase(currentNode);
@@ -488,6 +484,7 @@ void Hero::moveToSomePointAutomatically(Vec2 TileCoord)
 
 	}
 	log("ok");
+	isCheckingAutomaticallyMovePath = false;
 
 	std::list<node>::iterator iter;
 	for (iter = openList.begin(); iter != openList.end();iter++){
@@ -537,8 +534,17 @@ void Hero::AutoMovingUpdate(float dt)
 
 bool Hero::ifReachable(Vec2 tilecoord)
 {
-	if (checkCollision(GameMap::positionForTileCoord(tilecoord), true) != knull) {
-		return false;
+	isCheckingAutomaticallyMovePath = true;
+	CollisionType type = checkCollision(GameMap::positionForTileCoord(tilecoord), true);
+	isCheckingAutomaticallyMovePath = false;
+	if (type != knull) {
+		if (type == kitem) {
+			return true;
+		}
+		else {
+			return false;
+		}
+		
 	}
 	else {
 		return true;
@@ -603,7 +609,8 @@ AutoMovingTest Hero::moveToPointAroundHeroWhenAutomaticallyMoving(Vec2 point)
 
 	if (collisionType != knull) //如果撞到任何东西 立刻返回hitSomethingBad
 	{
-		return hitSomethingBad;
+		if(collisionType != kitem)
+			return hitSomethingBad;
 	}
 
 	//heroSprite仅播放行走动画
@@ -621,8 +628,6 @@ AutoMovingTest Hero::moveToPointAroundHeroWhenAutomaticallyMoving(Vec2 point)
 
 	return moveCommondExecuted;
 }
-
-
 
 void Hero::actWithNPC() {
 	if (isTalking) { return; }              //如果正在BB，那么就在此地不要走动

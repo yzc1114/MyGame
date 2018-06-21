@@ -17,7 +17,7 @@ bool ControlLayer::init()
 	//退出按钮
 	auto exit = MenuItemImage::create("Close/CloseNormal.png", "Close/CloseSelected.png", CC_CALLBACK_1(ControlLayer::exitButtonCallBack, this));
 	exitButton = Menu::create(exit, NULL);
-	exitButton->setPosition(20, 416);
+	exitButton->setPosition(exit->getContentSize().width / 2,MAP_SIZE);
 	addChild(exitButton, 0);
 
 	//四个方向控制的按钮精灵
@@ -70,6 +70,8 @@ bool ControlLayer::init()
 
 void ControlLayer::exitButtonCallBack(Ref* psender)
 {
+	Global::instance()->gameMap->removeFromParent();
+	Global::instance()->resetGlobal();
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ButtonBGS.mp3");
 	Director::getInstance()->replaceScene(StartScene::createStartScene());
 }
