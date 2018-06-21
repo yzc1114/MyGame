@@ -24,9 +24,11 @@ bool GameScene::init()
 	this->addChild(gamelayer,-1);
 	gamelayer->setPosition(192 , TIPBARHEIGHT);
 	//创建左边的状态栏
-	LayerColor* statusLayer = LayerColor::create(Color4B::YELLOW, STATUSBARWIDTH, MAP_SIZE);
+	Sprite* statusLayer = Sprite::create("ControlImage.png",Rect(0,0,311,580));
+	statusLayer->setScale(0.75f);
+	statusLayer->setAnchorPoint(Vec2::ZERO);
 	this->addChild(statusLayer, -1);
-	statusLayer->setPosition(0, TIPBARHEIGHT);
+	statusLayer->setPosition(-40, TIPBARHEIGHT);
 	//创建最下面的信息栏
 	LayerColor* downTipBar = LayerColor::create(Color4B::WHITE, STATUSBARWIDTH + MAP_SIZE, TIPBARHEIGHT);
 	this->addChild(downTipBar, -1);
@@ -51,49 +53,49 @@ bool GameScene::init()
 	std::string temp = std::to_string(Global::instance()->currentLevel);
 	auto currentlevel = Label::createWithTTF(ttfconfigStatusBar, "current level : " + temp);
 	currentlevel->setAnchorPoint(Vec2::ZERO);
-	currentlevel->setColor(Color3B::BLACK);
+	currentlevel->setColor(Color3B::WHITE);
 	currentlevel->setPosition(192 / 4.5, 32 * 12);
 	this->addChild(currentlevel, kZcurrentlevel, kZcurrentlevel);
 	//显示血量
 	temp = std::to_string(Global::instance()->hero->HP);
 	auto currentHP = Label::createWithTTF(ttfconfigStatusBar, "Hero HP : " + temp);
 	currentHP->setAnchorPoint(Vec2::ZERO);
-	currentHP->setColor(Color3B::BLACK);
+	currentHP->setColor(Color3B::WHITE);
 	currentHP->setPosition(192 / 4.5, 32 * 11);
 	this->addChild(currentHP, kZHP, kZHP);
 	//显示攻击力
 	temp = std::to_string(Global::instance()->hero->ATK);
 	auto currentATK = Label::createWithTTF(ttfconfigStatusBar, "Hero ATK : " + temp);
 	currentATK->setAnchorPoint(Vec2::ZERO);
-	currentATK->setColor(Color3B::BLACK);
+	currentATK->setColor(Color3B::WHITE);
 	currentATK->setPosition(192 / 4.5, 32 * 10);
 	this->addChild(currentATK, kZATK, kZATK);
 	//显示防御力
 	temp = std::to_string(Global::instance()->hero->DEF);
 	auto currentDEF = Label::createWithTTF(ttfconfigStatusBar, "Hero DEF : " + temp);
 	currentDEF->setAnchorPoint(Vec2::ZERO);
-	currentDEF->setColor(Color3B::BLACK);
+	currentDEF->setColor(Color3B::WHITE);
 	currentDEF->setPosition(192 / 4.5, 32 * 9);
 	this->addChild(currentDEF, kZDEF, kZDEF);
 	//显示黄钥匙数量
 	temp = std::to_string(Global::instance()->hero->YellowKeys);
 	auto currentYellowKeys = Label::createWithTTF(ttfconfigStatusBar, "Hero YellowKeys : " + temp);
 	currentYellowKeys->setAnchorPoint(Vec2::ZERO);
-	currentYellowKeys->setColor(Color3B::BLACK);
+	currentYellowKeys->setColor(Color3B::WHITE);
 	currentYellowKeys->setPosition(192 / 4.5, 32 * 8);
 	this->addChild(currentYellowKeys, kZYellowKeys, kZYellowKeys);
 	//显示蓝钥匙数量
 	temp = std::to_string(Global::instance()->hero->BlueKeys);
 	auto currentBlueKeys = Label::createWithTTF(ttfconfigStatusBar, "Hero BlueKeys : " + temp);
 	currentBlueKeys->setAnchorPoint(Vec2::ZERO);
-	currentBlueKeys->setColor(Color3B::BLACK);
+	currentBlueKeys->setColor(Color3B::WHITE);
 	currentBlueKeys->setPosition(192 / 4.5, 32 * 7);
 	this->addChild(currentBlueKeys, kZBlueKeys, kZBlueKeys);
 	//显示红钥匙数量
 	temp = std::to_string(Global::instance()->hero->RedKeys);
 	auto currentRedKeys = Label::createWithTTF(ttfconfigStatusBar, "Hero RedKeys : " + temp);
 	currentRedKeys->setAnchorPoint(Vec2::ZERO);
-	currentRedKeys->setColor(Color3B::BLACK);
+	currentRedKeys->setColor(Color3B::WHITE);
 	currentRedKeys->setPosition(192 / 4.5, 32 * 6);
 	this->addChild(currentRedKeys, kZRedKeys, kZRedKeys);
 
@@ -363,6 +365,7 @@ void GameScene::GameVictory()
 	std::string vicMessage = 
 		"With the dead of the Dark Lord, lightning shines and loud noises are made. All parts of the tower start to shake. There is a crack appear on the wall. You got into it and finally get out the tower. The Dark Lords who has sliently lived in the tower so long was killed by you, same as the lifes in the tower. You don't know how did you get into the tower, but in order to get out of the tower, you do things at any cost, without even a word asked.\n\nWhich one is the dark one?";
 
+	//创建通关后弹出的图层，并将滚动文本添加至图层中
 	victoryLayer = LayerColor::create(Color4B::BLACK);
 	TTFConfig vicConfig("fonts/Marker Felt.ttf", 36);
 	auto victoryLabel = Label::createWithTTF(vicConfig, vicMessage);
@@ -372,6 +375,7 @@ void GameScene::GameVictory()
 	victoryLabel->setPosition(104, -700);
 	victoryLayer->addChild(victoryLabel);
 
+	//创建“Continue”键并使其和滚动文本一起滚动，到最后显示出来
 	auto continueLabel = Label::createWithTTF(vicConfig, "Continue");
 	continueLabel->setColor(Color3B::RED);
 	auto* continueButton = Menu::create(MenuItemLabel::create(continueLabel, CC_CALLBACK_0(GameScene::continueCALLBACK, this)), NULL);
@@ -391,6 +395,7 @@ void GameScene::GameDefeat()
 	std::string defeatMessage =
 		"You become weak and paralyzed, more and more unconsciousness. A strange feel fill in all parts of you, you get into a stupor. When you are awake, you find yourself lying on the bottom floor, with a weak body like the initial situation. All is same as what was said, without defeating the Dark Lord, no one could get out of the tower.";
 
+	//创建死亡后弹出图层并添加滚动文本
 	defeatLayer = LayerColor::create(Color4B::BLACK);
 	TTFConfig defeatConfig("fonts/Marker Felt.ttf", 36);
 	auto defeatLabel = Label::createWithTTF(defeatConfig, defeatMessage);
@@ -400,6 +405,7 @@ void GameScene::GameDefeat()
 	defeatLabel->setPosition(104, -500);
 	defeatLayer->addChild(defeatLabel);
 
+	//添加continue按钮并随文本一同滚动
 	auto continueLabel = Label::createWithTTF(defeatConfig, "Continue");
 	continueLabel->setColor(Color3B::RED);
 	auto* continueButton = Menu::create(MenuItemLabel::create(continueLabel, CC_CALLBACK_0(GameScene::continueCALLBACK, this)), NULL);

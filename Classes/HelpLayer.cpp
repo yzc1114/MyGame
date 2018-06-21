@@ -15,16 +15,21 @@ bool HelpLayer::init()
 		return nullptr;
 	}
 
+	//表示正在开启怪物图鉴
 	Global::instance()->controlLayer->isHelping = true;
 
+	//黑色背景
 	Layer* BGLayer = LayerColor::create(Color4B::BLACK);
 	this->addChild(BGLayer, 1);
 
+	//防止在图鉴开始时点击到地图上其它物件的监听器
 	auto theListener = EventListenerTouchOneByOne::create();
 	theListener->setSwallowTouches(true);
 	theListener->onTouchBegan = [&](Touch* touch, Event* event) {return true;};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(theListener, BGLayer);
 
+
+	//退出按钮
 	auto exit = MenuItemImage::create("Close/CloseNormal.png", "Close/CloseSelected.png", [&](Ref* ref) {
 		this->removeFromParent(); 
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ButtonBGS.mp3");
@@ -34,6 +39,7 @@ bool HelpLayer::init()
 	exitButton->setPosition(20, 416);
 	this->addChild(exitButton, 2);
 
+	//翻页的操作按钮
 	auto* LastPage = MenuItemImage::create("LastPage.png", "LastPage.png", CC_CALLBACK_1(HelpLayer::LastPageCallBack, this));
 	auto* NextPage = MenuItemImage::create("NextPage.png", "NextPage.png", CC_CALLBACK_1(HelpLayer::NextPageCallBack, this));
 	auto* pageChange = Menu::create(LastPage, NextPage, NULL);
