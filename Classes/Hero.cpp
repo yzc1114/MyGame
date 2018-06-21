@@ -336,13 +336,9 @@ void Hero::FightingUpdate(float dt)
 		unschedule(schedule_selector(Hero::MusicUpdate));
 		//设置isHeroFighting为false
 		isHeroFighting = false;
-		//将当前的地图从他的父节点删除 以便清理所有的内存
-		Global::instance()->gameMap->removeFromParent();
-		//重置Global
-		Global::instance()->resetGlobal();
-		//更换场景
-		auto scene = StartScene::createStartScene();
-		Director::getInstance()->replaceScene(scene);
+	
+		Global::instance()->gameScene->GameDefeat();
+		
 	}
 
 }

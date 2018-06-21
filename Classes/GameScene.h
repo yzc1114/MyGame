@@ -31,6 +31,8 @@ public:
 
 	void GameVictory();
 
+	void GameDefeat();
+
 	void continueCALLBACK();
 
 private:
@@ -38,6 +40,8 @@ private:
 	TTFConfig ttfconfigStatusBar;
 	//记录是否在展示存档界面 初始为false
 	bool isShowingSaveLayer = false;
+
+	Layer* defeatLayer;
 
 	Layer* victoryLayer;
 };
