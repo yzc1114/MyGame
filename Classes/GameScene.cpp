@@ -383,6 +383,33 @@ void GameScene::GameVictory()
 
 }
 
+void GameScene::GameDefeat()
+{
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/DeathBGM.mp3");
+
+	std::string defeatMessage =
+		"You become weak and paralyzed, more and more unconsciousness. A strange feel fill in all parts of you, you get into a stupor. When you are awake, you find yourself lying on the bottom floor, with a weak body like the initial situation. All is same as what was said, without defeating the Dark Lord, no one could get out of the tower.";
+	
+	defeatLayer = LayerColor::create(Color4B::BLACK);
+	TTFConfig defeatConfig("fonts/Marker Felt.ttf", 36);
+	auto defeatLabel = Label::createWithTTF(defeatConfig, defeatMessage);
+	defeatLabel->setColor(Color3B::WHITE);
+	defeatLabel->setAnchorPoint(Vec2::ZERO);
+	defeatLabel->setDimensions(400, 500);
+	defeatLabel->setPosition(104, -500);
+	defeatLayer->addChild(defeatLabel);
+
+	auto continueLabel = Label::createWithTTF(defeatConfig, "Continue");
+	continueLabel->setColor(Color3B::RED);
+	auto* continueButton = Menu::create(MenuItemLabel::create(continueLabel, CC_CALLBACK_0(GameScene::continueCALLBACK, this)), NULL);
+	continueButton->setPosition(200, -50);
+	defeatLabel->addChild(continueButton);
+
+	this->addChild(defeatLayer, 500);
+	defeatLabel->runAction(MoveTo::create(20.0f, Vec2(104, 100)));
+
+}
+
 void GameScene::continueCALLBACK()
 {
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ButtonBGS.mp3");

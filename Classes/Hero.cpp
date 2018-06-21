@@ -317,11 +317,9 @@ void Hero::FightingUpdate(float dt)
 		unschedule(schedule_selector(Hero::MusicUpdate));
 		//设置isHeroFighting为false
 		isHeroFighting = false;
-		//重置Global
-		Global::instance()->resetGlobal();
-		//更换场景
-		auto scene = StartScene::createStartScene();
-		Director::getInstance()->replaceScene(scene);
+		
+		Global::instance()->gameScene->GameDefeat();
+		
 	}
 
 }

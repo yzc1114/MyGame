@@ -33,6 +33,8 @@ public:
 
 	void GameVictory();
 
+	void GameDefeat();
+
 	void continueCALLBACK();
 
 private:
@@ -41,6 +43,8 @@ private:
 	bool isShowingSaveLayer = false;
 
 	Layer* victoryLayer;
+
+	Layer* defeatLayer;
 };
 
 #endif 
