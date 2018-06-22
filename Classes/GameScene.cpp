@@ -217,7 +217,11 @@ void GameScene::showSaveLayer()
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	auto SaverLayer = LayerColor::create(Color4B::ORANGE);
-	SaverLayer->setScale(1);
+
+	auto exit = MenuItemImage::create("Close/CloseNormal.png", "Close/CloseSelected.png", CC_CALLBACK_1(GameScene::SaverLayerExitButtonCallBack, this));
+	auto exitButton = Menu::create(exit, NULL);
+	exitButton->setPosition(exit->getContentSize().width / 2, MAP_SIZE);
+	SaverLayer->addChild(exitButton, 0);
 
 	this->addChild(SaverLayer, kZSaveLayer, kZSaveLayer);
 
@@ -425,6 +429,13 @@ void GameScene::continueCALLBACK()
 	Global::instance()->resetGlobal();
 	auto scene = StartScene::createStartScene();
 	Director::getInstance()->replaceScene(scene);
+}
+
+void GameScene::SaverLayerExitButtonCallBack(Ref * psender)
+{
+	this->setIfShowingSaveLayer(false);
+	this->removeChildByTag(kZSaveLayer);
+
 }
 
 

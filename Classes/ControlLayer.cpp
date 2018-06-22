@@ -101,6 +101,18 @@ bool ControlLayer::onTouchBegan(Touch * touch, Event * unused_Event)
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/ButtonBGS.mp3");
 		return true;
 	}
+	
+	Rect Help(0, 0, ADDED_WIDTH / 4, 25);
+	Rect Save(ADDED_WIDTH / 4,0 , ADDED_WIDTH / 4, 25);
+	if (Help.containsPoint(touch->getStartLocation())) {
+		if (!isHelping) {
+			Global::instance()->gameScene->addChild(HelpLayer::create(), 200);
+		}
+	}
+	if (Save.containsPoint(touch->getStartLocation())) {
+		Global::instance()->gameScene->showSaveLayer();
+	}
+
 	return false;
 	
 
