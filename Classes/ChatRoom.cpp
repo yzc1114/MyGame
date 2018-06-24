@@ -9,24 +9,40 @@ bool ChatRoom::init()
 	if (!Scene::init()) {
 		return false;
 	}
-	boot_client();
+	if (hasName()) {
+		extrainit();
+	}
+	this->InputName();
+
+	
+	return true;
+}
+
+void ChatRoom::extrainit()
+{
+	boot_client(); //初始化客户端
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	//背景Layer
-	BGLayer = LayerColor::create(Color4B::ORANGE);
-	this->addChild(BGLayer,kZBGLayer,kZBGLayer);
+	BGLayer = LayerColor::create(Color4B::BLACK);
+	this->addChild(BGLayer, kZBGLayer, kZBGLayer);
+	//退出按钮
+	auto exit = MenuItemImage::create("Close/CloseNormal.png", "Close/CloseSelected.png", [&](Ref* ref) {Director::getInstance()->popScene(); });
+	auto exitButton = Menu::create(exit, NULL);
+	exitButton->setPosition(exit->getContentSize().width / 2, MAP_SIZE);
+	BGLayer->addChild(exitButton, 10);
 	//输入框背景
-	LayerColor* InputBoxBGLayer = LayerColor::create(Color4B::BLUE,4 * BGLayer->getContentSize().width / 5, 1 * BGLayer->getContentSize().height / 9);
+	LayerColor* InputBoxBGLayer = LayerColor::create(Color4B::BLACK, 4 * BGLayer->getContentSize().width / 5, 1 * BGLayer->getContentSize().height / 9);
 	InputBoxBGLayer->setAnchorPoint(Vec2::ZERO);
 	InputBoxBGLayer->setPosition(40, 30);
 	BGLayer->addChild(InputBoxBGLayer, kZInputBoxBGLayer, kZInputBoxBGLayer);
 	//创建输入框函数
 	createTextField();
 	//创建遮挡信息框的条
-	Barrier1 = LayerColor::create(Color4B::BLACK, BGLayer->getContentSize().width, BGLayer->getContentSize().height / 9);
+	Barrier1 = LayerColor::create(Color4B::WHITE, BGLayer->getContentSize().width, BGLayer->getContentSize().height / 9);
 	Barrier1->setAnchorPoint(Vec2::ZERO);
 	Barrier1->setPosition(0, 8 * BGLayer->getContentSize().height / 9);
 	BGLayer->addChild(Barrier1, kZBarrier1, kZBarrier1);
-	Barrier2 = LayerColor::create(Color4B::BLACK, BGLayer->getContentSize().width,2 * BGLayer->getContentSize().height / 9);
+	Barrier2 = LayerColor::create(Color4B::WHITE, BGLayer->getContentSize().width, 2 * BGLayer->getContentSize().height / 9);
 	Barrier2->setAnchorPoint(Vec2::ZERO);
 	Barrier2->setPosition(0, 0);
 	BGLayer->addChild(Barrier2, kZBarrier2, kZBarrier2);
@@ -34,7 +50,7 @@ bool ChatRoom::init()
 	//触摸监听器 若点击了输入框 则可以进行输入 若点击其他地方 则不可以输入
 	auto touchListener = EventListenerTouchOneByOne::create();
 	touchListener->onTouchBegan = CC_CALLBACK_2(ChatRoom::onTouchBegan, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener,this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 	//添加键盘监听器 实现文本输入 使用了λ函数
 	auto keyboardListener = EventListenerKeyboard::create();
 	keyboardListener->onKeyPressed = [=](EventKeyboard::KeyCode code, Event* eve) {
@@ -46,12 +62,11 @@ bool ChatRoom::init()
 		}
 	};
 	keyboardListener->onKeyReleased = [=](EventKeyboard::KeyCode code, Event* eve) {
-		if(code == EventKeyboard::KeyCode::KEY_ENTER)
+		if (code == EventKeyboard::KeyCode::KEY_ENTER)
 			sendMsg();
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
 
-	return true;
 }
 
 ChatRoom::ChatRoom()
@@ -61,9 +76,12 @@ ChatRoom::ChatRoom()
 
 ChatRoom::~ChatRoom()
 {
-	Global::instance()->chatRoom = NULL;
-	client->close();
-	t.join();
+	if (client != nullptr) {
+		Global::instance()->chatRoom = NULL;
+		client->close();
+		t.join();
+	}
+	
 }
 
 void ChatRoom::boot_client()
@@ -103,7 +121,7 @@ bool ChatRoom::onTouchBegan(Touch * touch, Event * ev)
 
 void ChatRoom::sendMsg()
 {
-	std::string str = textEdit->getString();
+	std::string str = Global::instance()->userName + " : " + textEdit->getString();
 	//this->addLabel(createMSGLabel(str));
 	textEdit->setString("");
 	char line[chat_message::max_body_length + 1] = { '\0' };
@@ -139,8 +157,8 @@ Label * ChatRoom::createMSGLabel(const std::string & str )
 	Label* label = Label::createWithTTF(ttfconfig, str, TextHAlignment::LEFT, 4 * BGLayer->getContentSize().width / 5);
 	label->setAnchorPoint(Vec2::ZERO);
 	return label;
-}
-//向聊天室添加新消息
+}//向聊天室添加新消息
+
 void ChatRoom::addLabel(Label * label)
 {
 	if (LabelList.empty()) { //如果消息室米有消息就直接push_back()
@@ -259,6 +277,56 @@ void ChatRoom::moveDown(float dt)
 	}
 }
 
+void ChatRoom::InputName() {
+	InputNameLayer = LayerColor::create(Color4B::WHITE);
+	this->addChild(InputNameLayer);
+	TTFConfig config("fonts/arial.ttf", 28);
+	auto label = Label::createWithTTF(config, "Input your name");
+	label->setColor(Color3B::BLACK);
+	label->setPosition( ADDED_WIDTH / 2, 2.8 * ADDED_HEIGHT / 4);
+	InputNameLayer->addChild(label, 1);
+	Layer* TextBGLayer = LayerColor::create(Color4B::BLACK,ADDED_WIDTH / 2 , ADDED_HEIGHT / 9);
+	TextBGLayer->setPosition(ADDED_WIDTH / 4, ADDED_HEIGHT / 2);
+	InputNameLayer->addChild(TextBGLayer);
+	//文本编辑框设置
+	textEdit = TextFieldTTF::textFieldWithPlaceHolder("Please input:", "fonts\arial.ttf", 36);
+	textEdit->setAnchorPoint(Vec2::ZERO);
+	textEdit->setPosition(ADDED_WIDTH / 4, ADDED_HEIGHT / 2);
+	textEdit->setColorSpaceHolder(Color3B::WHITE);
+	InputNameLayer->addChild(textEdit);
+	auto touchListener = EventListenerTouchOneByOne::create();
+	touchListener->onTouchBegan = CC_CALLBACK_2(ChatRoom::onTouchBegan, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, InputNameLayer);
+	auto keyboardListener = EventListenerKeyboard::create();
+	keyboardListener->onKeyPressed = [=](EventKeyboard::KeyCode code, Event* eve) {
+		if (code == EventKeyboard::KeyCode::KEY_ENTER) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	};
+	keyboardListener->onKeyReleased = [=](EventKeyboard::KeyCode code, Event* eve) {
+		if (code == EventKeyboard::KeyCode::KEY_ENTER) {
+			std::string str = textEdit->getString();
+			if (str != "") {
+				Global::instance()->userName = str;
+				eve->getCurrentTarget()->removeFromParent();
+				extrainit();
+			}
+		}
+	};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, InputNameLayer);
+}
+
+bool ChatRoom::hasName()
+{
+	if (Global::instance()->userName == "") {
+		return false;
+	}
+	return true;
+}
+
 bool chat_client::init()
 {
 	if (!Node::init()) {
@@ -286,3 +354,4 @@ void chat_client::handle_read_body(const boost::system::error_code & error)
 		do_close();
 	}
 }
+

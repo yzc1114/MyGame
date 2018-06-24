@@ -22,6 +22,7 @@ public:
 	ChatRoom();
 	~ChatRoom();
 	virtual bool init();
+	void extrainit();
 	CREATE_FUNC(ChatRoom);
 	enum {
 		kZBGLayer,
@@ -32,6 +33,8 @@ public:
 		kZEditBox,
 		kZScrollLayer
 	};
+	void InputName();
+	bool hasName();
 	void addLabel(Label* label);
 	void boot_client();
 	virtual bool onTouchBegan(Touch* touch, Event* ev);
@@ -46,8 +49,9 @@ public:
 	void onMouseUp(Touch* touch, Event* ev);
 	void moveUp(float dt);
 	void moveDown(float dt);
+	
 private:
-	chat_client* client;
+	chat_client* client = nullptr;
 	boost::thread t;
 	TextFieldTTF* textEdit;
 	
@@ -57,6 +61,7 @@ private:
 	bool ScrollLayerHasBeenCreated = false;
 	Layer* buttonLayer1;
 	Layer* buttonLayer2;
+	Layer* InputNameLayer;
 
 	bool isTouchingScroller;//标记是否点击着滚动条
 	std::list<Label*> LabelList;//存放label的List

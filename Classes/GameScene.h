@@ -44,6 +44,8 @@ private:
 	Layer* defeatLayer;
 
 	Layer* victoryLayer;
+
+	void SaverLayerExitButtonCallBack(Ref* psender);
 };
 
 #endif 
