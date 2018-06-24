@@ -1,5 +1,3 @@
-
-#pragma warning(disable:4996)  
 #ifndef CHAT_MESSAGE_HPP  
 #define CHAT_MESSAGE_HPP  
 

@@ -40,6 +40,9 @@ public:
 	//聊天室
 	ChatRoom* chatRoom;
 
+	//聊天昵称
+	std::string userName = "";
+
 	//目标地图的层数
 	int currentLevel;
 

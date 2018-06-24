@@ -1,4 +1,5 @@
 #include"ControlLayer.h"
+//class ChatRoom;
 
 ControlLayer::ControlLayer()
 {
@@ -104,6 +105,7 @@ bool ControlLayer::onTouchBegan(Touch * touch, Event * unused_Event)
 	
 	Rect Help(0, 0, ADDED_WIDTH / 4, 25);
 	Rect Save(ADDED_WIDTH / 4,0 , ADDED_WIDTH / 4, 25);
+	Rect Chat(ADDED_WIDTH / 2, 0, ADDED_WIDTH / 4, 25);
 	if (Help.containsPoint(touch->getStartLocation())) {
 		if (!isHelping) {
 			Global::instance()->gameScene->addChild(HelpLayer::create(), 200);
@@ -111,6 +113,9 @@ bool ControlLayer::onTouchBegan(Touch * touch, Event * unused_Event)
 	}
 	if (Save.containsPoint(touch->getStartLocation())) {
 		Global::instance()->gameScene->showSaveLayer();
+	}
+	if (Chat.containsPoint(touch->getStartLocation())) {
+		Director::getInstance()->pushScene(ChatRoom::create());
 	}
 
 	return false;
@@ -197,6 +202,9 @@ void ControlLayer::onKeyPressed(EventKeyboard::KeyCode keycode, Event * unused_e
 			Global::instance()->gameScene->addChild(HelpLayer::create(), 200);
 		}
 		
+	}
+	if (keycode == EventKeyboard::KeyCode::KEY_C) {
+		Director::getInstance()->pushScene(ChatRoom::create());
 	}
 	//快速上下楼 在楼梯旁边站着时 按PageUp和PageDown上下楼 只能去已经去过的楼层
 	if (keycode == EventKeyboard::KeyCode::KEY_PG_UP) { 
