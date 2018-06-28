@@ -156,9 +156,9 @@ Enemy::Enemy(int gid)
 
 	//´óÄ§Íõ
 	if (gid >= 211 && gid < 215) {
-		ATK = 250;
-		DEF = 160;
-		HP = 1000;
+		ATK = 0;//250;
+		DEF = 0;//160;
+		HP = 1;// 1000;
 		startGID = 211;
 	}
 }

@@ -360,9 +360,9 @@ void Hero::moveToSomePointAutomatically(Vec2 TileCoord)
 	if (!ifReachable(TileCoord))return;//若目标不可达 则返回
 
 	TMXLayer* wallLayer = Global::instance()->gameMap->WallLayer;
-	
-	Vec2 startPoint = GameMap::tileCoordForPosition(this->getPosition()); //some fucking crazy offsets; shit
 	this->EndPointOfAutoMoving = TileCoord;
+	Vec2 startPoint = GameMap::tileCoordForPosition(this->getPosition()); //some fucking crazy offsets; shit
+	
 	struct node {
 	private:
 		Vec2 endp;
@@ -411,10 +411,7 @@ void Hero::moveToSomePointAutomatically(Vec2 TileCoord)
 				currentNode = iter; //用最小F的node作为当前node
 			}
 		}
-		//输出调试
-		std::string str;
-		str = " x : " + std::to_string(currentNode->getVec2().x) + " y : " + std::to_string(currentNode->getVec2().y) + "\n";
-		log(str.c_str());
+		
 
 		closeList.push_back(*currentNode);
 		openList.erase(currentNode);
@@ -479,7 +476,6 @@ void Hero::moveToSomePointAutomatically(Vec2 TileCoord)
 		if (added)break;
 
 	}
-	log("ok");
 	isCheckingAutomaticallyMovePath = false;
 
 	std::list<node>::iterator iter;
@@ -499,7 +495,6 @@ void Hero::moveToSomePointAutomatically(Vec2 TileCoord)
 		steps.push(p);
 		double x = p.x;
 		double y = p.y;
-		log("%lf %lf\n",x,y);
 		nodeP = nodeP->getParent();
 	}
 
